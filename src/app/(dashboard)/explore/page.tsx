@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ProductCard } from "@/components/ui/cards/ProductCard";
 import { Button } from "@/components/ui/elements/Button";
 import { SectionHeader } from "@/components/ui/elements/SectionHeader";
@@ -22,13 +22,24 @@ type Filters = {
   inStockOnly: boolean;
 };
 
+const itemMeta: Record<string, Pick<CatalogItem, "category" | "brand" | "price" | "location" | "createdAt">> = {
+  "1": { category: "Outerwear", brand: "Aster Lane", price: 148, location: "New York", createdAt: "2026-04-05T10:00:00.000Z" },
+  "2": { category: "Sets", brand: "Marrow Studio", price: 182, location: "Los Angeles", createdAt: "2026-04-12T10:00:00.000Z" },
+  "3": { category: "Tops", brand: "Willow Form", price: 96, location: "Chicago", createdAt: "2026-04-09T10:00:00.000Z" },
+  "4": { category: "Bottoms", brand: "Dune North", price: 118, location: "Austin", createdAt: "2026-04-02T10:00:00.000Z" },
+  "5": { category: "Dresses", brand: "Elm Theory", price: 164, location: "Seattle", createdAt: "2026-04-14T10:00:00.000Z" },
+  "6": { category: "Outerwear", brand: "Cedar Kind", price: 132, location: "Portland", createdAt: "2026-04-07T10:00:00.000Z" },
+};
+
+const priceBounds = { min: 0, max: 250 };
 const pageSize = 4;
 
 export default function ExplorePage() {
   const profile = useUserProfile();
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<Sort>("relevance");
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
+  const dq = useDebouncedValue(q, 250);
 
   const data = useMemo(() => mockProducts, []);
   const priceBounds = useMemo(
@@ -68,7 +79,7 @@ export default function ExplorePage() {
   };
 
   const filtered = useMemo(() => {
-    const query = q.trim().toLowerCase();
+    const query = dq.trim().toLowerCase();
     const searched = query
       ? data.filter((p) => [p.name, p.description, p.category, p.location, ...(p.tags ?? [])].join(" ").toLowerCase().includes(query))
       : data;
@@ -90,14 +101,14 @@ export default function ExplorePage() {
   }, [data, filters.categories, filters.inStockOnly, filters.location, filters.priceMax, filters.priceMin, q, sort]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
-  const currentPage = Math.min(page, totalPages - 1);
-  const paged = filtered.slice(currentPage * pageSize, (currentPage + 1) * pageSize);
+  const currentPage = Math.min(page, totalPages);
+  const paged = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const clearFilters = () => {
     setQ("");
     setFilters(defaults);
     setSort("relevance");
-    setPage(0);
+    setPage(1);
   };
 
   const activeChips = [
@@ -142,11 +153,8 @@ export default function ExplorePage() {
         >
           <input
             value={q}
-            onChange={(e) => {
-              setQ(e.target.value);
-              setPage(0);
-            }}
-            placeholder="Search"
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search product, brand, tag"
             style={{ ...typography.body, padding: spacing.sm, border: `1px solid ${colors.border}`, borderRadius: spacing.md }}
           />
 
