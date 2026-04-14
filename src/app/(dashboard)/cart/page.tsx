@@ -1,40 +1,101 @@
+import Link from "next/link";
+import { OutfitCard } from "@/components/ui/cards/OutfitCard";
 import { ProductCard } from "@/components/ui/cards/ProductCard";
 import { SectionHeader } from "@/components/ui/elements/SectionHeader";
 import { Grid } from "@/components/ui/layout/Grid";
 import { colors } from "@/components/theme/colors";
 import { spacing } from "@/components/theme/spacing";
 import { typography } from "@/components/theme/typography";
-import { mockProducts } from "@/lib/mockData";
+import { mockOutfits, mockProducts } from "@/lib/mockData";
 
 export default function CartPage() {
+  const cartItems = mockProducts.slice(0, 3);
+
   return (
     <div
+      className="ui-enter"
       style={{
         maxWidth: "1120px",
         margin: "0 auto",
         padding: spacing.xxl,
-        display: "flex",
-        flexDirection: "column",
-        gap: spacing.lg,
+        display: "grid",
+        gridTemplateColumns: "minmax(0, 1fr) 280px",
+        gap: spacing.xl,
+        alignItems: "start",
       }}
     >
-      <section className="ui-enter">
-        <SectionHeader title="Your selection" subtitle="Everything here works with your structure" />
-        <Grid>
-          {mockProducts.slice(0, 3).map((product) => (
-            <ProductCard key={product.id} {...product} />
-          ))}
-        </Grid>
-      </section>
-      <p
-        className="ui-enter"
+      <div
         style={{
-          ...typography.body,
-          color: colors.mutedText,
+          display: "flex",
+          flexDirection: "column",
+          gap: spacing.xxl,
         }}
       >
-        These pieces work together
-      </p>
+        <section className="ui-enter">
+          <SectionHeader
+            title="Your selection"
+            subtitle="Everything here works with your structure, tone, and presence."
+          />
+          <Grid>
+            {cartItems.map((product) => (
+              <ProductCard key={product.id} {...product} />
+            ))}
+          </Grid>
+        </section>
+
+        <section className="ui-enter">
+          <SectionHeader title="Together" subtitle="One coherent decision." />
+          <Link href={`/product/${mockOutfits[0].productId}`} style={{ textDecoration: "none", color: "inherit" }}>
+            <OutfitCard items={mockOutfits[0].items} title={mockOutfits[0].title} />
+          </Link>
+        </section>
+
+        <p
+          className="ui-enter"
+          style={{
+            ...typography.body,
+            color: colors.mutedText,
+          }}
+        >
+          These pieces work together
+        </p>
+      </div>
+
+      <aside
+        className="ui-enter"
+        style={{
+          position: "sticky",
+          top: spacing.xxl,
+          display: "flex",
+          flexDirection: "column",
+          gap: spacing.lg,
+          padding: spacing.lg,
+          border: `1px solid ${colors.border}`,
+          borderRadius: spacing.lg,
+          background: colors.surface,
+        }}
+      >
+        <p style={{ ...typography.body, color: colors.secondaryText }}>
+          Review complete. Continue when ready.
+        </p>
+        <Link
+          href="/checkout"
+          style={{
+            ...typography.body,
+            textDecoration: "none",
+            color: colors.surface,
+            background: colors.primaryText,
+            borderRadius: spacing.xxl,
+            padding: `${spacing.sm} ${spacing.lg}`,
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "fit-content",
+          }}
+        >
+          Continue to checkout -&gt;
+        </Link>
+      </aside>
     </div>
   );
 }
