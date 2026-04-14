@@ -1,13 +1,17 @@
+import Link from "next/link";
+import { colors } from "@/components/theme/colors";
+import { spacing } from "@/components/theme/spacing";
+import { typography } from "@/components/theme/typography";
+
 export default function Footer() {
   return (
-    <footer className="bg-[#F9F6F0] border-t border-[#D4C7B8]/40 py-12">
-      <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-        <div className="text-sm tracking-tight font-system font-normal text-[#201A17] uppercase">SYNTHE</div>
-
-        <div className="flex gap-8 text-xs tracking-wide text-[#8C8A79] uppercase">
-          <a href="#" className="hover:text-[#201A17] transition-colors">Approach</a>
-          <a href="#" className="hover:text-[#201A17] transition-colors">Privacy</a>
-          <a href="#" className="hover:text-[#201A17] transition-colors">Terms</a>
+    <footer style={{ borderTop: `1px solid ${colors.border}`, background: colors.background, padding: `${spacing.xxl} 0` }}>
+      <div style={{ width: "min(1120px, 100%)", margin: "0 auto", padding: `0 clamp(20px, 4vw, 40px)`, display: "flex", gap: spacing.md, justifyContent: "space-between", flexWrap: "wrap" }}>
+        <div style={{ ...typography.cardTitle, fontSize: "18px", textTransform: "uppercase" }}>SYNTHE</div>
+        <div style={{ display: "flex", gap: spacing.md, flexWrap: "wrap" }}>
+          <a href="#discovery" style={{ ...typography.body, textDecoration: "none", color: colors.secondaryText }}>Approach</a>
+          <Link href="/auth" style={{ ...typography.body, textDecoration: "none", color: colors.secondaryText }}>Sign in</Link>
+          <a href="#" style={{ ...typography.body, textDecoration: "none", color: colors.secondaryText }}>Privacy</a>
         </div>
       </div>
     </footer>

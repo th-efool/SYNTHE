@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ProductCard } from "@/components/ui/cards/ProductCard";
 import { Button } from "@/components/ui/elements/Button";
+import { SelectInput, TextInput } from "@/components/ui/elements/FormControls";
 import { SectionHeader } from "@/components/ui/elements/SectionHeader";
 import { Tag } from "@/components/ui/elements/Tag";
 import { Grid } from "@/components/ui/layout/Grid";
@@ -144,43 +145,43 @@ export default function ExplorePage() {
 
       <section className="ui-enter" style={{ animationDelay: "80ms", display: "grid", gap: spacing.md }}>
         <div style={{ display: "grid", gap: spacing.sm, gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))" }}>
-          <input
+          <TextInput
+            label="Search"
             value={q}
             onChange={(e) => {
               setQ(e.target.value);
               setPage(1);
             }}
             placeholder="Search product, brand, tag"
-            style={{ ...typography.body, padding: spacing.sm, border: `1px solid ${colors.border}`, borderRadius: spacing.md }}
           />
-          <select
+          <SelectInput
+            label="Category"
             value={cat}
             onChange={(e) => {
               setCat(e.target.value);
               setPage(1);
             }}
-            style={{ ...typography.body, padding: spacing.sm, border: `1px solid ${colors.border}`, borderRadius: spacing.md }}
           >
             {cats.map((c) => (
               <option key={c} value={c}>
                 {c === "all" ? "All categories" : c}
               </option>
             ))}
-          </select>
-          <select
+          </SelectInput>
+          <SelectInput
+            label="Location"
             value={loc}
             onChange={(e) => {
               setLoc(e.target.value);
               setPage(1);
             }}
-            style={{ ...typography.body, padding: spacing.sm, border: `1px solid ${colors.border}`, borderRadius: spacing.md }}
           >
             {locs.map((l) => (
               <option key={l} value={l}>
                 {l === "all" ? "All locations" : l}
               </option>
             ))}
-          </select>
+          </SelectInput>
         </div>
 
         <div style={{ display: "flex", flexWrap: "wrap", gap: spacing.sm, alignItems: "center" }}>
@@ -204,19 +205,19 @@ export default function ExplorePage() {
       <section className="ui-enter" style={{ animationDelay: "140ms", display: "grid", gap: spacing.lg }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: spacing.md, flexWrap: "wrap", alignItems: "center" }}>
           <SectionHeader title="Catalog results" subtitle={`${filtered.length} item${filtered.length === 1 ? "" : "s"} found`} />
-          <select
+          <SelectInput
+            label="Sort"
             value={sort}
             onChange={(e) => {
               setSort(e.target.value as Sort);
               setPage(1);
             }}
-            style={{ ...typography.body, padding: spacing.sm, border: `1px solid ${colors.border}`, borderRadius: spacing.md }}
           >
             <option value="relevance">Relevance</option>
             <option value="price_asc">Price: Low to High</option>
             <option value="price_desc">Price: High to Low</option>
             <option value="newest">Newest</option>
-          </select>
+          </SelectInput>
         </div>
 
         {paged.length ? (
@@ -236,24 +237,21 @@ export default function ExplorePage() {
                 {start}-{end} of {filtered.length} results
               </p>
               <div style={{ display: "flex", gap: spacing.sm, alignItems: "center" }}>
-                <label htmlFor="page-size" style={{ ...typography.body, color: colors.secondaryText }}>
-                  Page size
-                </label>
-                <select
+                <SelectInput
                   id="page-size"
+                  label="Page size"
                   value={pageSize}
                   onChange={(e) => {
                     setPageSize(Number(e.target.value));
                     setPage(1);
                   }}
-                  style={{ ...typography.body, padding: spacing.sm, border: `1px solid ${colors.border}`, borderRadius: spacing.md }}
                 >
                   {pageSizes.map((size) => (
                     <option key={size} value={size}>
                       {size}
                     </option>
                   ))}
-                </select>
+                </SelectInput>
                 <Button onClick={() => setPage((v) => Math.max(1, v - 1))}>Prev</Button>
                 <Tag label={`Page ${currentPage}/${totalPages}`} />
                 <Button onClick={() => setPage((v) => Math.min(totalPages, v + 1))}>Next</Button>

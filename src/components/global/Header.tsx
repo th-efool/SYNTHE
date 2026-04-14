@@ -6,18 +6,18 @@ import { colors } from "@/components/theme/colors";
 import { spacing } from "@/components/theme/spacing";
 import { typography } from "@/components/theme/typography";
 
+const links = [
+  { href: "/explore", label: "Explore" },
+  { href: "/typing", label: "Typing" },
+  { href: "/wardrobe", label: "Wardrobe" },
+  { href: "/sessions", label: "Sessions" },
+  { href: "/settings", label: "Settings" },
+  { href: "/cart", label: "Cart" },
+];
+
 export default function Header() {
   const pathname = usePathname();
-  const links = [
-    { href: "/explore", label: "Explore" },
-    { href: "/typing", label: "Typing" },
-    { href: "/wardrobe", label: "Wardrobe" },
-    { href: "/cart", label: "Cart" },
-  ];
-
-  if (pathname === "/") {
-    return null;
-  }
+  if (pathname === "/") return null;
 
   return (
     <header
@@ -26,43 +26,27 @@ export default function Header() {
         top: 0,
         zIndex: 40,
         borderBottom: `1px solid ${colors.border}`,
-        background: `${colors.background}E6`,
+        background: `${colors.background}EB`,
         backdropFilter: "blur(12px)",
-        boxShadow: `0 10px 30px -28px ${colors.primaryText}`,
       }}
     >
       <nav
         style={{
-          maxWidth: "1120px",
+          width: "min(1120px, 100%)",
           margin: "0 auto",
-          padding: `${spacing.md} clamp(24px, 4vw, 40px)`,
+          padding: `${spacing.md} clamp(20px, 4vw, 40px)`,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: spacing.lg,
+          gap: spacing.md,
           flexWrap: "wrap",
         }}
       >
-        <Link
-          href="/"
-          style={{
-            ...typography.cardTitle,
-            fontSize: "22px",
-            textDecoration: "none",
-            color: colors.primaryText,
-          }}
-        >
+        <Link href="/" style={{ ...typography.cardTitle, fontSize: "22px", textDecoration: "none", color: colors.primaryText }}>
           SYNTHE
         </Link>
 
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: spacing.sm,
-            flexWrap: "wrap",
-          }}
-        >
+        <div style={{ display: "flex", alignItems: "center", gap: spacing.xs, flexWrap: "wrap" }}>
           {links.map((link) => {
             const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
             return (
@@ -74,10 +58,9 @@ export default function Header() {
                   textDecoration: "none",
                   color: active ? colors.primaryText : colors.secondaryText,
                   border: `1px solid ${active ? colors.accent : colors.border}`,
-                  background: active ? `${colors.accent}1A` : colors.surface,
+                  background: active ? colors.accentSoft : colors.surface,
                   borderRadius: spacing.xxl,
                   padding: `${spacing.xs} ${spacing.md}`,
-                  transition: "background 220ms cubic-bezier(0.22, 1, 0.36, 1), border-color 220ms cubic-bezier(0.22, 1, 0.36, 1), color 220ms cubic-bezier(0.22, 1, 0.36, 1)",
                 }}
               >
                 {link.label}
@@ -89,7 +72,7 @@ export default function Header() {
         <Link
           href="/profile"
           style={{
-            ...typography.body,
+            ...typography.bodyStrong,
             textDecoration: "none",
             color: colors.surface,
             background: colors.primaryText,

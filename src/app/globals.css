@@ -319,3 +319,23 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #D4C7B8; border-radius: 4px; }
 
+
+:where(button, a, input, select, textarea):focus-visible {
+  outline: 2px solid var(--ring-color, #8A5A42);
+  outline-offset: 2px;
+}
+
+.form-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.page-grid-2 {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+}
+
+@media (max-width: 960px) {
+  .page-grid-2 { grid-template-columns: 1fr; }
+}
