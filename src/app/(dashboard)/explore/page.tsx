@@ -12,6 +12,8 @@ import { typography } from "@/components/theme/typography";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { mockProducts } from "@/lib/mockData";
 
+const minBound = Math.min(...mockProducts.map((p) => p.price));
+const maxBound = Math.max(...mockProducts.map((p) => p.price));
 type Sort = "relevance" | "price_asc" | "price_desc" | "newest";
 
 function useDebouncedValue<T>(value: T, delay = 250) {
@@ -215,3 +217,21 @@ export default function ExplorePage() {
     </div>
   );
 }
+
+const inputStyle: CSSProperties = {
+  ...typography.body,
+  border: `1px solid ${colors.border}`,
+  borderRadius: spacing.sm,
+  background: colors.background,
+  color: colors.primaryText,
+  padding: `${spacing.sm} ${spacing.md}`,
+};
+
+const btnStyle: CSSProperties = {
+  ...typography.body,
+  border: `1px solid ${colors.border}`,
+  borderRadius: spacing.xxl,
+  background: colors.background,
+  padding: `${spacing.sm} ${spacing.md}`,
+  cursor: "pointer",
+};
