@@ -14,6 +14,14 @@ export const mockProducts = [
     image: productImages["1"],
     tags: ["Soft Natural", "Soft Autumn"],
     description: "Relaxed tailoring with warm muted depth.",
+    category: "outerwear",
+    price: 148,
+    currency: "USD",
+    location: "Portland, OR",
+    rating: 4.6,
+    inStock: true,
+    brand: "North Thread",
+    material: "linen blend",
   },
   {
     id: "2",
@@ -21,6 +29,14 @@ export const mockProducts = [
     image: productImages["2"],
     tags: ["Natural", "Warm"],
     description: "Low-contrast texture built for tonal harmony.",
+    category: "tops",
+    price: 112,
+    currency: "USD",
+    location: "Austin, TX",
+    rating: 4.4,
+    inStock: true,
+    brand: "Sable Form",
+    material: "cotton knit",
   },
   {
     id: "3",
@@ -28,6 +44,14 @@ export const mockProducts = [
     image: productImages["3"],
     tags: ["Soft", "Romantic"],
     description: "Fluid drape keeps structure soft and balanced.",
+    category: "tops",
+    price: 86,
+    currency: "USD",
+    location: "San Francisco, CA",
+    rating: 4.7,
+    inStock: false,
+    brand: "Atelier Vale",
+    material: "viscose",
   },
   {
     id: "4",
@@ -35,6 +59,14 @@ export const mockProducts = [
     image: productImages["4"],
     tags: ["Autumn", "Natural"],
     description: "Grounded line with gentle width through leg.",
+    category: "pants",
+    price: 132,
+    currency: "USD",
+    location: "Nashville, TN",
+    rating: 4.5,
+    inStock: true,
+    brand: "Field & Grain",
+    material: "twill",
   },
   {
     id: "5",
@@ -42,6 +74,14 @@ export const mockProducts = [
     image: productImages["5"],
     tags: ["Warm", "Curved"],
     description: "Soft contour with muted warmth near face.",
+    category: "dresses",
+    price: 159,
+    currency: "USD",
+    location: "Charleston, SC",
+    rating: 4.8,
+    inStock: true,
+    brand: "Marlowe",
+    material: "merino blend",
   },
   {
     id: "6",
@@ -49,8 +89,26 @@ export const mockProducts = [
     image: productImages["6"],
     tags: ["Texture", "Relaxed"],
     description: "Tactile layer that supports natural essence.",
+    category: "outerwear",
+    price: 174,
+    currency: "USD",
+    location: "Denver, CO",
+    rating: 4.3,
+    inStock: false,
+    brand: "Stone Harbor",
+    material: "suede",
   },
 ];
+
+export const mockCategories = [...new Set(mockProducts.map((product) => product.category))];
+
+export const mockLocations = [...new Set(mockProducts.map((product) => product.location))];
+
+const prices = mockProducts.map((product) => product.price);
+export const priceBounds = {
+  min: Math.min(...prices),
+  max: Math.max(...prices),
+};
 
 export const mockUserProfile = {
   kibbe: "Soft Natural",
