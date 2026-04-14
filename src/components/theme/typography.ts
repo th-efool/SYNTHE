@@ -1,6 +1,13 @@
 import { colors } from "@/components/theme/colors";
 
 export const typography = {
+  pageTitle: {
+    fontFamily: "var(--font-editorial), serif",
+    fontSize: "48px",
+    lineHeight: 1.02,
+    letterSpacing: "-0.035em",
+    color: colors.primaryText,
+  },
   sectionTitle: {
     fontFamily: "var(--font-editorial), serif",
     fontSize: "36px",
@@ -20,6 +27,13 @@ export const typography = {
     fontSize: "14px",
     lineHeight: 1.8,
     color: colors.secondaryText,
+  },
+  bodyStrong: {
+    fontFamily: "var(--font-inter), sans-serif",
+    fontSize: "14px",
+    lineHeight: 1.8,
+    fontWeight: 600,
+    color: colors.primaryText,
   },
   tag: {
     fontFamily: "var(--font-inter), sans-serif",

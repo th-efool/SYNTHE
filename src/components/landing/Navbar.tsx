@@ -1,25 +1,48 @@
 "use client";
 
 import Link from "next/link";
+import { colors } from "@/components/theme/colors";
+import { spacing } from "@/components/theme/spacing";
+import { typography } from "@/components/theme/typography";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 export default function Navbar() {
   useScrollReveal();
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-[#F9F6F0]/80 backdrop-blur-xl border-b border-[#D4C7B8]/40">
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <div className="text-xl tracking-tight font-system font-normal text-[#201A17] uppercase">SYNTHE</div>
-        <div className="hidden md:flex items-center gap-8 text-sm text-[#7A6F68]">
-          <a href="#discovery" className="hover:text-[#201A17] transition-colors duration-500">Approach</a>
-          <a href="#system" className="hover:text-[#201A17] transition-colors duration-500">System</a>
-          <a href="#wardrobe" className="hover:text-[#201A17] transition-colors duration-500">Selection</a>
-          <a href="#transformation" className="hover:text-[#201A17] transition-colors duration-500">Proof</a>
-          <Link href="/explore" className="hover:text-[#201A17] transition-colors duration-500">Explore</Link>
+    <nav style={{ position: "fixed", top: 0, zIndex: 50, width: "100%", backdropFilter: "blur(12px)", borderBottom: `1px solid ${colors.border}`, background: `${colors.background}DB` }}>
+      <div
+        style={{
+          width: "min(1120px, 100%)",
+          margin: "0 auto",
+          padding: `0 clamp(20px, 4vw, 40px)`,
+          height: 80,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: spacing.md,
+        }}
+      >
+        <div style={{ ...typography.cardTitle, fontSize: "22px", textTransform: "uppercase" }}>SYNTHE</div>
+        <div style={{ display: "flex", alignItems: "center", gap: spacing.lg }}>
+          <a href="#discovery" style={{ ...typography.body, textDecoration: "none", color: colors.secondaryText }}>Approach</a>
+          <a href="#system" style={{ ...typography.body, textDecoration: "none", color: colors.secondaryText }}>System</a>
+          <a href="#wardrobe" style={{ ...typography.body, textDecoration: "none", color: colors.secondaryText }}>Selection</a>
+          <Link href="/explore" style={{ ...typography.body, textDecoration: "none", color: colors.secondaryText }}>Explore</Link>
         </div>
-        <button className="text-sm text-[#201A17] border border-[#D4C7B8] rounded-full px-6 py-2 hover:bg-[#201A17] hover:border-[#201A17] hover:text-[#F9F6F0] transition-all duration-500">
+        <Link
+          href="/auth"
+          style={{
+            ...typography.bodyStrong,
+            textDecoration: "none",
+            color: colors.surface,
+            background: colors.primaryText,
+            borderRadius: spacing.xxl,
+            padding: `${spacing.xs} ${spacing.lg}`,
+          }}
+        >
           Sign In
-        </button>
+        </Link>
       </div>
     </nav>
   );
