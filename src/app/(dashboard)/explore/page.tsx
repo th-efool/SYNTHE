@@ -17,10 +17,8 @@ export default function ExplorePage() {
 
   return (
     <div
+      className="flow-shell"
       style={{
-        maxWidth: "1120px",
-        margin: "0 auto",
-        padding: spacing.xxl,
         display: "flex",
         flexDirection: "column",
         gap: spacing.xxl,

@@ -37,22 +37,16 @@ export function ProductDecisionEngine({ product, productId, outfit }: ProductDec
 
   return (
     <div
-      className="ui-enter"
+      className="ui-enter flow-shell"
       style={{
-        maxWidth: "1120px",
-        margin: "0 auto",
-        padding: spacing.xxl,
         display: "flex",
         flexDirection: "column",
         gap: spacing.xxl,
       }}
     >
       <section
+        className="product-flow"
         style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1.1fr) minmax(0, 0.9fr)",
-          gap: spacing.xl,
-          alignItems: "start",
         }}
       >
         <div
@@ -74,10 +68,8 @@ export function ProductDecisionEngine({ product, productId, outfit }: ProductDec
           </div>
 
           <div
+            className="gallery-thumbs"
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-              gap: spacing.sm,
             }}
           >
             {gallery.map((image, index) => (
@@ -92,6 +84,7 @@ export function ProductDecisionEngine({ product, productId, outfit }: ProductDec
                   overflow: "hidden",
                   background: colors.surface,
                   cursor: "pointer",
+                  transition: "border-color 220ms cubic-bezier(0.22, 1, 0.36, 1)",
                 }}
               >
                 <ImageContainer src={image} alt={`${product.name} view ${index + 1}`} />
@@ -164,6 +157,7 @@ export function ProductDecisionEngine({ product, productId, outfit }: ProductDec
               background: colors.primaryText,
               borderRadius: spacing.xxl,
               padding: `${spacing.sm} ${spacing.lg}`,
+              boxShadow: `0 10px 24px -18px ${colors.primaryText}`,
             }}
           >
             Add to wardrobe -&gt;

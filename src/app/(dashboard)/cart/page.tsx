@@ -13,15 +13,8 @@ export default function CartPage() {
 
   return (
     <div
-      className="ui-enter"
+      className="ui-enter flow-shell review-flow"
       style={{
-        maxWidth: "1120px",
-        margin: "0 auto",
-        padding: spacing.xxl,
-        display: "grid",
-        gridTemplateColumns: "minmax(0, 1fr) 280px",
-        gap: spacing.xl,
-        alignItems: "start",
       }}
     >
       <div
@@ -62,10 +55,8 @@ export default function CartPage() {
       </div>
 
       <aside
-        className="ui-enter"
+        className="ui-enter flow-sidebar"
         style={{
-          position: "sticky",
-          top: spacing.xxl,
           display: "flex",
           flexDirection: "column",
           gap: spacing.lg,

@@ -11,8 +11,12 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), sans-serif;
   font-weight: 300;
-  line-height: 1.8;
+  line-height: 1.85;
   overflow-x: hidden;
+}
+
+@view-transition {
+  navigation: auto;
 }
 
 .font-editorial { font-family: var(--font-editorial), serif; }
@@ -113,7 +117,7 @@ body {
 }
 
 .ui-enter {
-  animation: ui-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ui-enter 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .ui-hover-soft {
@@ -133,6 +137,96 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+::view-transition-old(root) {
+  animation: ui-route-out 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+::view-transition-new(root) {
+  animation: ui-route-in 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes ui-route-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ui-route-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.flow-shell {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding: 40px;
+}
+
+.product-flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.review-flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 24px;
+  align-items: start;
+}
+
+.checkout-flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 24px;
+  align-items: start;
+}
+
+.gallery-thumbs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.flow-sidebar {
+  position: sticky;
+  top: 40px;
+}
+
+@media (max-width: 960px) {
+  .product-flow,
+  .review-flow,
+  .checkout-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .flow-shell {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .gallery-thumbs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

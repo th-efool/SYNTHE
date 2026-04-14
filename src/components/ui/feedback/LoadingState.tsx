@@ -1,16 +1,28 @@
 import { colors } from "@/components/theme/colors";
+import { spacing } from "@/components/theme/spacing";
 import { typography } from "@/components/theme/typography";
 
 export function LoadingState() {
   return (
-    <p
+    <div
       className="ui-enter"
       style={{
-        ...typography.body,
-        color: colors.secondaryText,
+        border: `1px solid ${colors.border}`,
+        borderRadius: spacing.lg,
+        padding: spacing.xl,
+        background: colors.surface,
+        textAlign: "center",
       }}
     >
-      Loading...
-    </p>
+      <p
+        style={{
+          ...typography.body,
+          color: colors.secondaryText,
+          margin: 0,
+        }}
+      >
+        Loading...
+      </p>
+    </div>
   );
 }

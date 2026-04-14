@@ -28,17 +28,19 @@ export default function Header() {
         borderBottom: `1px solid ${colors.border}`,
         background: `${colors.background}E6`,
         backdropFilter: "blur(12px)",
+        boxShadow: `0 10px 30px -28px ${colors.primaryText}`,
       }}
     >
       <nav
         style={{
           maxWidth: "1120px",
           margin: "0 auto",
-          padding: `${spacing.md} ${spacing.xxl}`,
+          padding: `${spacing.md} clamp(24px, 4vw, 40px)`,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           gap: spacing.lg,
+          flexWrap: "wrap",
         }}
       >
         <Link
@@ -75,6 +77,7 @@ export default function Header() {
                   background: active ? `${colors.accent}1A` : colors.surface,
                   borderRadius: spacing.xxl,
                   padding: `${spacing.xs} ${spacing.md}`,
+                  transition: "background 220ms cubic-bezier(0.22, 1, 0.36, 1), border-color 220ms cubic-bezier(0.22, 1, 0.36, 1), color 220ms cubic-bezier(0.22, 1, 0.36, 1)",
                 }}
               >
                 {link.label}

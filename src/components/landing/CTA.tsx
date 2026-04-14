@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function CTA() {
   return (
     <section className="py-24 bg-[#FCF9F6] relative overflow-hidden border-t border-[#D4C7B8]/40 shadow-[inset_0_16px_48px_-12px_rgba(58,49,44,0.04)]">
@@ -12,10 +14,10 @@ export default function CTA() {
           Start building a wardrobe that naturally aligns with your frame and tone.
         </p>
 
-        <button className="reveal-up bg-[#201A17] text-[#F9F6F0] rounded-full px-10 py-4 text-sm tracking-wide hover:bg-[#3A312C] transition-all duration-500 hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-3" style={{ transitionDelay: '0.3s' }}>
+        <Link href="/explore" className="reveal-up bg-[#201A17] text-[#F9F6F0] rounded-full px-10 py-4 text-sm tracking-wide hover:bg-[#3A312C] transition-all duration-500 hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-3" style={{ transitionDelay: '0.3s' }}>
           Start your profile
           <span>→</span>
-        </button>
+        </Link>
       </div>
     </section>
   );

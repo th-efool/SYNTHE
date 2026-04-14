@@ -14,12 +14,13 @@ export function Button({ children, onClick }: ButtonProps) {
       className="ui-hover-soft"
       style={{
         ...typography.body,
-        color: colors.primaryText,
-        background: colors.surface,
-        border: `1px solid ${colors.border}`,
+        color: colors.surface,
+        background: colors.primaryText,
+        border: `1px solid ${colors.primaryText}`,
         borderRadius: spacing.xxl,
         padding: `${spacing.sm} ${spacing.lg}`,
         cursor: "pointer",
+        boxShadow: `0 10px 24px -18px ${colors.primaryText}`,
       }}
     >
       {children}

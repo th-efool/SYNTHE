@@ -13,12 +13,14 @@ export function ImageContainer({ src, alt = "Image" }: ImageContainerProps) {
         width: "100%",
         aspectRatio: "4 / 5",
         overflow: "hidden",
+        position: "relative",
         borderRadius: spacing.lg,
         border: `1px solid ${colors.border}`,
         background: colors.background,
       }}
     >
       <img
+        className="card-image"
         src={src}
         alt={alt}
         style={{

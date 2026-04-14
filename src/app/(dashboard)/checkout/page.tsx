@@ -11,11 +11,8 @@ export default function CheckoutPage() {
 
   return (
     <div
-      className="ui-enter"
+      className="ui-enter flow-shell"
       style={{
-        maxWidth: "1120px",
-        margin: "0 auto",
-        padding: spacing.xxl,
         display: "flex",
         flexDirection: "column",
         gap: spacing.xxl,
@@ -26,12 +23,8 @@ export default function CheckoutPage() {
       </section>
 
       <section
-        className="ui-enter"
+        className="ui-enter checkout-flow"
         style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) 360px",
-          gap: spacing.xl,
-          alignItems: "start",
         }}
       >
         <div
@@ -114,6 +107,7 @@ export default function CheckoutPage() {
         </div>
 
         <aside
+          className="flow-sidebar"
           style={{
             display: "flex",
             flexDirection: "column",

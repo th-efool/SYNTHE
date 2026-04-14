@@ -14,19 +14,23 @@ type OutfitCardProps = {
 export function OutfitCard({ items, title }: OutfitCardProps) {
   return (
     <div
-      className="ui-enter"
+      className="ui-enter ui-hover-soft"
       style={{
         background: colors.surface,
         border: `1px solid ${colors.border}`,
         borderRadius: spacing.lg,
         padding: spacing.lg,
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        gap: spacing.md,
       }}
     >
       {title ? (
         <h3
           style={{
             ...typography.cardTitle,
-            marginBottom: spacing.md,
+            margin: 0,
           }}
         >
           {title}

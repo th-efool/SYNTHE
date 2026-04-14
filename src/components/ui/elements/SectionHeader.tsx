@@ -12,14 +12,16 @@ export function SectionHeader({ title, subtitle }: SectionHeaderProps) {
       className="ui-enter"
       style={{
         marginBottom: spacing.xl,
+        maxWidth: "720px",
       }}
     >
-      <h2 style={typography.sectionTitle}>{title}</h2>
+      <h2 style={{ ...typography.sectionTitle, margin: 0 }}>{title}</h2>
       {subtitle ? (
         <p
           style={{
             ...typography.body,
             marginTop: spacing.sm,
+            marginBottom: 0,
           }}
         >
           {subtitle}

@@ -29,9 +29,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`scroll-smooth h-full antialiased ${inter.variable} ${instrumentSerif.variable}`}>
-      <body className="min-h-full flex flex-col bg-[#F9F6F0] text-[#7A6F68] font-light overflow-x-hidden leading-[1.8]">
+      <body className="min-h-full flex flex-col font-light overflow-x-hidden leading-[1.8]">
         <Header />
-        <main>{children}</main>
+        <main style={{ flex: 1 }}>{children}</main>
         <Footer />
       </body>
     </html>

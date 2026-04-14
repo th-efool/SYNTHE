@@ -1,4 +1,5 @@
 import { colors } from "@/components/theme/colors";
+import { spacing } from "@/components/theme/spacing";
 import { typography } from "@/components/theme/typography";
 
 type EmptyStateProps = {
@@ -7,14 +8,25 @@ type EmptyStateProps = {
 
 export function EmptyState({ message }: EmptyStateProps) {
   return (
-    <p
+    <div
       className="ui-enter"
       style={{
-        ...typography.body,
-        color: colors.mutedText,
+        border: `1px solid ${colors.border}`,
+        borderRadius: spacing.lg,
+        padding: spacing.xl,
+        background: colors.surface,
+        textAlign: "center",
       }}
     >
-      {message}
-    </p>
+      <p
+        style={{
+          ...typography.body,
+          color: colors.mutedText,
+          margin: 0,
+        }}
+      >
+        {message}
+      </p>
+    </div>
   );
 }
