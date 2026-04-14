@@ -12,7 +12,7 @@ export default function Footer() {
   return (
     <footer>
       <p>SYNTHE</p>
-      <p>© Placeholder</p>
+      <p>(c) Placeholder</p>
     </footer>
   );
 }
