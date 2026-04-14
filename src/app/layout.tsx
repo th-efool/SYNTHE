@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Instrument_Serif } from "next/font/google";
+import Header from "@/components/global/Header";
+import Footer from "@/components/global/Footer";
 import "./globals.css";
 
 const inter = Inter({
@@ -28,7 +30,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`scroll-smooth h-full antialiased ${inter.variable} ${instrumentSerif.variable}`}>
       <body className="min-h-full flex flex-col bg-[#F9F6F0] text-[#7A6F68] font-light overflow-x-hidden leading-[1.8]">
-        {children}
+        <Header />
+        <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );
