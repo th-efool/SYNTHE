@@ -3,7 +3,6 @@ export default function Wardrobe() {
     <section id="wardrobe" className="py-20 bg-[#FCF9F6] relative border-b border-[#D4C7B8]/40">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col lg:flex-row gap-10 lg:gap-16">
-          
           <div className="w-full lg:w-4/12 flex flex-col">
             <div>
               <h2 className="reveal-up text-4xl lg:text-5xl font-editorial tracking-tight text-[#201A17] mb-4" style={{ transitionDelay: '0s' }}>
@@ -16,7 +15,6 @@ export default function Wardrobe() {
           </div>
 
           <div className="w-full lg:w-8/12 flex flex-col">
-            
             <div className="reveal-up mb-8 flex items-center gap-3 border-b border-[#D4C7B8]/40 pb-3" style={{ transitionDelay: '0.2s' }}>
               <div className="w-1.5 h-1.5 bg-[#B87A5D] rounded-full anim-pulse-soft"></div>
               <span className="text-xs uppercase tracking-wider text-[#7A6F68]">
@@ -25,7 +23,6 @@ export default function Wardrobe() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              
               <div className="reveal-up hover-scale-card group cursor-pointer flex flex-col relative" style={{ transitionDelay: '0.3s' }}>
                 <div className="aspect-[3/4] bg-[#F2EFE9] rounded-2xl mb-3 relative overflow-hidden border border-[#D4C7B8]/40 shadow-[0_8px_32px_-8px_rgba(58,49,44,0.04)]">
                   <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800&auto=format&fit=crop" alt="Soft Linen Jacket" className="w-full h-full object-cover" />
@@ -38,10 +35,10 @@ export default function Wardrobe() {
                   <li className="flex items-center gap-2"><div className="w-1 h-1 rounded-full bg-[#D4C7B8]"></div> Relaxed presence</li>
                 </ul>
                 <div className="text-xs uppercase tracking-wider text-[#B87A5D] flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-medium">
-                  View piece <iconify-icon icon="solar:arrow-right-linear" strokeWidth="1.5"></iconify-icon>
+                  View piece →
                 </div>
               </div>
-              
+
               <div className="reveal-up hover-scale-card group cursor-pointer flex flex-col relative" style={{ transitionDelay: '0.4s' }}>
                 <div className="aspect-[4/5] bg-[#F2EFE9] rounded-2xl mb-3 relative overflow-hidden border border-[#D4C7B8]/40 shadow-[0_8px_32px_-8px_rgba(58,49,44,0.04)]">
                   <img src="https://cdn-images.farfetch-contents.com/19/80/63/95/19806395_44431071_1000.jpg" alt="Draped Silk Blouse" className="w-full h-full object-cover" />
@@ -54,7 +51,7 @@ export default function Wardrobe() {
                   <li className="flex items-center gap-2"><div className="w-1 h-1 rounded-full bg-[#D4C7B8]"></div> Romantic essence</li>
                 </ul>
                 <div className="text-xs uppercase tracking-wider text-[#B87A5D] flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-medium">
-                  View piece <iconify-icon icon="solar:arrow-right-linear" strokeWidth="1.5"></iconify-icon>
+                  View piece →
                 </div>
               </div>
 
@@ -70,10 +67,9 @@ export default function Wardrobe() {
                   <li className="flex items-center gap-2"><div className="w-1 h-1 rounded-full bg-[#D4C7B8]"></div> Grounded presence</li>
                 </ul>
                 <div className="text-xs uppercase tracking-wider text-[#B87A5D] flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-medium">
-                  View piece <iconify-icon icon="solar:arrow-right-linear" strokeWidth="1.5"></iconify-icon>
+                  View piece →
                 </div>
               </div>
-              
             </div>
 
             <div className="reveal-up mt-10 pt-8 border-t border-[#D4C7B8]/40 text-center lg:text-left" style={{ transitionDelay: '0.6s' }}>
@@ -81,7 +77,6 @@ export default function Wardrobe() {
                 Every piece is selected to sit correctly on your frame, hold your color, and match how you naturally come across.
               </p>
             </div>
-
           </div>
         </div>
       </div>

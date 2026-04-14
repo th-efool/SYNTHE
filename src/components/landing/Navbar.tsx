@@ -1,4 +1,12 @@
+"use client";
+
+"use client";
+
+import { useScrollReveal } from "@/hooks/useScrollReveal";
+
 export default function Navbar() {
+  useScrollReveal();
+
   return (
     <nav className="fixed top-0 w-full z-50 bg-[#F9F6F0]/80 backdrop-blur-xl border-b border-[#D4C7B8]/40">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">

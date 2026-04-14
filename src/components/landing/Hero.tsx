@@ -6,36 +6,32 @@ export default function Hero() {
           <div className="w-1.5 h-1.5 bg-[#B87A5D] rounded-full anim-pulse-soft"></div>
           <span className="text-xs tracking-wider text-[#7A6F68] uppercase">Live Profile Active</span>
         </div>
-        
+
         <div className="reveal-up text-lg md:text-xl font-editorial italic text-[#8C8A79] mb-2 tracking-wide" style={{ transitionDelay: '0.1s' }}>
           Fabric. Skin. Light.
         </div>
 
-        <h1 className="reveal-up text-5xl md:text-6xl lg:text-7xl font-editorial leading-[1.05] tracking-tight mb-4 text-[#201A17] relative" style={{ transitionDelay: '0.2s' }}>
+        <h1 className="reveal-up text-5xl md:text-6xl lg:text-7xl font-editorial leading-[1.05] tracking-tight mb-4 text-[#201A17]" style={{ transitionDelay: '0.2s' }}>
           Find what naturally <span className="italic text-[#B87A5D]">suits you.</span>
         </h1>
-        
+
         <p className="reveal-up text-base text-[#7A6F68] max-w-md leading-[1.8] mb-6" style={{ transitionDelay: '0.3s' }}>
           Clothes should sit right on you.<br />
           The shape, the color, the way it comes together.<br />
           This brings those pieces into place.
         </p>
-        
+
         <div className="reveal-up flex flex-col w-full sm:w-auto" style={{ transitionDelay: '0.4s' }}>
           <button className="w-full sm:w-auto bg-[#201A17] text-[#F9F6F0] rounded-full px-8 py-4 text-sm tracking-wide hover:bg-[#3A312C] hover:shadow-lg transition-all duration-500 flex items-center justify-center gap-3 group relative overflow-hidden border border-[#1A1512]">
-            <span className="relative z-10 flex items-center gap-3">
-              Start your profile
-              <iconify-icon icon="solar:arrow-right-linear" className="text-lg group-hover:translate-x-1 transition-transform duration-500" strokeWidth="1.5"></iconify-icon>
-            </span>
+            <span className="relative z-10">Start your profile</span>
+            <span className="relative z-10 text-lg">→</span>
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(184,122,93,0.15),transparent_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
           </button>
 
           <div className="mt-4 pt-4 border-t border-[#D4C7B8]/60 w-full">
             <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-2">
               <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full border border-[#8C8A79] relative flex items-center justify-center">
-                  <div className="w-0.5 h-0.5 bg-[#8C8A79] rounded-full"></div>
-                </div>
+                <div className="w-1.5 h-1.5 rounded-full border border-[#8C8A79]"></div>
                 <span className="text-xs font-normal text-[#201A17]">Structure:</span>
                 <span className="text-xs text-[#7A6F68]">Soft Natural</span>
               </div>
@@ -45,13 +41,13 @@ export default function Hero() {
                 <span className="text-xs text-[#7A6F68]">Soft Autumn</span>
               </div>
               <div className="flex items-center gap-2">
-                <iconify-icon icon="solar:sparkles-linear" className="text-[#D4C7B8] text-xs" strokeWidth="1.5"></iconify-icon>
+                <span className="text-[#D4C7B8] text-xs">✦</span>
                 <span className="text-xs font-normal text-[#201A17]">Presence:</span>
                 <span className="text-xs text-[#7A6F68]">Romantic + Natural</span>
               </div>
             </div>
             <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-[#8C8A79]">
-              <iconify-icon icon="solar:shield-check-linear" className="text-[#D4C7B8] text-sm" strokeWidth="1.5"></iconify-icon>
+              <span className="text-[#D4C7B8]">◎</span>
               Grounded wardrobe decisions
             </div>
           </div>
@@ -60,11 +56,15 @@ export default function Hero() {
 
       <div className="reveal-up w-full lg:w-7/12 h-[500px] lg:h-[650px] relative rounded-[2.5rem] overflow-hidden bg-[#F2EFE9] group shadow-[0_16px_48px_-12px_rgba(58,49,44,0.12)] border border-[#D4C7B8]/60" style={{ transitionDelay: '0.5s' }}>
         <div className="absolute -inset-4 w-[calc(100%+32px)] h-[calc(100%+32px)] pointer-events-none">
-          <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=1600&auto=format&fit=crop" alt="Styling" className="w-full h-full object-cover object-top anim-drift anim-color-breathe transform origin-center opacity-95" />
+          <img
+            src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=1600&auto=format&fit=crop"
+            alt="Styling"
+            className="w-full h-full object-cover object-top anim-drift anim-color-breathe transform origin-center opacity-95"
+          />
         </div>
 
         <div className="absolute inset-0 bg-grain pointer-events-none mix-blend-multiply opacity-40"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_40%,rgba(212,199,184,0.15),transparent_70%)] mix-blend-color-burn pointer-events-none transition-opacity duration-1000"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_40%,rgba(212,199,184,0.15),transparent_70%)] mix-blend-color-burn pointer-events-none"></div>
         <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
           <div className="w-1/2 h-[200%] bg-gradient-to-r from-transparent via-[#F9F6F0]/10 to-transparent anim-light-sweep absolute -top-1/2 left-0 mix-blend-overlay"></div>
         </div>
@@ -85,7 +85,7 @@ export default function Hero() {
 
         <div className="absolute top-[20%] left-[6%] glass-panel rounded-xl p-4 flex flex-col gap-2 anim-float transition-transform hover:scale-105 cursor-default">
           <div className="flex items-center gap-2 mb-1">
-            <iconify-icon icon="solar:ruler-linear" className="text-[#8C8A79] text-sm" strokeWidth="1.5"></iconify-icon>
+            <span className="text-[#8C8A79] text-sm">⌬</span>
             <span className="text-xs uppercase tracking-wider text-[#7A6F68]">Structure</span>
           </div>
           <div className="flex flex-col gap-1">
@@ -103,7 +103,7 @@ export default function Hero() {
 
         <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col gap-2 p-2.5 glass-panel-dark rounded-full shadow-2xl anim-float-reverse z-20">
           <div className="w-4 h-4 rounded-full bg-[#E8DFD5] shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] hover:scale-125 transition-transform cursor-pointer"></div>
-          <div className="w-4 h-4 rounded-full bg-[#D4C7B8] shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] hover:scale-125 transition-transform cursor-pointer relative after:content-[''] after:absolute after:-right-2.5 after:top-1/2 after:-translate-y-1/2 after:w-1.5 after:h-px after:bg-[#F9F6F0]/30"></div>
+          <div className="w-4 h-4 rounded-full bg-[#D4C7B8] shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] hover:scale-125 transition-transform cursor-pointer"></div>
           <div className="w-4 h-4 rounded-full bg-[#B87A5D] shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] hover:scale-125 transition-transform cursor-pointer"></div>
           <div className="w-4 h-4 rounded-full bg-[#8C8A79] shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] hover:scale-125 transition-transform cursor-pointer"></div>
           <div className="w-4 h-4 rounded-full bg-[#6B5C52] shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] hover:scale-125 transition-transform cursor-pointer"></div>
@@ -112,7 +112,7 @@ export default function Hero() {
 
         <div className="absolute bottom-[22%] right-[12%] glass-panel rounded-xl p-4 flex flex-col gap-1.5 anim-float-delayed transition-transform hover:scale-105 cursor-default">
           <div className="flex items-center gap-2 mb-1">
-            <iconify-icon icon="solar:palette-linear" className="text-[#8C8A79] text-sm" strokeWidth="1.5"></iconify-icon>
+            <span className="text-[#8C8A79] text-sm">◉</span>
             <span className="text-xs uppercase tracking-wider text-[#7A6F68]">Tone</span>
           </div>
           <div className="flex items-end justify-between gap-5">
@@ -121,13 +121,10 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="absolute top-[65%] left-[8%] w-48 h-48 bg-[#D4C7B8]/20 blur-3xl rounded-full mix-blend-overlay anim-pulse-soft pointer-events-none z-10"></div>
-        <div className="absolute top-[58%] left-[18%] w-36 h-36 bg-[#8C8A79]/15 blur-2xl rounded-full mix-blend-overlay anim-pulse-soft pointer-events-none z-10" style={{ animationDelay: '2s' }}></div>
-        
         <div className="absolute top-[68%] left-[10%] glass-panel rounded-xl p-4 flex flex-col gap-3 anim-float transition-transform hover:scale-105 cursor-default">
           <div className="flex items-center justify-between gap-8 mb-0.5">
             <div className="flex items-center gap-2">
-              <iconify-icon icon="solar:star-fall-linear" className="text-[#8C8A79] text-sm" strokeWidth="1.5"></iconify-icon>
+              <span className="text-[#8C8A79] text-sm">✦</span>
               <span className="text-xs uppercase tracking-wider text-[#7A6F68]">Presence</span>
             </div>
             <div className="flex gap-1.5">
@@ -135,7 +132,6 @@ export default function Hero() {
               <div className="w-1.5 h-1.5 bg-[#D4C7B8] rounded-full anim-pulse-soft" style={{ animationDelay: '0.5s' }}></div>
             </div>
           </div>
-          
           <div className="flex items-center gap-2">
             <div className="px-3 py-1.5 bg-[#F9F6F0]/80 border border-[#D4C7B8]/50 rounded-md text-xs tracking-wide text-[#201A17] shadow-sm flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-[#B87A5D]"></div>

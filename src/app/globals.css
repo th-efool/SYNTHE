@@ -1,26 +1,124 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #F9F6F0;
+  --foreground: #201A17;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 300;
+  line-height: 1.8;
+  overflow-x: hidden;
 }
+
+.font-editorial { font-family: var(--font-editorial), serif; }
+.font-system { font-family: var(--font-inter), sans-serif; }
+
+.reveal-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-up.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hover-scale-card {
+  transition: transform 200ms ease-out;
+}
+.hover-scale-card:hover {
+  transform: scale(1.02);
+}
+
+@keyframes subtle-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes subtle-float-reverse {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.15); }
+}
+@keyframes mesh-shift {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+@keyframes scan-line {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { opacity: 0.2; }
+  90% { opacity: 0.2; }
+  100% { transform: translateY(400%); opacity: 0; }
+}
+@keyframes light-sweep {
+  0% { transform: translateX(-150%) skewX(-15deg); opacity: 0; }
+  30% { opacity: 0.3; }
+  70% { opacity: 0.3; }
+  100% { transform: translateX(250%) skewX(-15deg); opacity: 0; }
+}
+@keyframes color-breathe {
+  0%, 100% { filter: contrast(1) brightness(1) saturate(1.05); }
+  50% { filter: contrast(1.05) brightness(0.98) saturate(1.1); }
+}
+@keyframes drift {
+  0% { transform: translate(0, 0) scale(1.03); }
+  33% { transform: translate(1%, 1%) scale(1.05); }
+  66% { transform: translate(-1%, 0.5%) scale(1.02); }
+  100% { transform: translate(0, 0) scale(1.03); }
+}
+@keyframes line-draw {
+  0% { stroke-dashoffset: 100; opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { stroke-dashoffset: 0; opacity: 0.2; }
+}
+
+.anim-float { animation: subtle-float 7s ease-in-out infinite; }
+.anim-float-delayed { animation: subtle-float 8s ease-in-out infinite 2s; }
+.anim-float-reverse { animation: subtle-float-reverse 9s ease-in-out infinite 1s; }
+.anim-pulse-soft { animation: pulse-soft 4s ease-in-out infinite; }
+.anim-scan { animation: scan-line 8s linear infinite; }
+.anim-light-sweep { animation: light-sweep 10s ease-in-out infinite; }
+.anim-color-breathe { animation: color-breathe 14s ease-in-out infinite; }
+.anim-drift { animation: drift 25s ease-in-out infinite; }
+
+.bg-mesh {
+  background-image:
+    radial-gradient(at 0% 0%, hsla(32, 40%, 94%, 1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(20, 25%, 96%, 1) 0px, transparent 50%);
+  background-size: 200% 200%;
+  animation: mesh-shift 20s ease infinite;
+}
+
+.bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.06'/%3E%3C/svg%3E");
+}
+
+.glass-panel {
+  background: rgba(248, 245, 242, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 199, 184, 0.5);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.8), 0 8px 32px rgba(58, 49, 44, 0.05);
+}
+.glass-panel-dark {
+  background: rgba(58, 49, 44, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 199, 184, 0.2);
+}
+
+.structural-line {
+  stroke-dasharray: 100;
+  animation: line-draw 4s ease-out forwards;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #D4C7B8; border-radius: 4px; }
