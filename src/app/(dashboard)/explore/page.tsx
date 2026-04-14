@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ProductCard } from "@/components/ui/cards/ProductCard";
 import { Button } from "@/components/ui/elements/Button";
 import { SectionHeader } from "@/components/ui/elements/SectionHeader";
@@ -12,9 +13,9 @@ import { typography } from "@/components/theme/typography";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { mockProducts } from "@/lib/mockData";
 
-const minBound = Math.min(...mockProducts.map((p) => p.price));
-const maxBound = Math.max(...mockProducts.map((p) => p.price));
 type Sort = "relevance" | "price_asc" | "price_desc" | "newest";
+const sortValues: Sort[] = ["relevance", "price_asc", "price_desc", "newest"];
+const pageSizes = [12, 24, 36];
 
 function useDebouncedValue<T>(value: T, delay = 250) {
   const [debounced, setDebounced] = useState(value);
@@ -43,16 +44,34 @@ const itemMeta: Record<string, Pick<CatalogItem, "category" | "brand" | "price" 
 };
 
 const priceBounds = { min: 0, max: 250 };
-const pageSize = 4;
+
+function parseIntOr(value: string | null, fallback: number) {
+  if (!value) return fallback;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
+}
 
 export default function ExplorePage() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const profile = useUserProfile();
-  const [q, setQ] = useState("");
-  const [cat, setCat] = useState("all");
-  const [price, setPrice] = useState(priceBounds);
-  const [loc, setLoc] = useState("all");
-  const [sort, setSort] = useState<Sort>("relevance");
-  const [page, setPage] = useState(1);
+  const [q, setQ] = useState(() => searchParams.get("q") ?? "");
+  const [cat, setCat] = useState(() => searchParams.get("cat") ?? "all");
+  const [price, setPrice] = useState(() => ({
+    min: priceBounds.min,
+    max: Math.max(priceBounds.min, Math.min(priceBounds.max, parseIntOr(searchParams.get("priceMax"), priceBounds.max))),
+  }));
+  const [loc, setLoc] = useState(() => searchParams.get("loc") ?? "all");
+  const [sort, setSort] = useState<Sort>(() => {
+    const s = searchParams.get("sort");
+    return sortValues.includes(s as Sort) ? (s as Sort) : "relevance";
+  });
+  const [pageSize, setPageSize] = useState(() => {
+    const size = parseIntOr(searchParams.get("pageSize"), 12);
+    return pageSizes.includes(size) ? size : 12;
+  });
+  const [page, setPage] = useState(() => Math.max(1, parseIntOr(searchParams.get("page"), 1)));
   const dq = useDebouncedValue(q, 250);
 
   const data = useMemo<CatalogItem[]>(() => mockProducts.map((p) => ({ ...p, ...itemMeta[p.id] })), []);
@@ -81,11 +100,22 @@ export default function ExplorePage() {
   }, [cat, data, dq, loc, price.max, price.min, sort]);
 
   useEffect(() => {
-    setPage(1);
-  }, [dq]);
+    const params = new URLSearchParams();
+    if (q) params.set("q", q);
+    if (cat !== "all") params.set("cat", cat);
+    if (loc !== "all") params.set("loc", loc);
+    if (sort !== "relevance") params.set("sort", sort);
+    if (price.max !== priceBounds.max) params.set("priceMax", String(price.max));
+    if (page !== 1) params.set("page", String(page));
+    if (pageSize !== 12) params.set("pageSize", String(pageSize));
+    const query = params.toString();
+    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+  }, [cat, loc, page, pageSize, pathname, price.max, q, router, sort]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const currentPage = Math.min(page, totalPages);
+  const start = filtered.length ? (currentPage - 1) * pageSize + 1 : 0;
+  const end = filtered.length ? Math.min(filtered.length, currentPage * pageSize) : 0;
   const paged = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const clearFilters = () => {
@@ -110,7 +140,10 @@ export default function ExplorePage() {
         <div style={{ display: "grid", gap: spacing.sm, gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))" }}>
           <input
             value={q}
-            onChange={(e) => setQ(e.target.value)}
+            onChange={(e) => {
+              setQ(e.target.value);
+              setPage(1);
+            }}
             placeholder="Search product, brand, tag"
             style={{ ...typography.body, padding: spacing.sm, border: `1px solid ${colors.border}`, borderRadius: spacing.md }}
           />
@@ -174,8 +207,8 @@ export default function ExplorePage() {
             style={{ ...typography.body, padding: spacing.sm, border: `1px solid ${colors.border}`, borderRadius: spacing.md }}
           >
             <option value="relevance">Relevance</option>
-            <option value="price_asc">Price: Low to high</option>
-            <option value="price_desc">Price: High to low</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
             <option value="newest">Newest</option>
           </select>
         </div>
@@ -192,10 +225,33 @@ export default function ExplorePage() {
                 />
               ))}
             </Grid>
-            <div style={{ display: "flex", justifyContent: "flex-end", gap: spacing.sm }}>
-              <Button onClick={() => setPage((v) => Math.max(1, v - 1))}>Prev</Button>
-              <Tag label={`Page ${currentPage}/${totalPages}`} />
-              <Button onClick={() => setPage((v) => Math.min(totalPages, v + 1))}>Next</Button>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: spacing.sm, alignItems: "center", flexWrap: "wrap" }}>
+              <p style={{ ...typography.body, color: colors.secondaryText }}>
+                {start}-{end} of {filtered.length} results
+              </p>
+              <div style={{ display: "flex", gap: spacing.sm, alignItems: "center" }}>
+                <label htmlFor="page-size" style={{ ...typography.body, color: colors.secondaryText }}>
+                  Page size
+                </label>
+                <select
+                  id="page-size"
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setPage(1);
+                  }}
+                  style={{ ...typography.body, padding: spacing.sm, border: `1px solid ${colors.border}`, borderRadius: spacing.md }}
+                >
+                  {pageSizes.map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+                <Button onClick={() => setPage((v) => Math.max(1, v - 1))}>Prev</Button>
+                <Tag label={`Page ${currentPage}/${totalPages}`} />
+                <Button onClick={() => setPage((v) => Math.min(totalPages, v + 1))}>Next</Button>
+              </div>
             </div>
           </>
         ) : (
@@ -217,21 +273,3 @@ export default function ExplorePage() {
     </div>
   );
 }
-
-const inputStyle: CSSProperties = {
-  ...typography.body,
-  border: `1px solid ${colors.border}`,
-  borderRadius: spacing.sm,
-  background: colors.background,
-  color: colors.primaryText,
-  padding: `${spacing.sm} ${spacing.md}`,
-};
-
-const btnStyle: CSSProperties = {
-  ...typography.body,
-  border: `1px solid ${colors.border}`,
-  borderRadius: spacing.xxl,
-  background: colors.background,
-  padding: `${spacing.sm} ${spacing.md}`,
-  cursor: "pointer",
-};
