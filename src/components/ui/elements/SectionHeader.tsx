@@ -1,3 +1,6 @@
+import { spacing } from "@/components/theme/spacing";
+import { typography } from "@/components/theme/typography";
+
 type SectionHeaderProps = {
   title: string;
   subtitle?: string;
@@ -5,9 +8,23 @@ type SectionHeaderProps = {
 
 export function SectionHeader({ title, subtitle }: SectionHeaderProps) {
   return (
-    <div>
-      <h2>{title}</h2>
-      {subtitle ? <p>{subtitle}</p> : null}
+    <div
+      className="ui-enter"
+      style={{
+        marginBottom: spacing.xl,
+      }}
+    >
+      <h2 style={typography.sectionTitle}>{title}</h2>
+      {subtitle ? (
+        <p
+          style={{
+            ...typography.body,
+            marginTop: spacing.sm,
+          }}
+        >
+          {subtitle}
+        </p>
+      ) : null}
     </div>
   );
 }

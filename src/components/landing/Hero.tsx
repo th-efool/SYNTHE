@@ -1,5 +1,6 @@
-﻿"use client";
+"use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 export default function Hero() {
@@ -29,8 +30,7 @@ export default function Hero() {
         </p>
 
         <div className="reveal-up flex flex-col w-full sm:w-auto" style={{ transitionDelay: "0.4s" }}>
-          <button
-            className="pressable-btn w-full sm:w-auto bg-[#201A17] text-[#F9F6F0] rounded-full px-8 py-4 text-sm tracking-wide hover:bg-[#3A312C] hover:shadow-lg flex items-center justify-center gap-3 group relative overflow-hidden border border-[#1A1512]"
+          <Link href="/explore" className="pressable-btn w-full sm:w-auto bg-[#201A17] text-[#F9F6F0] rounded-full px-8 py-4 text-sm tracking-wide hover:bg-[#3A312C] hover:shadow-lg flex items-center justify-center gap-3 group relative overflow-hidden border border-[#1A1512]"
             onMouseMove={(e) => {
               const rect = e.currentTarget.getBoundingClientRect();
               setCtaGlow({ x: e.clientX - rect.left, y: e.clientY - rect.top });
@@ -45,7 +45,7 @@ export default function Hero() {
                 backgroundImage: `radial-gradient(circle at ${ctaGlow.x}px ${ctaGlow.y}px, rgba(184,122,93,0.22), transparent 55%)`,
               }}
             ></div>
-          </button>
+          </Link>
 
           <div className="mt-4 pt-4 border-t border-[#D4C7B8]/60 w-full">
             <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-2">
@@ -178,3 +178,4 @@ export default function Hero() {
     </section>
   );
 }
+

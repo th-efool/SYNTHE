@@ -1,7 +1,6 @@
 "use client";
 
-"use client";
-
+import Link from "next/link";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 export default function Navbar() {
@@ -16,6 +15,7 @@ export default function Navbar() {
           <a href="#system" className="hover:text-[#201A17] transition-colors duration-500">System</a>
           <a href="#wardrobe" className="hover:text-[#201A17] transition-colors duration-500">Selection</a>
           <a href="#transformation" className="hover:text-[#201A17] transition-colors duration-500">Proof</a>
+          <Link href="/explore" className="hover:text-[#201A17] transition-colors duration-500">Explore</Link>
         </div>
         <button className="text-sm text-[#201A17] border border-[#D4C7B8] rounded-full px-6 py-2 hover:bg-[#201A17] hover:border-[#201A17] hover:text-[#F9F6F0] transition-all duration-500">
           Sign In
