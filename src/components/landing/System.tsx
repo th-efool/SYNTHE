@@ -81,16 +81,48 @@ export default function System() {
           </div>
 
           <div className="w-full lg:w-5/12 relative flex gap-6 min-h-[500px]">
-            <div className="reveal-up w-[58%] relative rounded-2xl overflow-hidden border border-[#D4C7B8]/60 shadow-[0_8px_32px_-8px_rgba(58,49,44,0.08)] group" style={{ transitionDelay: '0.3s' }}>
-              <img src="https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?w=800&auto=format&fit=crop" alt="Aligned Outfit" className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700" />
-              <div className="absolute top-[30%] left-[10%] flex flex-col items-start z-10">
-                <div className="w-2 h-2 rounded-full bg-white shadow-md"></div>
-                <div className="mt-2 bg-[#F9F6F0]/95 backdrop-blur-md px-3 py-0.5 rounded-lg text-xs tracking-wide text-[#201A17] shadow-lg border border-[#D4C7B8]/50">Relaxed shoulder line</div>
+            <div className="reveal-up w-[58%] relative aspect-[4/5] rounded-2xl overflow-hidden border border-[#D4C7B8]/60 shadow-[0_8px_32px_-8px_rgba(58,49,44,0.08)] group">
+              <img
+                src="https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?w=800&auto=format&fit=crop"
+                className="absolute inset-0 w-full h-full object-cover object-center"
+              />
+
+              {/* Shoulder marker */}
+              <div
+                className="absolute z-10"
+                style={{
+                  left: "59%",
+                  top: "38%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
+                <div className="w-2 h-2 rounded-full bg-white shadow-md" />
+
+                <div className="absolute right-0 top-5.5 -translate-y-1/2">
+                  <div className="bg-[#F9F6F0]/70 backdrop-blur-sm px-3 py-1 rounded-lg text-xs tracking-wide text-[#201A17] shadow-md border border-[#D4C7B8]/40 whitespace-nowrap">
+                    Relaxed shoulder line
+                  </div>
+                </div>
               </div>
-              <div className="absolute bottom-[25%] right-[10%] flex flex-col items-end z-10">
-                <div className="w-2 h-2 rounded-full bg-white shadow-md"></div>
-                <div className="mt-2 bg-[#F9F6F0]/95 backdrop-blur-md px-3 py-1.5 rounded-lg text-xs tracking-wide text-[#201A17] shadow-lg border border-[#D4C7B8]/50">Soft, tactile fabric</div>
+
+              {/* Fabric marker */}
+              <div
+                className="absolute z-10"
+                style={{
+                  left: "65%",
+                  top: "70%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
+                <div className="w-2 h-2 rounded-full bg-white shadow-md" />
+
+                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                  <div className="bg-[#F9F6F0]/70 backdrop-blur-sm px-3 py-1.5 rounded-lg text-xs tracking-wide text-[#201A17] shadow-md border border-[#D4C7B8]/40 whitespace-nowrap">
+                    Soft, tactile fabric
+                  </div>
+                </div>
               </div>
+
             </div>
 
             <div className="w-[42%] flex flex-col gap-6">
