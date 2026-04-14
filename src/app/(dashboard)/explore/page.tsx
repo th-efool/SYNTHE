@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ProductCard } from "@/components/ui/cards/ProductCard";
 import { Button } from "@/components/ui/elements/Button";
 import { SectionHeader } from "@/components/ui/elements/SectionHeader";
@@ -54,25 +54,31 @@ function parseIntOr(value: string | null, fallback: number) {
 export default function ExplorePage() {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const profile = useUserProfile();
-  const [q, setQ] = useState(() => searchParams.get("q") ?? "");
-  const [cat, setCat] = useState(() => searchParams.get("cat") ?? "all");
-  const [price, setPrice] = useState(() => ({
-    min: priceBounds.min,
-    max: Math.max(priceBounds.min, Math.min(priceBounds.max, parseIntOr(searchParams.get("priceMax"), priceBounds.max))),
-  }));
-  const [loc, setLoc] = useState(() => searchParams.get("loc") ?? "all");
-  const [sort, setSort] = useState<Sort>(() => {
-    const s = searchParams.get("sort");
-    return sortValues.includes(s as Sort) ? (s as Sort) : "relevance";
-  });
-  const [pageSize, setPageSize] = useState(() => {
-    const size = parseIntOr(searchParams.get("pageSize"), 12);
-    return pageSizes.includes(size) ? size : 12;
-  });
-  const [page, setPage] = useState(() => Math.max(1, parseIntOr(searchParams.get("page"), 1)));
+  const [q, setQ] = useState("");
+  const [cat, setCat] = useState("all");
+  const [price, setPrice] = useState({ min: priceBounds.min, max: priceBounds.max });
+  const [loc, setLoc] = useState("all");
+  const [sort, setSort] = useState<Sort>("relevance");
+  const [pageSize, setPageSize] = useState(12);
+  const [page, setPage] = useState(1);
   const dq = useDebouncedValue(q, 250);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setQ(params.get("q") ?? "");
+    setCat(params.get("cat") ?? "all");
+    setLoc(params.get("loc") ?? "all");
+    const s = params.get("sort");
+    setSort(sortValues.includes(s as Sort) ? (s as Sort) : "relevance");
+    const size = parseIntOr(params.get("pageSize"), 12);
+    setPageSize(pageSizes.includes(size) ? size : 12);
+    setPage(Math.max(1, parseIntOr(params.get("page"), 1)));
+    setPrice({
+      min: priceBounds.min,
+      max: Math.max(priceBounds.min, Math.min(priceBounds.max, parseIntOr(params.get("priceMax"), priceBounds.max))),
+    });
+  }, []);
 
   const data = useMemo<CatalogItem[]>(() => mockProducts.map((p) => ({ ...p, ...itemMeta[p.id] })), []);
   const cats = useMemo(() => ["all", ...new Set(data.map((p) => p.category))], [data]);
