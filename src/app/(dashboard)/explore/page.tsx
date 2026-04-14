@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { ProductCard } from "@/components/ui/cards/ProductCard";
 import { Button } from "@/components/ui/elements/Button";
 import { SectionHeader } from "@/components/ui/elements/SectionHeader";
