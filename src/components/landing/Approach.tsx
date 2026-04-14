@@ -18,9 +18,8 @@ export default function Approach() {
               <span className="text-xs uppercase tracking-wider text-[#8C8A79] font-medium">Body Geometry System</span>
               <span className="text-lg text-[#8C8A79]">⌬</span>
             </div>
-            <div className="aspect-[4/3] w-full mb-5 relative rounded-xl overflow-hidden bg-[#F2EFE9] border border-[#D4C7B8]/60">
-              <img src="https://gabriellearruda.com/wp-content/uploads/2021/06/kibbeexamples.jpg" alt="Body Geometry" className="w-full h-full object-cover grayscale-[20%] opacity-90 group-hover:opacity-100 transition-opacity duration-700" />
-              <div className="absolute inset-0 bg-[#201A17]/10 mix-blend-multiply"></div>
+            <div className="aspect-[4/3]  w-full mb-5 relative rounded-xl overflow-hidden bg-[#F2EFE9] border border-[#D4C7B8]/60 ">
+              <img src="/kibbietype.png" alt="Body Geometry" className="w-full h-full object-cover grayscale-[0%] opacity-100 group-hover:opacity-100 transition-opacity duration-700" />
             </div>
             <h3 className="text-3xl font-editorial tracking-tight text-[#201A17] mt-1 mb-0">Kibbe Body Type</h3>
             <div className="w-[50px] h-px bg-[#D4C7B8] my-4 opacity-70"></div>
@@ -34,15 +33,15 @@ export default function Approach() {
               <span className="text-xs uppercase tracking-wider text-[#8C8A79] font-medium">Color Harmony System</span>
               <span className="text-lg text-[#8C8A79]">◉</span>
             </div>
-            <div className="aspect-[4/3] w-full mb-5 relative rounded-xl overflow-hidden bg-[#F2EFE9] border border-[#D4C7B8]/60">
+            <div className="w-full mb-5  relative rounded-xl overflow-hidden bg-[#F2EFE9] border border-[#D4C7B8]/60">
               <img src="https://cdn.prod.website-files.com/5eca30fd2b50b671e2107b06/60b9022d327540475afd2b49_Twelve%20Seaosons%20Colour%20Analysis.webp" alt="Seasonal Color" className="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 transition-opacity duration-700" />
-              <div className="absolute bottom-4 left-4 right-4 flex justify-between gap-1 p-2 bg-[#F9F6F0]/80 backdrop-blur-md rounded-lg border border-[#D4C7B8]/50 shadow-sm">
+              {/* <div className="absolute scale-[0.9] md:scale-[0.85] bottom-2 left-4 right-4 flex justify-between gap-1 p-2 bg-[#F9F6F0]/80 backdrop-blur-md rounded-lg border border-[#D4C7B8]/50 shadow-sm">
                 <div className="w-full h-8 rounded-md bg-[#E8DFD5] shadow-inner"></div>
                 <div className="w-full h-8 rounded-md bg-[#D4C7B8] shadow-inner"></div>
                 <div className="w-full h-8 rounded-md bg-[#B87A5D] shadow-inner"></div>
                 <div className="w-full h-8 rounded-md bg-[#8C8A79] shadow-inner"></div>
                 <div className="w-full h-8 rounded-md bg-[#6B5C52] shadow-inner"></div>
-              </div>
+              </div> */}
             </div>
             <h3 className="text-3xl font-editorial tracking-tight text-[#201A17] mt-1 mb-0">Seasonal Color</h3>
             <div className="w-[50px] h-px bg-[#D4C7B8] my-4 opacity-70"></div>
@@ -57,12 +56,11 @@ export default function Approach() {
               <span className="text-lg text-[#8C8A79]">✦</span>
             </div>
             <div className="aspect-[4/3] w-full mb-5 relative rounded-xl overflow-hidden bg-[#F2EFE9] border border-[#D4C7B8]/60">
-              <img src="https://cdn.prod.website-files.com/5eca30fd2b50b671e2107b06/60f802b8a0b822634c101106_Style%20Essences%20Spectrum%20Book.webp" alt="Style Essences" className="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 transition-opacity duration-700" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#201A17]/60 via-transparent to-transparent"></div>
-              <div className="absolute bottom-4 left-4 flex gap-2">
+              <img src="https://cdn.prod.website-files.com/5eca30fd2b50b671e2107b06/60f802b8a0b822634c101106_Style%20Essences%20Spectrum%20Book.webp" alt="Style Essences" className="w-full h-full object-contain object-center opacity-90 group-hover:opacity-100 transition-opacity duration-700" />
+              {/* <div className="absolute bottom-4 left-4 flex gap-2">
                 <span className="px-2.5 py-1 bg-[#F9F6F0]/90 backdrop-blur-sm border border-white/30 rounded-md text-xs uppercase tracking-wider text-[#201A17]">Natural</span>
                 <span className="px-2.5 py-1 bg-[#F9F6F0]/90 backdrop-blur-sm border border-white/30 rounded-md text-xs uppercase tracking-wider text-[#201A17]">Romantic</span>
-              </div>
+              </div> */}
             </div>
             <h3 className="text-3xl font-editorial tracking-tight text-[#201A17] mt-1 mb-0">Kitchener Essence</h3>
             <div className="w-[50px] h-px bg-[#D4C7B8] my-4 opacity-70"></div>
