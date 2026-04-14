@@ -1,458 +1,290 @@
-\## `INSTRUCTIONS.md`
+You’re not trying to “add animations” — you’re trying to **increase perceived responsiveness + intent density** without making it feel designed.
 
+So the instruction doc should enforce:
 
+> *micro-feedback everywhere, zero noise, no gimmicks*
 
-```md
+---
 
-\# OBJECTIVE
+## ✅ INSTRUCTIONS.md (drop-in for Codex)
 
-Resume and COMPLETE the interrupted landing page integration from `instructions/landingpage/`
+````md
+# INTERACTION REFINEMENT — MICRO DYNAMICS PASS
 
-into the main Next.js App Router project.
+Goal:
+Make the entire UI feel alive, responsive, and intentional through subtle, low-noise interactions.
+No flashy animations. Everything should feel like a *natural response*, not an effect.
 
+---
 
+## 1. GLOBAL PRINCIPLES
 
-This is NOT a copy-paste task.
+- Every interactive element must respond within 150–250ms
+- Prefer: opacity, transform, blur, shadow
+- Avoid: large movement, rotations, exaggerated scale
+- Always use easing: cubic-bezier(0.22, 1, 0.36, 1)
 
-This is a STRUCTURAL ADAPTATION task.
+---
 
+## 2. IMAGE CARDS (Commerce, Wardrobe, Transformation)
 
+Files:
+- :contentReference[oaicite:0]{index=0}
+- :contentReference[oaicite:1]{index=1}
+- :contentReference[oaicite:2]{index=2}
 
-The goal is:
+### Add layered hover system:
 
-\- Preserve design + behavior
+#### A. Image subtle zoom (already partially exists → refine)
+```css
+.group:hover img {
+  transform: scale(1.04);
+}
+````
 
-\- Refactor structure to match THIS project
+#### B. Add soft lighting sweep
 
-\- Avoid duplication, dead code, and mismatched patterns
+```css
+.card-light {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 40%,
+    rgba(255,255,255,0.12) 50%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
 
-
-
-\---
-
-
-
-\# CURRENT STATE (CRITICAL CONTEXT)
-
-
-
-\- Source landing page (Vite React):
-
-&#x20; `/instructions/landingpage/\*`
-
-
-
-\- Target project (Next.js App Router):
-
-&#x20; `/src/app/\*`
-
-&#x20; `/src/components/\*`
-
-
-
-\- Partial migration already attempted but:
-
-&#x20; - Architecture may have been overridden incorrectly
-
-&#x20; - Some files may be redundant / mislocated
-
-&#x20; - Styling + animations may be inconsistent
-
-
-
-Reference: :contentReference\[oaicite:0]{index=0}
-
-
-
-\---
-
-
-
-\# HARD RULES (DO NOT VIOLATE)
-
-
-
-1\. DO NOT blindly replicate folder structure from Vite project
-
-2\. DO NOT introduce duplicate components
-
-3\. DO NOT override existing working architecture
-
-4\. DO NOT create unnecessary wrappers or abstractions
-
-5\. KEEP token usage minimal → no verbose rewrites
-
-
-
-\---
-
-
-
-\# TARGET ARCHITECTURE (ENFORCE THIS)
-
-
-
-\## Pages
-
-\- Landing page MUST live at:
-
-&#x20; `src/app/page.tsx`
-
-
-
-\- REMOVE or IGNORE:
-
-&#x20; `src/app/(landing)/page.tsx` (route group conflict)
-
-
-
-\---
-
-
-
-\## Components
-
-ALL landing components go under:
-
+.group:hover .card-light {
+  opacity: 1;
+}
 ```
 
+#### C. Elevation response (not just scale)
 
-
-src/components/landing/
-
-
-
+```css
+.group:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px -20px rgba(58,49,44,0.18);
+}
 ```
 
+---
 
+## 3. TEXT REVEAL (ALL SECTIONS)
 
-Allowed components:
+### Replace static text with micro-shift:
 
-\- Navbar
+```css
+.text-shift {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
 
-\- Hero
-
-\- Approach
-
-\- System
-
-\- Wardrobe
-
-\- Transformation
-
-\- Commerce
-
-\- CTA
-
-\- Footer
-
-
-
-\---
-
-
-
-\## Shared Components (REUSE IF EXISTS)
-
-
-
-Before creating anything:
-
-\- CHECK:
-
-&#x20; `src/components/ui/\*`
-
-&#x20; `src/components/global/\*`
-
-
-
-If equivalent exists:
-
-→ REUSE instead of recreating
-
-
-
-\---
-
-
-
-\## Styling System
-
-
-
-SOURCE:
-
-\- `instructions/landingpage/src/index.css`
-
-\- `tailwind.config.js`
-
-
-
-TARGET:
-
-\- `src/app/globals.css`
-
-
-
-\### ACTIONS:
-
-\- Merge ONLY required styles
-
-\- Preserve:
-
-&#x20; - animations
-
-&#x20; - utility classes
-
-\- REMOVE:
-
-&#x20; - redundant resets
-
-&#x20; - conflicting base styles
-
-
-
-\---
-
-
-
-\## Animations / Effects
-
-
-
-\- Replace any DOM-based animation hacks with:
-
-&#x20; → React-safe logic
-
-&#x20; → IntersectionObserver hook
-
-
-
-If not already clean:
-
-Create:
-
+.group:hover .text-shift {
+  transform: translateY(-2px);
+}
 ```
 
+Apply to:
 
+* Titles in cards
+* "View piece →" (already exists, just enhance)
 
-src/hooks/useScrollReveal.ts
+---
 
+## 4. BUTTON (Hero.tsx)
 
+File:
 
+*
+
+### Add depth + pressure simulation:
+
+#### A. Press effect
+
+```css
+button:active {
+  transform: scale(0.97);
+}
 ```
 
+#### B. Glow follows cursor (optional but high impact)
 
+Add radial gradient tied to mouse position
 
-\---
+---
 
+## 5. HERO IMAGE (MOST IMPORTANT)
 
+File:
 
-\## Component Conversion Rules
+*
 
+### A. Parallax micro-response
 
+On mouse move:
 
-\### JSX → TSX
+```ts
+const offsetX = (mouseX / width - 0.5) * 6;
+const offsetY = (mouseY / height - 0.5) * 6;
 
-\- Convert ALL `.jsx` → `.tsx`
-
-\- Add minimal typing (no overengineering)
-
-
-
-\### Vite-specific code → REMOVE
-
-\- Remove:
-
-&#x20; - `vite.config`
-
-&#x20; - direct DOM mounts
-
-&#x20; - unused imports
-
-
-
-\---
-
-
-
-\## Layout Integration
-
-
-
-Update:
-
+image.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(1.02)`
 ```
 
+→ VERY subtle, almost subconscious
 
+---
 
-src/app/layout.tsx
+### B. Floating panels react to hover zone
 
+Each glass panel:
 
-
+```css
+.group:hover .panel {
+  transform: translateY(-3px) scale(1.02);
+}
 ```
 
+---
 
+## 6. ANNOTATION DOTS (YOUR CURRENT PROBLEM AREA)
 
-Ensure:
+File:
 
-\- Fonts properly loaded
+*
 
-\- Metadata updated
+### A. Add pulse (but not annoying)
 
-\- No duplicated `<html>` or `<body>` logic
+```css
+.marker-dot {
+  position: relative;
+}
 
+.marker-dot::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.4);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.4s ease;
+}
 
+.group:hover .marker-dot::after {
+  opacity: 1;
+  transform: scale(1.2);
+}
+```
 
-\---
+---
 
+### B. Labels appear ONLY on hover (cleaner UI)
 
+```css
+.marker-label {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: all 0.3s ease;
+}
 
-\## Assembly
+.group:hover .marker-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+```
 
+---
 
+## 7. APPROACH CARDS (IMPORTANT — currently static)
 
-`src/app/page.tsx` should:
+File:
 
+*
 
+### Add “material lift”
 
-\- Import ONLY from:
+```css
+.group:hover {
+  transform: translateY(-6px);
+}
+```
 
-&#x20; `@/components/landing/\*`
+### Add inner glow shift
 
+```css
+.group:hover {
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.9),
+    rgba(249,246,240,0.6)
+  );
+}
+```
 
+---
 
-\- Compose in order:
+## 8. TRANSFORMATION BEFORE/AFTER
 
-&#x20; Navbar
+File:
 
-&#x20; Hero
+*
 
-&#x20; Approach
+### Add comparison interaction:
 
-&#x20; System
+#### A. Hover → remove grayscale on "bad"
 
-&#x20; Wardrobe
+```css
+.group:hover img {
+  filter: grayscale(0%);
+  opacity: 0.85;
+}
+```
 
-&#x20; Transformation
+#### B. Slight contrast boost on "good"
 
-&#x20; Commerce
+```css
+.group:hover img {
+  filter: contrast(1.05);
+}
+```
 
-&#x20; CTA
+---
 
-&#x20; Footer
+## 9. MICRO DETAILS (HIGH ROI)
 
+### A. Borders react
 
+```css
+.group:hover {
+  border-color: rgba(184,122,93,0.4);
+}
+```
 
-NO extra wrappers unless necessary.
+### B. Grain / noise shift
 
+Very subtle opacity increase on hover
 
+---
 
-\---
+## 10. PERFORMANCE RULES
 
+* Use `will-change: transform` only on hoverable elements
+* Avoid layout shift (no height/width animations)
+* Keep all animations GPU-based (transform/opacity)
 
+---
 
-\# CLEANUP PHASE (MANDATORY)
+## FINAL CHECK
 
+If you hover everything quickly:
+→ Nothing should feel delayed
+→ Nothing should feel decorative
+→ Everything should feel like a *response*
 
+That’s the target.
 
-After integration:
-
-
-
-1\. DELETE unused files from:
-
-&#x20;  `/instructions/landingpage/`
-
-
-
-2\. REMOVE:
-
-&#x20;  - duplicate styles
-
-&#x20;  - unused components
-
-&#x20;  - dead imports
-
-
-
-3\. ENSURE:
-
-&#x20;  - no conflicting CSS
-
-&#x20;  - no duplicate layouts
-
-
-
-\---
-
-
-
-\# VALIDATION CHECKLIST
-
-
-
-Before finishing, VERIFY:
-
-
-
-\- \[ ] No duplicate components exist
-
-\- \[ ] No unused imports remain
-
-\- \[ ] No Vite-specific code remains
-
-\- \[ ] Page renders correctly in Next.js structure
-
-\- \[ ] Styling is consistent (no overrides breaking UI)
-
-\- \[ ] Animations work without layout shift issues
-
-
-
-\---
-
-
-
-\# OUTPUT FORMAT
-
-
-
-Return ONLY:
-
-
-
-1\. Files modified
-
-2\. Files created
-
-3\. Files deleted
-
-4\. Any assumptions made (1–2 lines max)
-
-
-
-NO explanations.
-
-NO commentary.
-
-NO verbosity.
-
-
-
-\---
-
-
-
-\# PRIORITY
-
-
-
-Correct structure > Visual perfection
-
-
-
-
-
-
-
+```

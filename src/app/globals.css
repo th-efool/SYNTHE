@@ -1,8 +1,9 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 :root {
   --background: #F9F6F0;
   --foreground: #201A17;
+  --ease-fluid: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 body {
@@ -28,10 +29,87 @@ body {
 }
 
 .hover-scale-card {
-  transition: transform 200ms ease-out;
+  transition: transform 220ms var(--ease-fluid), box-shadow 220ms var(--ease-fluid), border-color 220ms var(--ease-fluid), background 220ms var(--ease-fluid);
+  will-change: transform;
 }
 .hover-scale-card:hover {
-  transform: scale(1.02);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 60px -20px rgba(58,49,44,0.18);
+  border-color: rgba(184,122,93,0.4);
+}
+
+.card-image {
+  transition: transform 220ms var(--ease-fluid), filter 220ms var(--ease-fluid), opacity 220ms var(--ease-fluid);
+  will-change: transform;
+}
+.group:hover .card-image {
+  transform: scale(1.04);
+}
+
+.card-light {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 40%, rgba(255,255,255,0.12) 50%, transparent 60%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms var(--ease-fluid);
+}
+.group:hover .card-light {
+  opacity: 1;
+}
+
+.text-shift {
+  transition: transform 220ms var(--ease-fluid), opacity 220ms var(--ease-fluid);
+}
+.group:hover .text-shift {
+  transform: translateY(-2px);
+}
+
+.pressable-btn {
+  transition: transform 180ms var(--ease-fluid), box-shadow 220ms var(--ease-fluid), background-color 220ms var(--ease-fluid);
+}
+.pressable-btn:active {
+  transform: scale(0.97);
+}
+
+.panel {
+  transition: transform 220ms var(--ease-fluid);
+  will-change: transform;
+}
+.group:hover .panel {
+  transform: translateY(-3px) scale(1.02);
+}
+
+.marker-dot {
+  position: relative;
+}
+.marker-dot::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 220ms var(--ease-fluid), transform 220ms var(--ease-fluid);
+}
+.group:hover .marker-dot::after {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.marker-label {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 220ms var(--ease-fluid), transform 220ms var(--ease-fluid);
+}
+.group:hover .marker-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.approach-card:hover {
+  background: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(249,246,240,0.6));
 }
 
 @keyframes subtle-float {
@@ -122,3 +200,4 @@ body {
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #D4C7B8; border-radius: 4px; }
+

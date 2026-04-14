@@ -1,4 +1,4 @@
-export default function Transformation() {
+﻿export default function Transformation() {
   return (
     <section id="transformation" className="py-20 bg-[#1A1512] text-[#F9F6F0] relative">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#2A231F] via-[#1A1512] to-[#120E0C]"></div>
@@ -14,8 +14,9 @@ export default function Transformation() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center">
-          <div className="reveal-up relative rounded-3xl overflow-hidden bg-[#120E0C] group aspect-[4/5] lg:aspect-square" style={{ transitionDelay: '0.2s' }}>
-            <img src="https://images.unsplash.com/photo-1549570652-97324981a6fd?q=80&w=800&auto=format&fit=crop" alt="Unaligned styling" className="absolute inset-0 w-full h-full object-cover grayscale-[40%] opacity-60 transition-all duration-700" />
+          <div className="reveal-up hover-scale-card relative rounded-3xl overflow-hidden bg-[#120E0C] group aspect-[4/5] lg:aspect-square" style={{ transitionDelay: '0.2s' }}>
+            <img src="https://images.unsplash.com/photo-1549570652-97324981a6fd?q=80&w=800&auto=format&fit=crop" alt="Unaligned styling" className="card-image absolute inset-0 w-full h-full object-cover grayscale-[40%] opacity-60 transition-all duration-200 group-hover:grayscale-0 group-hover:opacity-85" />
+            <div className="card-light"></div>
             <div className="absolute inset-0 bg-gradient-to-t from-[#120E0C]/95 via-[#1A1512]/30 to-transparent"></div>
 
             <div className="absolute top-6 left-6">
@@ -24,18 +25,19 @@ export default function Transformation() {
 
             <div className="absolute bottom-6 left-6 right-6 flex flex-col gap-2">
               <div className="p-4 rounded-xl bg-[#1A1512]/70 backdrop-blur-md border border-[#3A312C]/60 flex items-start gap-3 shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
-                <span className="text-[#8C8A79] mt-1">✕</span>
+                <span className="text-[#8C8A79] mt-1">âœ•</span>
                 <p className="text-sm text-[#D4C7B8] leading-[1.6]">The shape feels stiff and disconnected from natural lines.</p>
               </div>
               <div className="p-4 rounded-xl bg-[#1A1512]/70 backdrop-blur-md border border-[#3A312C]/60 flex items-start gap-3 shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
-                <span className="text-[#8C8A79] mt-1">✕</span>
+                <span className="text-[#8C8A79] mt-1">âœ•</span>
                 <p className="text-sm text-[#D4C7B8] leading-[1.6]">Color sits flat and creates harsh, unnatural contrast.</p>
               </div>
             </div>
           </div>
 
-          <div className="reveal-up relative rounded-3xl overflow-hidden bg-[#2A231F] group aspect-[4/5] lg:aspect-square border border-[#D4C7B8]/20 shadow-2xl" style={{ transitionDelay: '0.3s' }}>
-            <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800&auto=format&fit=crop" alt="Resolved styling" className="absolute inset-0 w-full h-full object-cover transition-all duration-700" />
+          <div className="reveal-up hover-scale-card relative rounded-3xl overflow-hidden bg-[#2A231F] group aspect-[4/5] lg:aspect-square border border-[#D4C7B8]/20 shadow-2xl" style={{ transitionDelay: '0.3s' }}>
+            <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800&auto=format&fit=crop" alt="Resolved styling" className="card-image absolute inset-0 w-full h-full object-cover transition-all duration-200 group-hover:contrast-105" />
+            <div className="card-light"></div>
             <div className="absolute inset-0 bg-gradient-to-t from-[#120E0C]/95 via-[#2A231F]/30 to-transparent"></div>
 
             <div className="absolute top-6 left-6">
@@ -46,14 +48,14 @@ export default function Transformation() {
               <div className="p-4 rounded-xl bg-[#F9F6F0]/10 backdrop-blur-lg border border-[#F9F6F0]/20 flex flex-col gap-2 shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
                 <div className="flex items-center justify-between">
                   <span className="text-xs uppercase tracking-wider text-[#D4C7B8]">Structure</span>
-                  <span className="text-[#F9F6F0]">✓</span>
+                  <span className="text-[#F9F6F0]">âœ“</span>
                 </div>
                 <p className="text-sm text-[#F9F6F0] leading-[1.6]">The soft, natural silhouette drapes and holds together beautifully.</p>
               </div>
               <div className="p-4 rounded-xl bg-[#F9F6F0]/10 backdrop-blur-lg border border-[#F9F6F0]/20 flex flex-col gap-2 shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
                 <div className="flex items-center justify-between">
                   <span className="text-xs uppercase tracking-wider text-[#D4C7B8]">Tone &amp; Presence</span>
-                  <span className="text-[#F9F6F0]">✓</span>
+                  <span className="text-[#F9F6F0]">âœ“</span>
                 </div>
                 <p className="text-sm text-[#F9F6F0] leading-[1.6]">Warm, muted colors work with the skin. Everything reads as one tactile look.</p>
               </div>
@@ -64,3 +66,4 @@ export default function Transformation() {
     </section>
   );
 }
+

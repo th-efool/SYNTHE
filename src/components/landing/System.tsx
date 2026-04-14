@@ -1,4 +1,4 @@
-export default function System() {
+﻿export default function System() {
   return (
     <section id="system" className="py-20 bg-mesh border-y border-[#D4C7B8]/40 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -58,21 +58,21 @@ export default function System() {
             <div className="reveal-up mt-10 pt-10 border-t border-[#D4C7B8]/80 grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8" style={{ transitionDelay: '0.6s' }}>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#2A231F]">
-                  <span className="text-sm text-[#8C8A79]">✂</span>
+                  <span className="text-sm text-[#8C8A79]">âœ‚</span>
                   Silhouette
                 </div>
                 <p className="text-sm text-[#2A231F] font-medium leading-[1.6]">Soft, unstructured drape</p>
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#2A231F]">
-                  <span className="text-sm text-[#8C8A79]">◉</span>
+                  <span className="text-sm text-[#8C8A79]">â—‰</span>
                   Color
                 </div>
                 <p className="text-sm text-[#2A231F] font-medium leading-[1.6]">Muted, warm palette</p>
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#2A231F]">
-                  <span className="text-sm text-[#8C8A79]">✦</span>
+                  <span className="text-sm text-[#8C8A79]">âœ¦</span>
                   Presence
                 </div>
                 <p className="text-sm text-[#2A231F] font-medium leading-[1.6]">Relaxed with softness</p>
@@ -81,11 +81,12 @@ export default function System() {
           </div>
 
           <div className="w-full lg:w-5/12 relative flex gap-6 min-h-[500px]">
-            <div className="reveal-up w-[58%] relative aspect-[4/5] rounded-2xl overflow-hidden border border-[#D4C7B8]/60 shadow-[0_8px_32px_-8px_rgba(58,49,44,0.08)] group">
+            <div className="reveal-up hover-scale-card w-[58%] relative aspect-[4/5] rounded-2xl overflow-hidden border border-[#D4C7B8]/60 shadow-[0_8px_32px_-8px_rgba(58,49,44,0.08)] group">
               <img
                 src="https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?w=800&auto=format&fit=crop"
-                className="absolute inset-0 w-full h-full object-cover object-center"
+                className="card-image absolute inset-0 w-full h-full object-cover object-center"
               />
+              <div className="card-light"></div>
 
               {/* Shoulder marker */}
               <div
@@ -96,10 +97,10 @@ export default function System() {
                   transform: "translate(-50%, -50%)",
                 }}
               >
-                <div className="w-2 h-2 rounded-full bg-white shadow-md" />
+                <div className="marker-dot w-2 h-2 rounded-full bg-white shadow-md" />
 
                 <div className="absolute right-0 top-5.5 -translate-y-1/2">
-                  <div className="bg-[#F9F6F0]/70 backdrop-blur-sm px-3 py-1 rounded-lg text-xs tracking-wide text-[#201A17] shadow-md border border-[#D4C7B8]/40 whitespace-nowrap">
+                  <div className="marker-label bg-[#F9F6F0]/70 backdrop-blur-sm px-3 py-1 rounded-lg text-xs tracking-wide text-[#201A17] shadow-md border border-[#D4C7B8]/40 whitespace-nowrap">
                     Relaxed shoulder line
                   </div>
                 </div>
@@ -114,10 +115,10 @@ export default function System() {
                   transform: "translate(-50%, -50%)",
                 }}
               >
-                <div className="w-2 h-2 rounded-full bg-white shadow-md" />
+                <div className="marker-dot w-2 h-2 rounded-full bg-white shadow-md" />
 
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <div className="bg-[#F9F6F0]/70 backdrop-blur-sm px-3 py-1.5 rounded-lg text-xs tracking-wide text-[#201A17] shadow-md border border-[#D4C7B8]/40 whitespace-nowrap">
+                  <div className="marker-label bg-[#F9F6F0]/70 backdrop-blur-sm px-3 py-1.5 rounded-lg text-xs tracking-wide text-[#201A17] shadow-md border border-[#D4C7B8]/40 whitespace-nowrap">
                     Soft, tactile fabric
                   </div>
                 </div>
@@ -140,3 +141,4 @@ export default function System() {
     </section>
   );
 }
+
