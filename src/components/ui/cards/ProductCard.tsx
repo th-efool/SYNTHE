@@ -11,9 +11,33 @@ type ProductCardProps = {
   image: string;
   tags?: string[];
   description?: string;
+  price?: number | string;
+  currency?: string;
+  location?: string;
+  rating?: number | string;
+  inStock?: boolean;
 };
 
-export function ProductCard({ id, name, image, tags, description }: ProductCardProps) {
+export function ProductCard({
+  id,
+  name,
+  image,
+  tags,
+  description,
+  price,
+  currency,
+  location,
+  rating,
+  inStock,
+}: ProductCardProps) {
+  const hasMeta = price !== undefined || location || rating !== undefined || inStock !== undefined;
+  const priceLabel =
+    price === undefined
+      ? null
+      : typeof price === "number"
+        ? `${currency ?? "$"}${price.toFixed(2)}`
+        : `${currency ?? ""}${price}`;
+
   return (
     <Link
       className="group"
@@ -53,6 +77,61 @@ export function ProductCard({ id, name, image, tags, description }: ProductCardP
             {tags.map((tag) => (
               <Tag key={tag} label={tag} />
             ))}
+          </div>
+        ) : null}
+        {hasMeta ? (
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              gap: spacing.sm,
+            }}
+          >
+            {priceLabel ? (
+              <span
+                style={{
+                  ...typography.body,
+                  fontWeight: 700,
+                  color: colors.primaryText,
+                }}
+              >
+                {priceLabel}
+              </span>
+            ) : null}
+            {location ? (
+              <span
+                style={{
+                  ...typography.body,
+                  color: colors.mutedText,
+                }}
+              >
+                {location}
+              </span>
+            ) : null}
+            {rating !== undefined ? (
+              <span
+                style={{
+                  ...typography.body,
+                  color: colors.secondaryText,
+                }}
+              >
+                ★ {rating}
+              </span>
+            ) : null}
+            {inStock !== undefined ? (
+              <span
+                style={{
+                  ...typography.body,
+                  color: inStock ? colors.surface : colors.primaryText,
+                  background: inStock ? colors.primaryText : colors.border,
+                  borderRadius: spacing.xs,
+                  padding: `${spacing.xs}px ${spacing.sm}px`,
+                }}
+              >
+                {inStock ? "In stock" : "Out of stock"}
+              </span>
+            ) : null}
           </div>
         ) : null}
         {description ? (
