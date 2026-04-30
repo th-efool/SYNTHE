@@ -14,11 +14,7 @@ type UserProfile = {
   season: string;
   essence: string[];
   descriptors: string[];
-  confidence: {
-    kibbe: number;
-    color: number;
-    essence: number;
-  };
+  confidence: { kibbe: number; color: number; essence: number };
   layers: Layer[];
   palette: string[];
 };
@@ -28,11 +24,7 @@ const userProfile: UserProfile = {
   season: "Soft Autumn",
   essence: ["Natural", "Romantic"],
   descriptors: ["Warm", "Muted", "Soft Structure", "Natural Presence"],
-  confidence: {
-    kibbe: 0.82,
-    color: 0.76,
-    essence: 0.71,
-  },
+  confidence: { kibbe: 0.82, color: 0.76, essence: 0.71 },
   layers: [
     {
       key: "structure",
@@ -60,40 +52,116 @@ const userProfile: UserProfile = {
     },
   ],
   palette: [
-    "#A3A380",
-    "#7C8C4A",
-    "#C97B5A",
-    "#D2A679",
-    "#E6B8A2",
-    "#5E6B3C",
-    "#B8A58A",
-    "#C89B3C",
+    "#A3A380","#7C8C4A","#C97B5A","#D2A679",
+    "#E6B8A2","#5E6B3C","#B8A58A","#C89B3C",
+    "#8B7355","#D4B896","#6B7C5E","#B8956A",
   ],
 };
 
+/* ─── DIVIDER ─── */
+function Divider() {
+  return <div style={{ height: 1, background: "#d9d0c5", margin: "0" }} />;
+}
+
+/* ─── SECTION LABEL ─── */
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p style={{
+      fontFamily: "'Georgia', serif",
+      fontSize: 10,
+      letterSpacing: "0.18em",
+      textTransform: "uppercase",
+      color: "#9b8e7e",
+      marginBottom: 12,
+    }}>
+      {children}
+    </p>
+  );
+}
+
+/* ─── PROFILE HEADER ─── */
 function ProfileHeader({ profile }: { profile: UserProfile }) {
   return (
-    <section className="grid gap-8 md:grid-cols-2 md:gap-10">
-      <div className="aspect-square w-full rounded-2xl border border-[#e8e3dc] bg-[#efe9e1]" />
-      <div className="flex flex-col justify-center gap-5">
-        <h1 className="font-serif text-4xl leading-tight text-[#2f2a24] md:text-5xl">Your Profile</h1>
-        <p className="text-base leading-tight text-[#5a5046]">{profile.descriptors.join(" · ")}</p>
-        <p className="max-w-2xl text-base leading-tight text-[#4f463e]">
-          Your profile combines relaxed structure, warm muted color harmony, and a soft natural presence.
-        </p>
-        <div className="flex flex-wrap items-center gap-6 text-sm leading-tight text-[#4f463e]">
-          <span>Structure {Math.round(profile.confidence.kibbe * 100)}%</span>
-          <span>Color {Math.round(profile.confidence.color * 100)}%</span>
-          <span>Presence {Math.round(profile.confidence.essence * 100)}%</span>
+    <section style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 40, alignItems: "start" }}>
+      <div style={{ position: "relative" }}>
+        <img
+          src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80"
+          alt="Profile"
+          style={{ width: "100%", aspectRatio: "3/4", objectFit: "cover", display: "block", borderRadius: 4 }}
+        />
+        <div style={{
+          position: "absolute", bottom: 0, left: 0, right: 0,
+          background: "linear-gradient(to top, rgba(47,42,36,0.55) 0%, transparent 60%)",
+          padding: "24px 16px 16px", borderRadius: "0 0 4px 4px",
+        }}>
+          <p style={{ color: "#f7f3ee", fontFamily: "Georgia, serif", fontSize: 13, letterSpacing: "0.08em" }}>
+            Soft Autumn · Soft Natural
+          </p>
         </div>
-        <div className="flex flex-wrap gap-3">
-          <button className="rounded-xl border border-[#d2aa72] bg-[#d2aa72] px-5 py-2 text-sm font-medium text-[#2f2a24]">
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 20, paddingTop: 4 }}>
+        <div>
+          <SectionLabel>Personal Style & Color Analysis</SectionLabel>
+          <h1 style={{
+            fontFamily: "'Georgia', serif",
+            fontSize: 38,
+            fontWeight: 400,
+            color: "#2f2a24",
+            lineHeight: 1.15,
+            margin: "0 0 6px",
+          }}>
+            Your Profile
+          </h1>
+          <p style={{ fontFamily: "Georgia, serif", fontStyle: "italic", fontSize: 15, color: "#7a6e62", margin: 0 }}>
+            {profile.descriptors.join(" · ")}
+          </p>
+        </div>
+
+        <p style={{ fontSize: 14, color: "#4f463e", lineHeight: 1.7, margin: 0, maxWidth: 480 }}>
+          Your profile combines relaxed structure with warm muted color harmony and a soft natural presence.
+          You shine in earthy, golden, and nature-inspired tones with effortless, approachable styling.
+        </p>
+
+        <div>
+          <Divider />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0, marginTop: 12 }}>
+            {[
+              { label: "Kibbe Type", value: "Soft Natural", conf: profile.confidence.kibbe },
+              { label: "Color Season", value: "Soft Autumn", conf: profile.confidence.color },
+              { label: "Essence", value: "Natural + Romantic", conf: profile.confidence.essence },
+            ].map((item, i) => (
+              <div key={i} style={{ paddingRight: 20 }}>
+                <p style={{ fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "#9b8e7e", margin: "0 0 3px" }}>
+                  {item.label}
+                </p>
+                <p style={{ fontSize: 13, fontWeight: 600, color: "#2f2a24", margin: "0 0 2px" }}>{item.value}</p>
+                <p style={{ fontSize: 11, color: "#9b8e7e", margin: 0 }}>{Math.round(item.conf * 100)}% confidence</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <button style={{
+            background: "#c97b5a", color: "#fff", border: "none",
+            borderRadius: 3, padding: "8px 18px", fontSize: 12,
+            letterSpacing: "0.06em", cursor: "pointer", fontFamily: "Georgia, serif",
+          }}>
             Refine Analysis
           </button>
-          <button className="rounded-xl border border-[#e8e3dc] bg-[#f7f3ee] px-5 py-2 text-sm font-medium text-[#4f463e]">
+          <button style={{
+            background: "transparent", color: "#5a5046", border: "1px solid #d9d0c5",
+            borderRadius: 3, padding: "8px 18px", fontSize: 12,
+            letterSpacing: "0.06em", cursor: "pointer",
+          }}>
             Retake (Form)
           </button>
-          <button className="rounded-xl border border-[#e8e3dc] bg-[#f7f3ee] px-5 py-2 text-sm font-medium text-[#4f463e]">
+          <button style={{
+            background: "transparent", color: "#5a5046", border: "1px solid #d9d0c5",
+            borderRadius: 3, padding: "8px 18px", fontSize: 12,
+            letterSpacing: "0.06em", cursor: "pointer",
+          }}>
             Retake (Photo)
           </button>
         </div>
@@ -102,29 +170,37 @@ function ProfileHeader({ profile }: { profile: UserProfile }) {
   );
 }
 
+/* ─── PROFILE SNAPSHOT (palette + rules) ─── */
 function ProfileSnapshot({ profile }: { profile: UserProfile }) {
   const rules = [
-    "Soft drape over rigid structure",
-    "Warm muted tones",
-    "Natural textured fabrics",
-    "Relaxed, approachable styling",
+    "Soft drape over rigid structure — avoid sharp tailoring",
+    "Warm muted tones only — earth, sage, camel, terracotta",
+    "Natural textured fabrics — linen, cotton, knit, suede",
+    "Relaxed, approachable silhouettes — no boxy or stiff cuts",
   ];
-
   return (
-    <section className="rounded-2xl border border-[#e8e3dc] bg-[#f3eee7] p-8">
-      <div className="grid gap-8 md:grid-cols-2">
-        <div className="grid grid-cols-4 gap-3">
-          {profile.palette.map((color) => (
-            <div
-              key={color}
-              className="aspect-square rounded-lg border border-[#e8e3dc]"
-              style={{ backgroundColor: color }}
-            />
-          ))}
+    <section>
+      <SectionLabel>Soft Autumn Palette</SectionLabel>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}>
+        <div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 6 }}>
+            {profile.palette.map((c) => (
+              <div key={c} style={{
+                aspectRatio: "1", borderRadius: 2,
+                backgroundColor: c, border: "1px solid rgba(0,0,0,0.06)",
+              }} />
+            ))}
+          </div>
+          <p style={{ fontSize: 11, color: "#9b8e7e", marginTop: 8 }}>
+            Warm · Muted · Low–Medium Contrast · Earth-rooted
+          </p>
         </div>
-        <ul className="list-disc space-y-3 pl-6 text-sm leading-tight text-[#4f463e]">
-          {rules.map((rule) => (
-            <li key={rule}>{rule}</li>
+        <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 8 }}>
+          {rules.map((r) => (
+            <li key={r} style={{ fontSize: 13, color: "#4f463e", lineHeight: 1.5, display: "flex", gap: 10 }}>
+              <span style={{ color: "#c97b5a", flexShrink: 0, marginTop: 1 }}>—</span>
+              {r}
+            </li>
           ))}
         </ul>
       </div>
@@ -132,67 +208,407 @@ function ProfileSnapshot({ profile }: { profile: UserProfile }) {
   );
 }
 
-function AnalysisLayerItem({ layer }: { layer: Layer }) {
+/* ─── COLOR COMPARISON ─── */
+function ColorComparisonSection() {
   return (
-    <div className="flex items-start justify-between gap-6 rounded-2xl border border-[#e8e3dc] p-5">
-      <div className="space-y-2">
-        <h3 className="font-serif text-xl leading-tight text-[#2f2a24]">{layer.title}</h3>
-        <p className="text-base font-semibold leading-tight text-[#3f372f]">{layer.result}</p>
-        <p className="text-sm leading-tight text-[#5f554b]">{layer.note}</p>
-      </div>
-      <div className="flex shrink-0 items-center gap-4">
-        <p className="text-sm leading-tight text-[#4f463e]">{Math.round(layer.confidence * 100)}%</p>
-        <button className="rounded-xl border border-[#e8e3dc] bg-[#f7f3ee] px-4 py-2 text-sm font-medium text-[#4f463e]">
-          Refine
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function AnalysisState() {
-  return (
-    <section className="rounded-2xl border border-[#e8e3dc] bg-[#f7f3ee] px-6 py-5">
-      <div className="flex flex-col justify-between gap-4 text-sm leading-tight text-[#4f463e] md:flex-row md:items-center md:text-base">
-        <p>Current Phase: Color refinement</p>
-        <p>Last Updated: 2 min ago</p>
-        <p>Iterations: 5</p>
+    <section>
+      <SectionLabel>Color Comparison</SectionLabel>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+        <div>
+          <div style={{ position: "relative", overflow: "hidden", borderRadius: 3 }}>
+            <img
+              src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80"
+              alt="In your colors"
+              style={{ width: "100%", aspectRatio: "4/3", objectFit: "cover", objectPosition: "top", display: "block", filter: "saturate(0.9) warmth(1.1)" }}
+            />
+            <div style={{
+              position: "absolute", top: 10, left: 10,
+              background: "#5E6B3C", color: "#f7f3ee",
+              fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase",
+              padding: "3px 8px", borderRadius: 2,
+            }}>
+              In Your Colors
+            </div>
+          </div>
+          <p style={{ fontSize: 12, color: "#5f554b", marginTop: 8, lineHeight: 1.5 }}>
+            Skin reads clear, warm, and radiant. Features appear balanced and harmonious.
+          </p>
+        </div>
+        <div>
+          <div style={{ position: "relative", overflow: "hidden", borderRadius: 3 }}>
+            <img
+              src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80"
+              alt="Out of your colors"
+              style={{ width: "100%", aspectRatio: "4/3", objectFit: "cover", objectPosition: "top", display: "block", filter: "saturate(0.3) contrast(1.1) brightness(0.9)" }}
+            />
+            <div style={{
+              position: "absolute", top: 10, left: 10,
+              background: "#2f2a24", color: "#f7f3ee",
+              fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase",
+              padding: "3px 8px", borderRadius: 2,
+            }}>
+              Out of Your Colors
+            </div>
+          </div>
+          <p style={{ fontSize: 12, color: "#5f554b", marginTop: 8, lineHeight: 1.5 }}>
+            Shadows deepen, contrast breaks harmony. Skin looks duller, features less integrated.
+          </p>
+        </div>
       </div>
     </section>
   );
 }
 
-function RefinementCard({ title, description }: { title: string; description: string }) {
+/* ─── ANALYSIS LAYERS ─── */
+function AnalysisLayers({ layers }: { layers: Layer[] }) {
   return (
-    <div className="flex h-full flex-col justify-between gap-4 rounded-2xl border border-[#e8e3dc] bg-[#f7f3ee] p-5">
-      <div className="space-y-2">
-        <h3 className="font-serif text-xl leading-tight text-[#2f2a24]">{title}</h3>
-        <p className="text-sm leading-tight text-[#5f554b]">{description}</p>
+    <section>
+      <SectionLabel>Analysis Layers</SectionLabel>
+      <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+        {layers.map((layer, i) => (
+          <div key={layer.key}>
+            {i > 0 && <Divider />}
+            <div style={{
+              display: "grid", gridTemplateColumns: "120px 1fr 80px 70px",
+              gap: 20, alignItems: "center", padding: "14px 0",
+            }}>
+              <div>
+                <p style={{ fontFamily: "Georgia, serif", fontSize: 13, color: "#9b8e7e", margin: "0 0 2px", textTransform: "uppercase", letterSpacing: "0.1em", fontSize: 10 }}>
+                  {layer.title}
+                </p>
+                <p style={{ fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 600, color: "#2f2a24", margin: 0 }}>
+                  {layer.result}
+                </p>
+              </div>
+              <p style={{ fontSize: 13, color: "#5f554b", margin: 0, lineHeight: 1.5 }}>{layer.note}</p>
+              <div style={{ textAlign: "right" }}>
+                <p style={{ fontSize: 11, color: "#9b8e7e", margin: "0 0 4px" }}>{Math.round(layer.confidence * 100)}%</p>
+                <div style={{ height: 3, background: "#e8e3dc", borderRadius: 2, overflow: "hidden" }}>
+                  <div style={{ height: "100%", width: `${layer.confidence * 100}%`, background: "#c97b5a", borderRadius: 2 }} />
+                </div>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <span style={{
+                  fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase",
+                  color: layer.status === "resolved" ? "#5E6B3C" : "#c97b5a",
+                  border: `1px solid ${layer.status === "resolved" ? "#5E6B3C" : "#c97b5a"}`,
+                  padding: "2px 8px", borderRadius: 2,
+                }}>
+                  {layer.status}
+                </span>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
-      <button className="w-fit rounded-xl border border-[#e8e3dc] bg-[#f7f3ee] px-4 py-2 text-sm font-medium text-[#4f463e]">
-        Start
-      </button>
+    </section>
+  );
+}
+
+/* ─── HAIRSTYLE RECOMMENDATIONS ─── */
+function HairstyleSection() {
+  const styles = [
+    {
+      img: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&q=80",
+      title: "Soft Layers with Face Framing",
+      note: "Enhances natural width balance and adds movement to soft bone structure.",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1573497019236-17f8177b81e8?w=400&q=80",
+      title: "Long Wavy Layers",
+      note: "Maintains length while adding natural texture aligned with Soft Natural essence.",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&q=80",
+      title: "Curtain Bangs + Layers",
+      note: "Softens the forehead and highlights the eyes — ideal for oval with soft angles.",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80",
+      title: "Shoulder Length Lob",
+      note: "Creates shape and frames the face without overwhelming soft natural line.",
+    },
+  ];
+
+  return (
+    <section>
+      <SectionLabel>Hairstyle Recommendations</SectionLabel>
+      <p style={{ fontSize: 12, color: "#9b8e7e", margin: "0 0 14px" }}>
+        Aim for soft texture, natural waves, and light layers around the face.
+      </p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
+        {styles.map((s) => (
+          <div key={s.title}>
+            <img
+              src={s.img}
+              alt={s.title}
+              style={{ width: "100%", aspectRatio: "3/4", objectFit: "cover", objectPosition: "top", borderRadius: 3, display: "block" }}
+            />
+            <p style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 600, color: "#2f2a24", margin: "8px 0 3px" }}>
+              {s.title}
+            </p>
+            <p style={{ fontSize: 11, color: "#5f554b", margin: 0, lineHeight: 1.5 }}>{s.note}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ─── SKIN ANALYSIS ─── */
+function SkinAnalysisSection() {
+  const observations = [
+    "Warm, even skin tone with a natural glow",
+    "Minor texture on forehead and around nose — normal",
+    "Very light freckles and natural brightness",
+    "Overall healthy, low-inflammation baseline",
+  ];
+  const routine = [
+    { step: "Cleanser", detail: "Gentle, hydrating — avoid stripping foams" },
+    { step: "Treatment", detail: "Niacinamide or Vitamin C (AM) for glow and even tone" },
+    { step: "Moisturizer", detail: "Lightweight, nourishing — warm skin glow" },
+    { step: "Sunscreen", detail: "SPF 30+ Broad Spectrum daily, no exceptions" },
+  ];
+
+  return (
+    <section style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }}>
+      <div>
+        <SectionLabel>Skin Analysis</SectionLabel>
+        <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 7 }}>
+          {observations.map((o) => (
+            <li key={o} style={{ fontSize: 13, color: "#4f463e", display: "flex", gap: 10, lineHeight: 1.5 }}>
+              <span style={{ color: "#c97b5a", flexShrink: 0 }}>·</span>
+              {o}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <SectionLabel>Simple Care Routine</SectionLabel>
+        <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
+          {routine.map((r) => (
+            <div key={r.step} style={{ display: "grid", gridTemplateColumns: "90px 1fr", gap: 12 }}>
+              <p style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "#9b8e7e", margin: 0, paddingTop: 2 }}>
+                {r.step}
+              </p>
+              <p style={{ fontSize: 13, color: "#4f463e", margin: 0, lineHeight: 1.5 }}>{r.detail}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── GROOMING & DETAIL ─── */
+function GroomingSection() {
+  const tips = [
+    "Keep brows softly defined — no harsh fills or sharp edges",
+    "Brush upward for a lifted, open look; tint if sparse",
+    "Lightly tidy, maintain natural fullness and arch",
+    "Makeup direction: warm browns, terracotta, soft blush",
+  ];
+
+  return (
+    <section style={{ display: "grid", gridTemplateColumns: "1fr 180px", gap: 40, alignItems: "start" }}>
+      <div>
+        <SectionLabel>Grooming & Detail</SectionLabel>
+        <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 7 }}>
+          {tips.map((t) => (
+            <li key={t} style={{ fontSize: 13, color: "#4f463e", display: "flex", gap: 10, lineHeight: 1.5 }}>
+              <span style={{ color: "#c97b5a", flexShrink: 0 }}>—</span>
+              {t}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <img
+          src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=300&q=80"
+          alt="Grooming reference"
+          style={{ width: "100%", aspectRatio: "1", objectFit: "cover", objectPosition: "top", borderRadius: 3, display: "block" }}
+        />
+        <p style={{ fontSize: 10, color: "#9b8e7e", marginTop: 6 }}>Brow direction reference</p>
+      </div>
+    </section>
+  );
+}
+
+/* ─── GLOW-UP PANEL ─── */
+function GlowUpSection() {
+  const improvements = [
+    "Enhanced skin clarity with warm-toned skincare base",
+    "Refined layering — soft texture adds dimension without volume",
+    "Natural makeup: terracotta lips, warm bronze eyes, soft blush",
+    "Balanced tone — hair warmth harmonized with skin and clothing",
+  ];
+
+  return (
+    <section style={{ display: "grid", gridTemplateColumns: "240px 1fr", gap: 40, alignItems: "start" }}>
+      <div>
+        <img
+          src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&q=80"
+          alt="Glow-up version"
+          style={{ width: "100%", aspectRatio: "3/4", objectFit: "cover", objectPosition: "top", borderRadius: 3, display: "block" }}
+        />
+        <p style={{ fontSize: 10, color: "#9b8e7e", marginTop: 6 }}>Styled · Natural · Harmonized</p>
+      </div>
+      <div>
+        <SectionLabel>Glow-Up Version (Styled)</SectionLabel>
+        <p style={{ fontSize: 13, color: "#5f554b", margin: "0 0 16px", lineHeight: 1.6 }}>
+          What your look achieves when color, structure, and grooming are fully aligned with your profile:
+        </p>
+        <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
+          {improvements.map((imp, i) => (
+            <li key={i} style={{ display: "flex", gap: 14, alignItems: "start" }}>
+              <span style={{
+                flexShrink: 0, width: 20, height: 20,
+                background: "#c97b5a", color: "#fff",
+                borderRadius: "50%", display: "flex",
+                alignItems: "center", justifyContent: "center",
+                fontSize: 10, fontWeight: 700,
+              }}>
+                {i + 1}
+              </span>
+              <p style={{ fontSize: 13, color: "#4f463e", margin: 0, lineHeight: 1.6 }}>{imp}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+/* ─── QUICK STYLE GUIDE ─── */
+function QuickGuideSection() {
+  const best = ["Soft textures — knit, linen, cotton, suede", "Warm muted tones — earth, sage, camel", "Relaxed, feminine silhouettes with natural drape"];
+  const avoid = ["Cool icy tones — stark white, black, cobalt", "Overly bright or saturated colors", "Sharp tailoring and heavy structure"];
+  const tips = ["Layer soft textures for dimension", "Add warmth with gold and bronze jewelry", "Keep everything harmonious and grounded"];
+
+  return (
+    <section>
+      <SectionLabel>Quick Style Guide</SectionLabel>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 32 }}>
+        <div>
+          <p style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.14em", color: "#5E6B3C", margin: "0 0 10px", fontWeight: 700 }}>
+            Best Traits to Highlight
+          </p>
+          <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 7 }}>
+            {best.map((b) => (
+              <li key={b} style={{ fontSize: 12, color: "#4f463e", lineHeight: 1.5, display: "flex", gap: 8 }}>
+                <span style={{ color: "#5E6B3C" }}>✓</span> {b}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.14em", color: "#c97b5a", margin: "0 0 10px", fontWeight: 700 }}>
+            Avoid
+          </p>
+          <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 7 }}>
+            {avoid.map((a) => (
+              <li key={a} style={{ fontSize: 12, color: "#4f463e", lineHeight: 1.5, display: "flex", gap: 8 }}>
+                <span style={{ color: "#c97b5a" }}>✕</span> {a}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.14em", color: "#7C8C4A", margin: "0 0 10px", fontWeight: 700 }}>
+            Style Direction
+          </p>
+          <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 7 }}>
+            {tips.map((t) => (
+              <li key={t} style={{ fontSize: 12, color: "#4f463e", lineHeight: 1.5, display: "flex", gap: 8 }}>
+                <span style={{ color: "#7C8C4A" }}>→</span> {t}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── ANALYSIS STATE FOOTER ─── */
+function AnalysisState() {
+  return (
+    <div style={{
+      display: "flex", justifyContent: "space-between",
+      fontSize: 11, color: "#9b8e7e", padding: "10px 0",
+      borderTop: "1px solid #d9d0c5",
+    }}>
+      <span>Phase: Color refinement</span>
+      <span>Last updated: 2 min ago</span>
+      <span>Iterations: 5</span>
     </div>
   );
 }
 
+/* ─── PAGE ─── */
 export default function TypingPage() {
   return (
-    <main className="min-h-screen bg-[#f7f3ee] px-6 py-10 text-[#2f2a24] md:px-10 md:py-14">
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-14 md:gap-16">
+    <main style={{
+      minHeight: "100vh",
+      background: "#f7f3ee",
+      padding: "48px 48px 80px",
+      color: "#2f2a24",
+      fontFamily: "-apple-system, 'Helvetica Neue', sans-serif",
+    }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", flexDirection: "column", gap: 0 }}>
+
         <ProfileHeader profile={userProfile} />
+
+        <div style={{ height: 40 }} />
+        <Divider />
+        <div style={{ height: 28 }} />
+
         <ProfileSnapshot profile={userProfile} />
-        <section className="space-y-4">
-          {userProfile.layers.map((layer) => (
-            <AnalysisLayerItem key={layer.key} layer={layer} />
-          ))}
-        </section>
+
+        <div style={{ height: 32 }} />
+        <Divider />
+        <div style={{ height: 28 }} />
+
+        <ColorComparisonSection />
+
+        <div style={{ height: 32 }} />
+        <Divider />
+        <div style={{ height: 28 }} />
+
+        <AnalysisLayers layers={userProfile.layers} />
+
+        <div style={{ height: 32 }} />
+        <Divider />
+        <div style={{ height: 28 }} />
+
+        <HairstyleSection />
+
+        <div style={{ height: 32 }} />
+        <Divider />
+        <div style={{ height: 28 }} />
+
+        <SkinAnalysisSection />
+
+        <div style={{ height: 32 }} />
+        <Divider />
+        <div style={{ height: 28 }} />
+
+        <GroomingSection />
+
+        <div style={{ height: 32 }} />
+        <Divider />
+        <div style={{ height: 28 }} />
+
+        <GlowUpSection />
+
+        <div style={{ height: 32 }} />
+        <Divider />
+        <div style={{ height: 28 }} />
+
+        <QuickGuideSection />
+
+        <div style={{ height: 24 }} />
         <AnalysisState />
-        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <RefinementCard title="Re-evaluate Structure" description="Run another pass on silhouette balance and line accommodation." />
-          <RefinementCard title="Re-check Color" description="Validate warmth, value depth, and contrast harmony." />
-          <RefinementCard title="Adjust Presence" description="Refine essence weighting for overall styling direction." />
-        </section>
       </div>
     </main>
   );
