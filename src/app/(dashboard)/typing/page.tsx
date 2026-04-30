@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTypingStore } from "@/lib/typing-state";
 
 type Layer = {
   key: string;
@@ -588,6 +589,7 @@ function RetakeAnalysisModal({ open, onClose }: { open: boolean; onClose: () => 
 export default function TypingPage() {
   const [isRetakeOpen, setIsRetakeOpen] = useState(false);
   const router = useRouter();
+  const { mode, currentStep, isComplete, resetFlow } = useTypingStore();
   return (
     <>
     <main style={{
@@ -599,6 +601,14 @@ export default function TypingPage() {
     }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", flexDirection: "column", gap: 0 }}>
 
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+          <p style={{ margin: 0, fontSize: 12, color: "#7a6e62" }}>
+            Flow state: {mode ?? "not-started"} · step {currentStep} · {isComplete ? "complete" : "in progress"}
+          </p>
+          <button onClick={resetFlow} style={{ border: "1px solid #d9d0c5", background: "transparent", borderRadius: 3, padding: "6px 10px", cursor: "pointer" }}>
+            Reset flow state
+          </button>
+        </div>
         <div className="section-enter"><ProfileHeader profile={userProfile} onRetake={() => setIsRetakeOpen(true)} onStart={() => router.push("/typing/start")} onRefine={() => router.push("/typing/refine")} /></div>
 
         <div style={{ height: 40 }} />
