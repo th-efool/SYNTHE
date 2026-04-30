@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 type Layer = {
@@ -84,7 +83,7 @@ function ProfileHeader({ profile, onRetake }: { profile: UserProfile; onRetake: 
   return (
     <section className="profile-header" style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 40, alignItems: "start" }}>
       <div style={{ position: "relative" }}>
-        <motion.img whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}
+        <img className="hover-image"
           src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80"
           alt="Profile"
           style={{ width: "100%", aspectRatio: "3/4", objectFit: "cover", display: "block", borderRadius: 4 }}
@@ -143,20 +142,20 @@ function ProfileHeader({ profile, onRetake }: { profile: UserProfile; onRetake: 
         </div>
 
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          <motion.button whileHover={{ opacity: 0.9 }} style={{
+          <button className="hover-button" style={{
             background: "#c97b5a", color: "#fff", border: "none",
             borderRadius: 3, padding: "8px 18px", fontSize: 12,
             letterSpacing: "0.06em", cursor: "pointer", fontFamily: "Georgia, serif",
           }}>
             Refine Analysis
-          </motion.button>
-          <motion.button whileHover={{ opacity: 0.85 }} onClick={onRetake} style={{
+          </button>
+          <button className="hover-button" onClick={onRetake} style={{
             background: "transparent", color: "#5a5046", border: "1px solid #d9d0c5",
             borderRadius: 3, padding: "8px 18px", fontSize: 12,
             letterSpacing: "0.06em", cursor: "pointer",
           }}>
             Retake Analysis
-          </motion.button>
+          </button>
         </div>
       </div>
     </section>
@@ -537,11 +536,10 @@ function RetakeAnalysisModal({ open, onClose }: { open: boolean; onClose: () => 
     if (open) window.addEventListener("keydown", onEsc);
     return () => window.removeEventListener("keydown", onEsc);
   }, [open, onClose]);
+  if (!open) return null;
   return (
-    <AnimatePresence>
-      {open && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 20 }}>
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.2 }} onClick={(e) => e.stopPropagation()} style={{ width: "100%", maxWidth: 520, background: "#f7f3ee", borderRadius: 4, border: "1px solid #d9d0c5", padding: "20px" }}>
+        <div className="modal-overlay" onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 20 }}>
+          <div className="modal-panel" onClick={(e) => e.stopPropagation()} style={{ width: "100%", maxWidth: 520, background: "#f7f3ee", borderRadius: 4, border: "1px solid #d9d0c5", padding: "20px" }}>
             <button onClick={onClose} style={{ float: "right", border: "none", background: "transparent", fontSize: 18, cursor: "pointer", color: "#7a6e62" }}>×</button>
             <h3 style={{ margin: "0 0 16px", fontFamily: "Georgia, serif", fontSize: 26, fontWeight: 400, color: "#2f2a24" }}>Retake Analysis</h3>
             {[
@@ -549,16 +547,14 @@ function RetakeAnalysisModal({ open, onClose }: { open: boolean; onClose: () => 
               ["Retake AI Image Analysis", "Upload new photos for re-analysis", () => router.push("/typing/upload")],
               ["Book Professional Analysis", "Get typed by a human expert", () => {}],
             ].map(([t, d, action]) => (
-              <motion.button key={t as string} whileHover={{ opacity: 0.88 }} onClick={action as () => void} style={{ width: "100%", textAlign: "left", background: "#fff", border: "1px solid #d9d0c5", borderRadius: 3, padding: "12px 14px", marginBottom: 10, cursor: "pointer" }}>
+              <button className="hover-button" key={t as string} onClick={action as () => void} style={{ width: "100%", textAlign: "left", background: "#fff", border: "1px solid #d9d0c5", borderRadius: 3, padding: "12px 14px", marginBottom: 10, cursor: "pointer" }}>
                 <p style={{ margin: "0 0 4px", fontFamily: "Georgia, serif", fontSize: 14, color: "#2f2a24" }}>{t as string}</p>
                 <p style={{ margin: 0, fontSize: 12, color: "#7a6e62" }}>{d as string}</p>
-              </motion.button>
+              </button>
             ))}
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
+          </div>
+        </div>
+      );
 }
 
 /* ─── PAGE ─── */
@@ -575,55 +571,55 @@ export default function TypingPage() {
     }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", flexDirection: "column", gap: 0 }}>
 
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}><ProfileHeader profile={userProfile} onRetake={() => setIsRetakeOpen(true)} /></motion.div>
+        <div className="section-enter"><ProfileHeader profile={userProfile} onRetake={() => setIsRetakeOpen(true)} /></div>
 
         <div style={{ height: 40 }} />
         <Divider />
         <div style={{ height: 28 }} />
 
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}><ProfileSnapshot profile={userProfile} /></motion.div>
+        <div className="section-enter"><ProfileSnapshot profile={userProfile} /></div>
 
         <div style={{ height: 32 }} />
         <Divider />
         <div style={{ height: 28 }} />
 
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}><ColorComparisonSection /></motion.div>
+        <div className="section-enter"><ColorComparisonSection /></div>
 
         <div style={{ height: 32 }} />
         <Divider />
         <div style={{ height: 28 }} />
 
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}><AnalysisLayers layers={userProfile.layers} /></motion.div>
+        <div className="section-enter"><AnalysisLayers layers={userProfile.layers} /></div>
 
         <div style={{ height: 32 }} />
         <Divider />
         <div style={{ height: 28 }} />
 
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}><HairstyleSection /></motion.div>
+        <div className="section-enter"><HairstyleSection /></div>
 
         <div style={{ height: 32 }} />
         <Divider />
         <div style={{ height: 28 }} />
 
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}><SkinAnalysisSection /></motion.div>
+        <div className="section-enter"><SkinAnalysisSection /></div>
 
         <div style={{ height: 32 }} />
         <Divider />
         <div style={{ height: 28 }} />
 
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}><GroomingSection /></motion.div>
+        <div className="section-enter"><GroomingSection /></div>
 
         <div style={{ height: 32 }} />
         <Divider />
         <div style={{ height: 28 }} />
 
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}><GlowUpSection /></motion.div>
+        <div className="section-enter"><GlowUpSection /></div>
 
         <div style={{ height: 32 }} />
         <Divider />
         <div style={{ height: 28 }} />
 
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}><QuickGuideSection /></motion.div>
+        <div className="section-enter"><QuickGuideSection /></div>
 
         <div style={{ height: 24 }} />
         <AnalysisState />
@@ -636,6 +632,19 @@ export default function TypingPage() {
           .hairstyle-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
         .analysis-row:hover { background: rgba(94, 107, 60, 0.05); }
+
+        .section-enter { animation: fadeUp 0.32s ease-out both; }
+        .section-enter:nth-of-type(1) { animation-delay: 0.05s; }
+        .hover-image { transition: transform 0.2s ease; }
+        .hover-image:hover { transform: scale(1.02); }
+        .hover-button { transition: opacity 0.2s ease; }
+        .hover-button:hover { opacity: 0.88; }
+        .modal-overlay { animation: fadeIn 0.2s ease-out both; }
+        .modal-panel { animation: scaleIn 0.2s ease-out both; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
       `}</style>
     </>
   );
