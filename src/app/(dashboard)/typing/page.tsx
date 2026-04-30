@@ -1,4 +1,4 @@
-import { spacing } from "@/components/theme/spacing";
+import React from "react";
 
 type Layer = {
   key: string;
@@ -28,7 +28,11 @@ const userProfile: UserProfile = {
   season: "Soft Autumn",
   essence: ["Natural", "Romantic"],
   descriptors: ["Warm", "Muted", "Soft Structure", "Natural Presence"],
-  confidence: { kibbe: 0.82, color: 0.76, essence: 0.71 },
+  confidence: {
+    kibbe: 0.82,
+    color: 0.76,
+    essence: 0.71,
+  },
   layers: [
     {
       key: "structure",
@@ -55,30 +59,43 @@ const userProfile: UserProfile = {
       status: "refinable",
     },
   ],
-  palette: ["#A3A380", "#7C8C4A", "#C97B5A", "#D2A679", "#E6B8A2", "#5E6B3C", "#B8A58A", "#C89B3C"],
+  palette: [
+    "#A3A380",
+    "#7C8C4A",
+    "#C97B5A",
+    "#D2A679",
+    "#E6B8A2",
+    "#5E6B3C",
+    "#B8A58A",
+    "#C89B3C",
+  ],
 };
-
-const swatchNames = ["Sage", "Olive", "Terracotta", "Camel", "Muted Peach", "Moss", "Warm Taupe", "Golden Ochre"];
 
 function ProfileHeader({ profile }: { profile: UserProfile }) {
   return (
-    <section className="grid gap-8 md:grid-cols-[minmax(320px,420px)_1fr] md:gap-14">
-      <div className="aspect-square w-full rounded-2xl border border-[#e8e3dc] bg-[#ece4d8]" />
-      <div className="flex flex-col justify-center" style={{ gap: spacing.xl }}>
-        <h1 className="font-serif text-[2.2rem] leading-[1.05] text-[#2f2a24] md:text-[2.5rem]">Your Profile</h1>
-        <p className="text-[0.95rem] leading-tight tracking-[0.02em] text-[#6d6257]">{profile.descriptors.join(" · ")}</p>
-        <p className="max-w-2xl text-[1rem] leading-[1.35] text-[#4f463e]">
+    <section className="grid gap-8 md:grid-cols-2 md:gap-10">
+      <div className="aspect-square w-full rounded-2xl border border-[#e8e3dc] bg-[#efe9e1]" />
+      <div className="flex flex-col justify-center gap-5">
+        <h1 className="font-serif text-4xl leading-tight text-[#2f2a24] md:text-5xl">Your Profile</h1>
+        <p className="text-base leading-tight text-[#5a5046]">{profile.descriptors.join(" · ")}</p>
+        <p className="max-w-2xl text-base leading-tight text-[#4f463e]">
           Your profile combines relaxed structure, warm muted color harmony, and a soft natural presence.
         </p>
-        <div className="flex flex-wrap items-center gap-7 text-sm leading-tight text-[#4f463e]">
-          <span className="uppercase tracking-[0.08em] text-[#8f8376]">Structure {Math.round(profile.confidence.kibbe * 100)}%</span>
-          <span className="uppercase tracking-[0.08em] text-[#8f8376]">Color {Math.round(profile.confidence.color * 100)}%</span>
-          <span className="uppercase tracking-[0.08em] text-[#8f8376]">Presence {Math.round(profile.confidence.essence * 100)}%</span>
+        <div className="flex flex-wrap items-center gap-6 text-sm leading-tight text-[#4f463e]">
+          <span>Structure {Math.round(profile.confidence.kibbe * 100)}%</span>
+          <span>Color {Math.round(profile.confidence.color * 100)}%</span>
+          <span>Presence {Math.round(profile.confidence.essence * 100)}%</span>
         </div>
         <div className="flex flex-wrap gap-3">
-          <button className="rounded-xl border border-[#d2aa72] bg-[#d2aa72] px-5 py-2 text-sm font-medium text-[#2f2a24]">Refine Analysis</button>
-          <button className="rounded-xl border border-[#e8e3dc] bg-[#f7f3ee] px-5 py-2 text-sm font-medium text-[#4f463e]">Retake (Form)</button>
-          <button className="rounded-xl border border-[#e8e3dc] bg-[#f7f3ee] px-5 py-2 text-sm font-medium text-[#4f463e]">Retake (Photo)</button>
+          <button className="rounded-xl border border-[#d2aa72] bg-[#d2aa72] px-5 py-2 text-sm font-medium text-[#2f2a24]">
+            Refine Analysis
+          </button>
+          <button className="rounded-xl border border-[#e8e3dc] bg-[#f7f3ee] px-5 py-2 text-sm font-medium text-[#4f463e]">
+            Retake (Form)
+          </button>
+          <button className="rounded-xl border border-[#e8e3dc] bg-[#f7f3ee] px-5 py-2 text-sm font-medium text-[#4f463e]">
+            Retake (Photo)
+          </button>
         </div>
       </div>
     </section>
@@ -86,22 +103,29 @@ function ProfileHeader({ profile }: { profile: UserProfile }) {
 }
 
 function ProfileSnapshot({ profile }: { profile: UserProfile }) {
+  const rules = [
+    "Soft drape over rigid structure",
+    "Warm muted tones",
+    "Natural textured fabrics",
+    "Relaxed, approachable styling",
+  ];
+
   return (
-    <section className="rounded-2xl border border-[#e8e3dc] bg-[#f2ece4] p-8 md:p-10">
+    <section className="rounded-2xl border border-[#e8e3dc] bg-[#f3eee7] p-8">
       <div className="grid gap-8 md:grid-cols-2">
         <div className="grid grid-cols-4 gap-3">
-          {profile.palette.map((color, idx) => (
-            <div key={color} className="space-y-1.5 text-center">
-              <div className="aspect-square rounded-md border border-[#e8e3dc]" style={{ backgroundColor: color }} />
-              <p className="text-[10px] uppercase tracking-[0.08em] text-[#8f8376]">{swatchNames[idx]}</p>
-            </div>
+          {profile.palette.map((color) => (
+            <div
+              key={color}
+              className="aspect-square rounded-lg border border-[#e8e3dc]"
+              style={{ backgroundColor: color }}
+            />
           ))}
         </div>
         <ul className="list-disc space-y-3 pl-6 text-sm leading-tight text-[#4f463e]">
-          <li>Soft drape over rigid structure</li>
-          <li>Warm muted tones</li>
-          <li>Natural textured fabrics</li>
-          <li>Relaxed, approachable styling</li>
+          {rules.map((rule) => (
+            <li key={rule}>{rule}</li>
+          ))}
         </ul>
       </div>
     </section>
@@ -110,15 +134,17 @@ function ProfileSnapshot({ profile }: { profile: UserProfile }) {
 
 function AnalysisLayerItem({ layer }: { layer: Layer }) {
   return (
-    <div className="flex items-start justify-between gap-6 rounded-2xl border border-[#e8e3dc] px-5 py-4">
-      <div className="space-y-1.5">
+    <div className="flex items-start justify-between gap-6 rounded-2xl border border-[#e8e3dc] p-5">
+      <div className="space-y-2">
         <h3 className="font-serif text-xl leading-tight text-[#2f2a24]">{layer.title}</h3>
         <p className="text-base font-semibold leading-tight text-[#3f372f]">{layer.result}</p>
         <p className="text-sm leading-tight text-[#5f554b]">{layer.note}</p>
       </div>
       <div className="flex shrink-0 items-center gap-4">
-        <p className="font-serif text-lg leading-tight text-[#3f372f]">{Math.round(layer.confidence * 100)}%</p>
-        <button className="rounded-xl border border-[#e8e3dc] bg-[#f7f3ee] px-4 py-2 text-sm font-medium text-[#4f463e]">Refine</button>
+        <p className="text-sm leading-tight text-[#4f463e]">{Math.round(layer.confidence * 100)}%</p>
+        <button className="rounded-xl border border-[#e8e3dc] bg-[#f7f3ee] px-4 py-2 text-sm font-medium text-[#4f463e]">
+          Refine
+        </button>
       </div>
     </div>
   );
@@ -127,10 +153,10 @@ function AnalysisLayerItem({ layer }: { layer: Layer }) {
 function AnalysisState() {
   return (
     <section className="rounded-2xl border border-[#e8e3dc] bg-[#f7f3ee] px-6 py-5">
-      <div className="grid gap-4 text-sm leading-tight text-[#4f463e] md:grid-cols-3 md:gap-6 md:text-base">
-        <p className="text-center md:text-left">Current Phase: Color refinement</p>
-        <p className="text-center">Last Updated: 2 min ago</p>
-        <p className="text-center md:text-right">Iterations: 5</p>
+      <div className="flex flex-col justify-between gap-4 text-sm leading-tight text-[#4f463e] md:flex-row md:items-center md:text-base">
+        <p>Current Phase: Color refinement</p>
+        <p>Last Updated: 2 min ago</p>
+        <p>Iterations: 5</p>
       </div>
     </section>
   );
@@ -143,7 +169,9 @@ function RefinementCard({ title, description }: { title: string; description: st
         <h3 className="font-serif text-xl leading-tight text-[#2f2a24]">{title}</h3>
         <p className="text-sm leading-tight text-[#5f554b]">{description}</p>
       </div>
-      <button className="w-fit rounded-xl border border-[#e8e3dc] bg-[#f7f3ee] px-4 py-2 text-sm font-medium text-[#4f463e]">Start</button>
+      <button className="w-fit rounded-xl border border-[#e8e3dc] bg-[#f7f3ee] px-4 py-2 text-sm font-medium text-[#4f463e]">
+        Start
+      </button>
     </div>
   );
 }
