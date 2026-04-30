@@ -1,4 +1,7 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Layer = {
   key: string;
@@ -6,7 +9,6 @@ type Layer = {
   result: string;
   confidence: number;
   note: string;
-  status: "resolved" | "refinable";
 };
 
 type UserProfile = {
@@ -32,7 +34,6 @@ const userProfile: UserProfile = {
       result: "Soft Natural",
       confidence: 0.82,
       note: "Width + softness, relaxed drape over rigid tailoring",
-      status: "resolved",
     },
     {
       key: "color",
@@ -40,7 +41,6 @@ const userProfile: UserProfile = {
       result: "Soft Autumn",
       confidence: 0.76,
       note: "Warm, muted tones with low-medium contrast",
-      status: "refinable",
     },
     {
       key: "presence",
@@ -48,7 +48,6 @@ const userProfile: UserProfile = {
       result: "Natural + Romantic",
       confidence: 0.71,
       note: "Soft, approachable presence with gentle femininity",
-      status: "refinable",
     },
   ],
   palette: [
@@ -80,11 +79,11 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 /* ─── PROFILE HEADER ─── */
-function ProfileHeader({ profile }: { profile: UserProfile }) {
+function ProfileHeader({ profile, onRetake }: { profile: UserProfile; onRetake: () => void }) {
   return (
-    <section style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 40, alignItems: "start" }}>
+    <section className="profile-header" style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 40, alignItems: "start" }}>
       <div style={{ position: "relative" }}>
-        <img
+        <img className="hover-image"
           src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80"
           alt="Profile"
           style={{ width: "100%", aspectRatio: "3/4", objectFit: "cover", display: "block", borderRadius: 4 }}
@@ -143,26 +142,19 @@ function ProfileHeader({ profile }: { profile: UserProfile }) {
         </div>
 
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          <button style={{
+          <button className="hover-button" style={{
             background: "#c97b5a", color: "#fff", border: "none",
             borderRadius: 3, padding: "8px 18px", fontSize: 12,
             letterSpacing: "0.06em", cursor: "pointer", fontFamily: "Georgia, serif",
           }}>
             Refine Analysis
           </button>
-          <button style={{
+          <button className="hover-button" onClick={onRetake} style={{
             background: "transparent", color: "#5a5046", border: "1px solid #d9d0c5",
             borderRadius: 3, padding: "8px 18px", fontSize: 12,
             letterSpacing: "0.06em", cursor: "pointer",
           }}>
-            Retake (Form)
-          </button>
-          <button style={{
-            background: "transparent", color: "#5a5046", border: "1px solid #d9d0c5",
-            borderRadius: 3, padding: "8px 18px", fontSize: 12,
-            letterSpacing: "0.06em", cursor: "pointer",
-          }}>
-            Retake (Photo)
+            Retake Analysis
           </button>
         </div>
       </div>
@@ -181,7 +173,7 @@ function ProfileSnapshot({ profile }: { profile: UserProfile }) {
   return (
     <section>
       <SectionLabel>Soft Autumn Palette</SectionLabel>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}>
+      <div className="profile-snapshot" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}>
         <div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 6 }}>
             {profile.palette.map((c) => (
@@ -213,7 +205,7 @@ function ColorComparisonSection() {
   return (
     <section>
       <SectionLabel>Color Comparison</SectionLabel>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+      <div className="color-comparison" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
         <div>
           <div style={{ position: "relative", overflow: "hidden", borderRadius: 3 }}>
             <img
@@ -268,9 +260,9 @@ function AnalysisLayers({ layers }: { layers: Layer[] }) {
         {layers.map((layer, i) => (
           <div key={layer.key}>
             {i > 0 && <Divider />}
-            <div style={{
+            <div className="analysis-row" style={{
               display: "grid", gridTemplateColumns: "120px 1fr 80px 70px",
-              gap: 20, alignItems: "center", padding: "14px 0",
+              gap: 20, alignItems: "center", padding: "14px 0", transition: "background 0.2s ease",
             }}>
               <div>
                 <p style={{ fontFamily: "Georgia, serif", color: "#9b8e7e", margin: "0 0 2px", textTransform: "uppercase", letterSpacing: "0.1em", fontSize: 10 }}>
@@ -287,16 +279,7 @@ function AnalysisLayers({ layers }: { layers: Layer[] }) {
                   <div style={{ height: "100%", width: `${layer.confidence * 100}%`, background: "#c97b5a", borderRadius: 2 }} />
                 </div>
               </div>
-              <div style={{ textAlign: "right" }}>
-                <span style={{
-                  fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase",
-                  color: layer.status === "resolved" ? "#5E6B3C" : "#c97b5a",
-                  border: `1px solid ${layer.status === "resolved" ? "#5E6B3C" : "#c97b5a"}`,
-                  padding: "2px 8px", borderRadius: 2,
-                }}>
-                  {layer.status}
-                </span>
-              </div>
+              <div />
             </div>
           </div>
         ))}
@@ -336,7 +319,7 @@ function HairstyleSection() {
       <p style={{ fontSize: 12, color: "#9b8e7e", margin: "0 0 14px" }}>
         Aim for soft texture, natural waves, and light layers around the face.
       </p>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
+      <div className="hairstyle-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
         {styles.map((s) => (
           <div key={s.title}>
             <img
@@ -488,7 +471,7 @@ function QuickGuideSection() {
   return (
     <section>
       <SectionLabel>Quick Style Guide</SectionLabel>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 32 }}>
+      <div className="quick-guide" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 32 }}>
         <div>
           <p style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.14em", color: "#5E6B3C", margin: "0 0 10px", fontWeight: 700 }}>
             Best Traits to Highlight
@@ -545,9 +528,40 @@ function AnalysisState() {
   );
 }
 
+
+function RetakeAnalysisModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const router = useRouter();
+  useEffect(() => {
+    const onEsc = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    if (open) window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
+  }, [open, onClose]);
+  if (!open) return null;
+  return (
+        <div className="modal-overlay" onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 20 }}>
+          <div className="modal-panel" onClick={(e) => e.stopPropagation()} style={{ width: "100%", maxWidth: 520, background: "#f7f3ee", borderRadius: 4, border: "1px solid #d9d0c5", padding: "20px" }}>
+            <button onClick={onClose} style={{ float: "right", border: "none", background: "transparent", fontSize: 18, cursor: "pointer", color: "#7a6e62" }}>×</button>
+            <h3 style={{ margin: "0 0 16px", fontFamily: "Georgia, serif", fontSize: 26, fontWeight: 400, color: "#2f2a24" }}>Retake Analysis</h3>
+            {[
+              ["Retake Quiz", "Answer structured questions again", () => router.push("/typing/quiz/1")],
+              ["Retake AI Image Analysis", "Upload new photos for re-analysis", () => router.push("/typing/upload")],
+              ["Book Professional Analysis", "Get typed by a human expert", () => {}],
+            ].map(([t, d, action]) => (
+              <button className="hover-button" key={t as string} onClick={action as () => void} style={{ width: "100%", textAlign: "left", background: "#fff", border: "1px solid #d9d0c5", borderRadius: 3, padding: "12px 14px", marginBottom: 10, cursor: "pointer" }}>
+                <p style={{ margin: "0 0 4px", fontFamily: "Georgia, serif", fontSize: 14, color: "#2f2a24" }}>{t as string}</p>
+                <p style={{ margin: 0, fontSize: 12, color: "#7a6e62" }}>{d as string}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+}
+
 /* ─── PAGE ─── */
 export default function TypingPage() {
+  const [isRetakeOpen, setIsRetakeOpen] = useState(false);
   return (
+    <>
     <main style={{
       minHeight: "100vh",
       background: "#f7f3ee",
@@ -557,59 +571,81 @@ export default function TypingPage() {
     }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", flexDirection: "column", gap: 0 }}>
 
-        <ProfileHeader profile={userProfile} />
+        <div className="section-enter"><ProfileHeader profile={userProfile} onRetake={() => setIsRetakeOpen(true)} /></div>
 
         <div style={{ height: 40 }} />
         <Divider />
         <div style={{ height: 28 }} />
 
-        <ProfileSnapshot profile={userProfile} />
+        <div className="section-enter"><ProfileSnapshot profile={userProfile} /></div>
 
         <div style={{ height: 32 }} />
         <Divider />
         <div style={{ height: 28 }} />
 
-        <ColorComparisonSection />
+        <div className="section-enter"><ColorComparisonSection /></div>
 
         <div style={{ height: 32 }} />
         <Divider />
         <div style={{ height: 28 }} />
 
-        <AnalysisLayers layers={userProfile.layers} />
+        <div className="section-enter"><AnalysisLayers layers={userProfile.layers} /></div>
 
         <div style={{ height: 32 }} />
         <Divider />
         <div style={{ height: 28 }} />
 
-        <HairstyleSection />
+        <div className="section-enter"><HairstyleSection /></div>
 
         <div style={{ height: 32 }} />
         <Divider />
         <div style={{ height: 28 }} />
 
-        <SkinAnalysisSection />
+        <div className="section-enter"><SkinAnalysisSection /></div>
 
         <div style={{ height: 32 }} />
         <Divider />
         <div style={{ height: 28 }} />
 
-        <GroomingSection />
+        <div className="section-enter"><GroomingSection /></div>
 
         <div style={{ height: 32 }} />
         <Divider />
         <div style={{ height: 28 }} />
 
-        <GlowUpSection />
+        <div className="section-enter"><GlowUpSection /></div>
 
         <div style={{ height: 32 }} />
         <Divider />
         <div style={{ height: 28 }} />
 
-        <QuickGuideSection />
+        <div className="section-enter"><QuickGuideSection /></div>
 
         <div style={{ height: 24 }} />
         <AnalysisState />
       </div>
     </main>
+      <RetakeAnalysisModal open={isRetakeOpen} onClose={() => setIsRetakeOpen(false)} />
+      <style jsx>{`
+        @media (max-width: 767px) {
+          .profile-header, .profile-snapshot, .color-comparison, .quick-guide { grid-template-columns: 1fr !important; }
+          .hairstyle-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+        .analysis-row:hover { background: rgba(94, 107, 60, 0.05); }
+
+        .section-enter { animation: fadeUp 0.32s ease-out both; }
+        .section-enter:nth-of-type(1) { animation-delay: 0.05s; }
+        .hover-image { transition: transform 0.2s ease; }
+        .hover-image:hover { transform: scale(1.02); }
+        .hover-button { transition: opacity 0.2s ease; }
+        .hover-button:hover { opacity: 0.88; }
+        .modal-overlay { animation: fadeIn 0.2s ease-out both; }
+        .modal-panel { animation: scaleIn 0.2s ease-out both; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+      `}</style>
+    </>
   );
 }
