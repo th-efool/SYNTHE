@@ -273,7 +273,7 @@ function AnalysisLayers({ layers }: { layers: Layer[] }) {
               gap: 20, alignItems: "center", padding: "14px 0",
             }}>
               <div>
-                <p style={{ fontFamily: "Georgia, serif", fontSize: 13, color: "#9b8e7e", margin: "0 0 2px", textTransform: "uppercase", letterSpacing: "0.1em", fontSize: 10 }}>
+                <p style={{ fontFamily: "Georgia, serif", color: "#9b8e7e", margin: "0 0 2px", textTransform: "uppercase", letterSpacing: "0.1em", fontSize: 10 }}>
                   {layer.title}
                 </p>
                 <p style={{ fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 600, color: "#2f2a24", margin: 0 }}>
