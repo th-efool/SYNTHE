@@ -1,10 +1,10 @@
 "use client";
 
 import { editorialPageStyle, typingTokens } from "@/features/typing/components/uiTokens";
+import { FlowPage } from "@/features/typing/components/FlowPage";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTypingStore } from "@/lib/typing-state";
-import { useTypingPageFX } from "@/features/typing/components/useTypingPageFX";
 
 const cards = [
   { key: "quiz", title: "Guided Quiz", helper: "Fastest method", description: "Structured questions with deterministic scoring.", recommended: true },
@@ -15,8 +15,7 @@ const cards = [
 export default function TypingStartPage() {
   const router = useRouter();
   const { mode, profile, isComplete, currentStep, answers, uploadedImages, resetFlow } = useTypingStore();
-  const { containerStyle } = useTypingPageFX();
-
+  
   useEffect(() => {
     if (profile && isComplete) return void router.replace("/typing");
     const hasPartialInputs = Object.keys(answers).length > 0 || uploadedImages.length > 0 || currentStep > 0 || !!mode;
@@ -26,7 +25,7 @@ export default function TypingStartPage() {
   }, [answers, currentStep, isComplete, mode, profile, router, uploadedImages]);
 
   return (
-    <main style={{ ...editorialPageStyle, ...containerStyle }}>
+    <FlowPage>
       <p style={{ margin: 0, color: typingTokens.color.muted }}>Style Analysis System</p>
       <h1 style={{ margin: "6px 0 8px" }}>Find Your Profile</h1>
       <p style={{ marginTop: 0, maxWidth: 620, color: typingTokens.color.muted }}>Resolve your structure, color, and presence through a structured analysis system.</p>
@@ -43,6 +42,6 @@ export default function TypingStartPage() {
       </div>
       <p style={{ marginTop: 16, fontSize: 12, color: typingTokens.color.muted }}>Used to analyze structure, color harmony, and presence with deterministic scoring.</p>
       <style>{`.typing-card:hover{transform:translateY(-2px) scale(1.01);border-color:${typingTokens.color.accent}} .typing-card:active{transform:scale(0.98)}`}</style>
-    </main>
+    </FlowPage>
   );
 }

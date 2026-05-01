@@ -1,6 +1,7 @@
 "use client";
 
-import { editorialPageStyle, typingTokens } from "@/features/typing/components/uiTokens";
+import { typingTokens } from "@/features/typing/components/uiTokens";
+import { FlowPage } from "@/features/typing/components/FlowPage";
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useTypingStore } from "@/lib/typing-state";
@@ -40,7 +41,7 @@ export default function TypingQuizStepPage() {
   if (!question) return null;
 
   return (
-    <main style={editorialPageStyle}>
+    <FlowPage>
       <ProgressHeader currentStep={normalizedStep} totalSteps={totalQuestions} />
       <QuestionBlock
         questionId={question.id}
@@ -66,6 +67,6 @@ export default function TypingQuizStepPage() {
           {normalizedStep >= totalQuestions ? "Submit and process" : "Next"}
         </button>
       </div>
-    </main>
+    </FlowPage>
   );
 }

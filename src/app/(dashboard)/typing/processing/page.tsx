@@ -1,11 +1,11 @@
 "use client";
 
 import { editorialPageStyle, typingTokens } from "@/features/typing/components/uiTokens";
+import { FlowPage } from "@/features/typing/components/FlowPage";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTypingStore } from "@/lib/typing-state";
 import { ProcessingIndicator } from "@/features/typing/components/ProcessingIndicator";
-import { useTypingPageFX } from "@/features/typing/components/useTypingPageFX";
 
 const messages = ["Extracting features...", "Analyzing structure...", "Resolving color profile...", "Finalizing result..."];
 
@@ -14,8 +14,7 @@ export default function TypingProcessingPage() {
   const { completeProfile } = useTypingStore();
   const [tick, setTick] = useState(0);
   const [progress, setProgress] = useState(0);
-  const { containerStyle } = useTypingPageFX();
-  const label = useMemo(() => messages[tick % messages.length], [tick]);
+    const label = useMemo(() => messages[tick % messages.length], [tick]);
 
   useEffect(() => {
     const msgId = window.setInterval(() => setTick((v) => v + 1), 800);
@@ -28,7 +27,8 @@ export default function TypingProcessingPage() {
   }, [completeProfile, router]);
 
   return (
-    <main style={{ ...editorialPageStyle, ...containerStyle, minHeight: "70vh", display: "grid", placeItems: "center" }}>
+    <FlowPage>
+      <div style={{ minHeight: "70vh", display: "grid", placeItems: "center" }}>
       <section style={{ textAlign: "center", width: "100%", maxWidth: 520 }}>
         <h1>Analyzing your inputs</h1>
         <p style={{ color: typingTokens.color.muted }}>{label}</p>
@@ -36,6 +36,7 @@ export default function TypingProcessingPage() {
         <div style={{ display: "flex", justifyContent: "center", margin: "12px 0" }}><ProcessingIndicator /></div>
         <div style={{ height: 8, borderRadius: 999, background: "#e6ddd2", overflow: "hidden" }}><div style={{ width: `${progress}%`, height: "100%", background: typingTokens.color.accent, transition: "width 100ms linear" }} /></div>
       </section>
-    </main>
+      </div>
+    </FlowPage>
   );
 }
