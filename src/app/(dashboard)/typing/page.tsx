@@ -589,7 +589,15 @@ function RetakeAnalysisModal({ open, onClose }: { open: boolean; onClose: () => 
 export default function TypingPage() {
   const [isRetakeOpen, setIsRetakeOpen] = useState(false);
   const router = useRouter();
-  const { mode, currentStep, isComplete, resetFlow } = useTypingStore();
+  const { mode, currentStep, isComplete, profile, resetFlow } = useTypingStore();
+
+  useEffect(() => {
+    if (!profile) {
+      router.replace("/typing/start");
+    }
+  }, [profile, router]);
+
+  if (!profile) return null;
   return (
     <>
     <main style={{

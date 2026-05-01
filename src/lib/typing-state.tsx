@@ -34,7 +34,7 @@ type TypingStore = TypingState & {
 
 const initialState: TypingState = {
   mode: null,
-  currentStep: 1,
+  currentStep: 0,
   answers: {},
   uploadedImages: [],
   isComplete: false,
