@@ -1,5 +1,6 @@
 "use client";
 
+import { editorialPageStyle, typingTokens } from "@/features/typing/components/uiTokens";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTypingStore } from "@/lib/typing-state";
@@ -29,7 +30,7 @@ export default function TypingStartPage() {
   }, [answers, currentStep, isComplete, mode, profile, router, uploadedImages]);
 
   return (
-    <main style={{ padding: 24 }}>
+    <main style={editorialPageStyle}>
       <h1>Start Analysis</h1>
       <p>Begin your typing flow.</p>
       <button onClick={() => { resetFlow(); router.push("/typing/mode"); }}>

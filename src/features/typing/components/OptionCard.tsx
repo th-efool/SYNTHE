@@ -1,5 +1,7 @@
 "use client";
 
+import { typingTokens } from "./uiTokens";
+
 type OptionCardProps = {
   children: React.ReactNode;
   selected?: boolean;
@@ -12,11 +14,12 @@ export function OptionCard({ children, selected = false, onClick }: OptionCardPr
       onClick={onClick}
       style={{
         textAlign: "left",
-        padding: "10px 12px",
-        borderRadius: 6,
-        border: selected ? "1px solid #c97b5a" : "1px solid #d9d0c5",
+        padding: `${typingTokens.spacing.sm}px ${typingTokens.spacing.md}px`,
+        borderRadius: typingTokens.border.radius,
+        border: selected ? `1px solid ${typingTokens.color.accent}` : typingTokens.border.soft,
         background: selected ? "#f4e4dc" : "#fff",
         cursor: "pointer",
+        fontFamily: typingTokens.typography.serif,
       }}
     >
       {children}

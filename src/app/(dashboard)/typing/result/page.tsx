@@ -1,5 +1,6 @@
 "use client";
 
+import { editorialPageStyle, typingTokens } from "@/features/typing/components/uiTokens";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTypingStore } from "@/lib/typing-state";
@@ -17,7 +18,7 @@ export default function TypingResultPage() {
   if (!profile || !isComplete) return null;
 
   return (
-    <main style={{ padding: 24 }}>
+    <main style={editorialPageStyle}>
       <h1>Your Result</h1>
       <p>{profile.kibbe} · {profile.season}</p>
       <p>Essence: {profile.essence.join(" + ")}</p>

@@ -1,5 +1,6 @@
 "use client";
 
+import { editorialPageStyle, typingTokens } from "@/features/typing/components/uiTokens";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTypingStore } from "@/lib/typing-state";
@@ -27,7 +28,7 @@ export default function TypingProcessingPage() {
     <main style={{ minHeight: "70vh", display: "grid", placeItems: "center", padding: 24 }}>
       <section style={{ textAlign: "center", maxWidth: 460 }}>
         <h1 style={{ marginBottom: 10 }}>Analyzing your inputs</h1>
-        <p style={{ marginTop: 0, color: "#7a6e62" }}>We are processing your quiz and image signals to build your profile.</p>
+        <p style={{ marginTop: 0, color: typingTokens.color.muted }}>We are processing your quiz and image signals to build your profile.</p>
         <div style={{ display: "flex", justifyContent: "center", marginTop: 18 }}>
           <ProcessingIndicator />
         </div>

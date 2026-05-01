@@ -1,5 +1,6 @@
 "use client";
 
+import { editorialPageStyle, typingTokens } from "@/features/typing/components/uiTokens";
 import { useRouter } from "next/navigation";
 import { useTypingStore } from "@/lib/typing-state";
 
@@ -8,7 +9,7 @@ export default function TypingModePage() {
   const { selectMode } = useTypingStore();
 
   return (
-    <main style={{ padding: 24 }}>
+    <main style={editorialPageStyle}>
       <h1>Choose a Mode</h1>
       <ul>
         <li><button onClick={() => { selectMode("quiz"); router.push("/typing/quiz"); }}>Take guided quiz</button></li>

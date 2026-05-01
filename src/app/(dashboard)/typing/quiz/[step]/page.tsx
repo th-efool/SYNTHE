@@ -1,5 +1,6 @@
 "use client";
 
+import { editorialPageStyle, typingTokens } from "@/features/typing/components/uiTokens";
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useTypingStore } from "@/lib/typing-state";
@@ -39,7 +40,7 @@ export default function TypingQuizStepPage() {
   if (!question) return null;
 
   return (
-    <main style={{ padding: 24 }}>
+    <main style={editorialPageStyle}>
       <ProgressHeader currentStep={normalizedStep} totalSteps={totalQuestions} />
       <QuestionBlock
         questionId={question.id}

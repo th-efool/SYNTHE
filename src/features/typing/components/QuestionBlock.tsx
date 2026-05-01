@@ -1,4 +1,6 @@
 "use client";
+
+import { typingTokens } from "./uiTokens";
 import { OptionCard } from "./OptionCard";
 
 type QuestionBlockProps = {

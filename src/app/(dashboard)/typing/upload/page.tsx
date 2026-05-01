@@ -1,5 +1,6 @@
 "use client";
 
+import { editorialPageStyle, typingTokens } from "@/features/typing/components/uiTokens";
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useTypingStore } from "@/lib/typing-state";
@@ -16,7 +17,7 @@ export default function TypingUploadPage() {
   const canAnalyze = uploadedImages.length >= MIN_IMAGES;
 
   return (
-    <main style={{ padding: 24 }}>
+    <main style={editorialPageStyle}>
       <h1>Upload</h1>
       <p>Add at least {MIN_IMAGES} images (max {MAX_IMAGES}) to analyze.</p>
       <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>

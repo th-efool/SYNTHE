@@ -1,5 +1,6 @@
 "use client";
 
+import { editorialPageStyle, typingTokens } from "@/features/typing/components/uiTokens";
 import { useRouter } from "next/navigation";
 import { useTypingStore } from "@/lib/typing-state";
 
@@ -14,7 +15,7 @@ export default function TypingRefinePage() {
   const { setStep, saveAnswers, selectMode } = useTypingStore();
 
   return (
-    <main style={{ padding: 24 }}>
+    <main style={editorialPageStyle}>
       <h1>Refine Analysis</h1>
       <p>Select a layer to re-run from the quiz flow.</p>
       <div style={{ display: "grid", gap: 10, maxWidth: 360 }}>

@@ -1,5 +1,7 @@
 "use client";
 
+import { typingTokens } from "./uiTokens";
+
 type UploadSlotProps = {
   label: string;
   previewUrl?: string;
@@ -9,8 +11,8 @@ type UploadSlotProps = {
 
 export function UploadSlot({ label, previewUrl, onFileSelected, onRemove }: UploadSlotProps) {
   return (
-    <div style={{ border: "1px solid #d9d0c5", borderRadius: 8, padding: 12 }}>
-      <p style={{ marginTop: 0 }}>{label}</p>
+    <div style={{ border: typingTokens.border.soft, borderRadius: typingTokens.border.radius, padding: typingTokens.spacing.sm }}>
+      <p style={{ marginTop: 0, fontFamily: typingTokens.typography.serif }}>{label}</p>
       {previewUrl ? (
         <div>
           <img src={previewUrl} alt={label} style={{ width: "100%", maxHeight: 180, objectFit: "cover", borderRadius: 6 }} />
