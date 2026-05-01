@@ -313,44 +313,46 @@ export default function WardrobePage() {
           ) : null}
         </section>
       ) : (
-        <section style={{ display: "grid", gap: spacing.lg, gridTemplateColumns: "minmax(0, 0.8fr) minmax(0, 1.6fr)" }}>
-          <div style={panelStyle}>
-            <h2 style={panelTitle}>Board list</h2>
+        <section style={{ display: "grid", gap: spacing.lg }}>
+          <div style={{ ...panelStyle, display: "grid", gap: spacing.lg }}>
             <div style={{ display: "grid", gap: spacing.sm }}>
-              {boards.map((board) => (
-                <button key={board.id} onClick={() => setSelectedBoardId(board.id)} style={cardBtn(selectedBoard?.id === board.id)}>
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: spacing.sm }}>
-                    <strong style={{ fontSize: "14px" }}>{board.title}</strong>
-                    <span style={{ ...typography.tag, color: colors.mutedText }}>{fmtDate(board.updatedAt)}</span>
-                  </div>
-                  <p style={{ ...typography.body, margin: `${spacing.xs} 0 0`, color: colors.mutedText }}>{board.description || "No description"}</p>
-                </button>
-              ))}
+              <p style={{ ...typography.tag, margin: 0, color: colors.mutedText }}>Moodboard</p>
+              <h2 style={{ ...typography.sectionTitle, margin: 0 }}>Explore. Play. Refine your style story.</h2>
+              <p style={{ ...typography.body, margin: 0, color: colors.mutedText }}>
+                Gather visual references and shape your next styling direction.
+              </p>
             </div>
-          </div>
 
-          <div style={panelStyle}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: spacing.sm, alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: spacing.xs }}>
+                <label htmlFor="board-selector" style={{ ...typography.tag, color: colors.mutedText }}>
+                  Active board
+                </label>
+                <select
+                  id="board-selector"
+                  value={selectedBoard?.id ?? ""}
+                  onChange={(e) => setSelectedBoardId(e.target.value)}
+                  style={{ ...inputStyle, minWidth: "220px", background: colors.surface }}
+                >
+                  {boards.map((board) => (
+                    <option key={board.id} value={board.id}>
+                      {board.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {selectedBoard ? (
+                <span style={{ ...typography.tag, color: colors.mutedText }}>
+                  Updated {fmtDate(selectedBoard.updatedAt)}
+                </span>
+              ) : null}
+            </div>
+
             {!selectedBoard ? (
               <p style={{ ...typography.body, color: colors.mutedText, margin: 0 }}>No boards yet. Create one.</p>
             ) : (
               <>
-                <div style={{ display: "grid", gap: spacing.sm }}>
-                  <h2 style={panelTitle}>Moodboard canvas</h2>
-                  <input
-                    value={selectedBoard.title}
-                    onChange={(e) => updateBoard(selectedBoard.id, { title: e.target.value })}
-                    style={inputStyle}
-                    placeholder="Board title"
-                  />
-                  <textarea
-                    value={selectedBoard.description}
-                    onChange={(e) => updateBoard(selectedBoard.id, { description: e.target.value })}
-                    style={{ ...inputStyle, minHeight: "80px", resize: "vertical" }}
-                    placeholder="Board description"
-                  />
-                </div>
-
-                <div style={{ display: "flex", flexWrap: "wrap", gap: spacing.xs, marginTop: spacing.md }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: spacing.xs }}>
                   <button
                     onClick={() => addPin({ id: makeId("pin"), type: "product", productId: mockWardrobeItems[0].id, x: 1, y: 1, w: 4, h: 4 })}
                     style={smallBtn}
@@ -410,34 +412,38 @@ export default function WardrobePage() {
 
                 <div
                   style={{
-                    marginTop: spacing.md,
-                    display: "grid",
-                    gridTemplateColumns: "repeat(8, minmax(0, 1fr))",
-                    gridAutoRows: "56px",
-                    gap: spacing.sm,
-                    background: colors.background,
+                    marginTop: spacing.sm,
+                    columnCount: 3,
+                    columnGap: spacing.md,
+                    background: "#efe7db",
                     borderRadius: spacing.md,
-                    padding: spacing.md,
-                    border: `1px dashed ${colors.border}`,
+                    padding: spacing.lg,
+                    boxShadow: "inset 0 0 0 1px rgba(83, 62, 48, 0.12)",
                   }}
                 >
                   {selectedBoard.pins.map((pin, idx) => (
                     <div
                       key={pin.id}
                       style={{
-                        border: `1px solid ${colors.border}`,
+                        breakInside: "avoid",
+                        marginBottom: spacing.md,
+                        border: `1px solid rgba(83, 62, 48, 0.16)`,
                         borderRadius: spacing.md,
-                        background: colors.surface,
+                        background: "#fffaf4",
                         overflow: "hidden",
-                        gridColumn: `${pin.x} / span ${pin.w}`,
-                        gridRow: `${pin.y} / span ${pin.h}`,
                         display: "grid",
+                        boxShadow: "0 10px 24px rgba(83, 62, 48, 0.14)",
+                        transform: `translateY(${(idx % 3) * 4}px) rotate(${[-1.2, 0.65, -0.4, 1.1, -0.8][idx % 5]}deg)`,
                       }}
                     >
                       {pin.type === "product" ? (
                         (() => {
                           const p = mockWardrobeItems.find((item) => item.id === pin.productId);
-                          return p ? <ProductCard {...p} /> : null;
+                          return p ? (
+                            <div style={{ minHeight: idx % 2 === 0 ? "250px" : "220px" }}>
+                              <ProductCard {...p} />
+                            </div>
+                          ) : null;
                         })()
                       ) : null}
                       {pin.type === "look" ? (
@@ -445,24 +451,26 @@ export default function WardrobePage() {
                           const look = looks.find((item) => item.id === pin.lookId);
                           if (!look) return <div style={{ padding: spacing.sm }}>Missing look</div>;
                           return (
-                            <OutfitCard
-                              title={look.title}
-                              items={look.itemIds
-                                .map((id) => mockWardrobeItems.find((item) => item.id === id))
-                                .filter(Boolean)
-                                .map((item) => ({ id: item!.id, image: item!.image }))}
-                            />
+                            <div style={{ minHeight: idx % 2 === 0 ? "320px" : "280px" }}>
+                              <OutfitCard
+                                title={look.title}
+                                items={look.itemIds
+                                  .map((id) => mockWardrobeItems.find((item) => item.id === id))
+                                  .filter(Boolean)
+                                  .map((item) => ({ id: item!.id, image: item!.image }))}
+                              />
+                            </div>
                           );
                         })()
                       ) : null}
                       {pin.type === "note" ? (
-                        <div style={{ padding: spacing.md, display: "grid", alignContent: "center" }}>
+                        <div style={{ padding: spacing.md, display: "grid", alignContent: "center", minHeight: idx % 2 ? "180px" : "140px" }}>
                           <p style={{ ...typography.body, margin: 0, fontStyle: "italic" }}>{pin.text}</p>
                         </div>
                       ) : null}
                       {pin.type === "color" ? (
-                        <div style={{ padding: spacing.md, display: "grid", alignContent: "center", gap: spacing.sm }}>
-                          <div style={{ width: "100%", height: "32px", borderRadius: spacing.xs, background: pin.hex }} />
+                        <div style={{ padding: spacing.md, display: "grid", alignContent: "center", gap: spacing.sm, minHeight: "120px" }}>
+                          <div style={{ width: "100%", height: idx % 2 ? "40px" : "30px", borderRadius: spacing.xs, background: pin.hex }} />
                           <span style={{ ...typography.tag }}>{pin.label}</span>
                         </div>
                       ) : null}
