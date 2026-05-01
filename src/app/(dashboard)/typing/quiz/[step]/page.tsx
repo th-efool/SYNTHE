@@ -2,7 +2,7 @@
 
 import { typingTokens } from "@/features/typing/components/uiTokens";
 import { FlowPage } from "@/features/typing/components/FlowPage";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useTypingStore } from "@/lib/typing-state";
 import { mockQuestions } from "@/features/typing/data/mockQuestions";
@@ -22,7 +22,7 @@ export default function TypingQuizStepPage() {
   const totalQuestions = mockQuestions.length;
   const normalizedStep = Math.min(Math.max(stepNumber, 1), totalQuestions);
   const question = mockQuestions[normalizedStep - 1];
-  const [selectedOption, setSelectedOption] = useState<string | undefined>();
+  const selectedOption = typeof answers[question?.id] === "string" ? (answers[question.id] as string) : undefined;
 
   useEffect(() => {
     if (!question) {
@@ -30,13 +30,7 @@ export default function TypingQuizStepPage() {
       return;
     }
     setStep(normalizedStep);
-    const previousAnswer = answers[question.id];
-    if (typeof previousAnswer === "string") {
-      setSelectedOption(previousAnswer);
-    } else {
-      setSelectedOption(undefined);
-    }
-  }, [answers, normalizedStep, question, router, setStep]);
+  }, [normalizedStep, question, router, setStep]);
 
   if (!question) return null;
 
@@ -55,7 +49,7 @@ export default function TypingQuizStepPage() {
         prompt={question.prompt}
         options={question.options}
         selectedOption={selectedOption}
-        onSelect={setSelectedOption}
+        onSelect={(option) => saveAnswer(question.id, option)}
       />
       <div style={{ marginTop: 16 }}>
         <button
@@ -70,7 +64,6 @@ export default function TypingQuizStepPage() {
           }}
           onClick={() => {
             if (!selectedOption) return;
-            saveAnswer(question.id, selectedOption);
             if (normalizedStep >= totalQuestions) {
               router.push("/typing/processing");
               return;
