@@ -9,6 +9,14 @@ import { mockQuestions } from "@/features/typing/data/mockQuestions";
 import { ProgressHeader } from "@/features/typing/components/ProgressHeader";
 import { QuestionBlock } from "@/features/typing/components/QuestionBlock";
 
+function signalLabel(id: string) {
+  if (id.includes("silhouette") || id.includes("fabric") || id.includes("line") || id.includes("neckline") || id.includes("details"))
+    return "Refining structure signal";
+  if (id.includes("contrast") || id.includes("color") || id.includes("print"))
+    return "Refining color signal";
+  return "Refining essence signal";
+}
+
 export default function TypingQuizStepPage() {
   const params = useParams<{ step: string }>();
   const router = useRouter();
@@ -23,6 +31,7 @@ export default function TypingQuizStepPage() {
   const normalizedStep = Math.min(Math.max(stepNumber, 1), totalQuestions);
   const question = mockQuestions[normalizedStep - 1];
   const selectedOption = typeof answers[question?.id] === "string" ? (answers[question.id] as string) : undefined;
+  const isLast = normalizedStep >= totalQuestions;
 
   useEffect(() => {
     if (!question) {
@@ -37,34 +46,52 @@ export default function TypingQuizStepPage() {
   return (
     <FlowPage>
       <ProgressHeader currentStep={normalizedStep} totalSteps={totalQuestions} />
-      <p style={{ marginTop: -8, marginBottom: 12, fontSize: 12, color: typingTokens.color.muted }}>
-        {question.id.includes("structure") || question.id.includes("silhouette")
-          ? "Refining structure signal"
-          : question.id.includes("color") || question.id.includes("contrast")
-            ? "Refining color signal"
-            : "Refining essence signal"}
+      <p style={{ marginTop: -8, marginBottom: 12, fontSize: 12, color: typingTokens.color.muted, letterSpacing: 0.2 }}>
+        {signalLabel(question.id)}
       </p>
-      <QuestionBlock
-        questionId={question.id}
-        prompt={question.prompt}
-        options={question.options}
-        selectedOption={selectedOption}
-        onSelect={(option) => saveAnswer(question.id, option)}
-      />
-      <div style={{ marginTop: 16 }}>
+
+      <div key={question.id} style={{ animation: "step-in 220ms ease" }}>
+        <QuestionBlock
+          questionId={question.id}
+          prompt={question.prompt}
+          options={question.options}
+          selectedOption={selectedOption}
+          onSelect={(option) => saveAnswer(question.id, option)}
+        />
+      </div>
+
+      <div style={{ marginTop: 20, display: "flex", alignItems: "center", gap: 12 }}>
+        <button
+          type="button"
+          onClick={() => {
+            if (normalizedStep <= 1) router.push("/typing/quiz");
+            else router.push(`/typing/quiz/${normalizedStep - 1}`);
+          }}
+          style={{
+            border: typingTokens.border.soft,
+            background: "#fff",
+            color: typingTokens.color.text,
+            padding: "10px 16px",
+            borderRadius: 8,
+          }}
+        >
+          ← Back
+        </button>
         <button
           type="button"
           disabled={!selectedOption}
+          className="step-cta"
           style={{
             border: typingTokens.border.soft,
             background: selectedOption ? typingTokens.color.accent : "#ece6df",
             color: selectedOption ? "#fff" : typingTokens.color.muted,
             padding: "10px 18px",
             borderRadius: 8,
+            cursor: selectedOption ? "pointer" : "not-allowed",
           }}
           onClick={() => {
             if (!selectedOption) return;
-            if (normalizedStep >= totalQuestions) {
+            if (isLast) {
               router.push("/typing/processing");
               return;
             }
@@ -72,9 +99,17 @@ export default function TypingQuizStepPage() {
             router.push(`/typing/quiz/${normalizedStep + 1}`);
           }}
         >
-          {normalizedStep >= totalQuestions ? "Submit and process" : "Next"}
+          {isLast ? "Submit & Analyze →" : "Continue Analysis →"}
         </button>
+        <span style={{ marginLeft: "auto", fontSize: 12, color: typingTokens.color.muted }}>
+          {selectedOption ? "Selection saved" : "Select an option to continue"}
+        </span>
       </div>
+
+      <style>{`
+        @keyframes step-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+        .step-cta:not(:disabled):hover{filter:brightness(0.95)}
+      `}</style>
     </FlowPage>
   );
 }
