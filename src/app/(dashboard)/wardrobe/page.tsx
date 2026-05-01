@@ -44,6 +44,7 @@ export default function WardrobePage() {
   const [confirmBoardDelete, setConfirmBoardDelete] = useState(false);
   const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
   const [activePinActionsId, setActivePinActionsId] = useState<string | null>(null);
+  const [isBoardMetaOpen, setIsBoardMetaOpen] = useState(false);
 
   const selectedLook = useMemo(
     () => looks.find((look) => look.id === selectedLookId) ?? looks[0],
@@ -319,9 +320,9 @@ export default function WardrobePage() {
           <div style={{ ...panelStyle, display: "grid", gap: spacing.lg }}>
             <div style={{ display: "grid", gap: spacing.sm }}>
               <p style={{ ...typography.tag, margin: 0, color: colors.mutedText }}>Moodboard</p>
-              <h2 style={{ ...typography.sectionTitle, margin: 0 }}>Explore. Play. Refine your style story.</h2>
+              <h2 style={{ ...typography.sectionTitle, margin: 0 }}>Moodboard</h2>
               <p style={{ ...typography.body, margin: 0, color: colors.mutedText }}>
-                Gather visual references and shape your next styling direction.
+                Explore. Play. Refine your style story.
               </p>
             </div>
 
@@ -344,11 +345,32 @@ export default function WardrobePage() {
                 </select>
               </div>
               {selectedBoard ? (
-                <span style={{ ...typography.tag, color: colors.mutedText }}>
-                  Updated {fmtDate(selectedBoard.updatedAt)}
-                </span>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: spacing.xs }}>
+                  <span style={{ ...typography.tag, color: colors.mutedText }}>
+                    Updated {fmtDate(selectedBoard.updatedAt)}
+                  </span>
+                  <button onClick={() => setIsBoardMetaOpen((prev) => !prev)} style={smallBtn}>
+                    Edit details
+                  </button>
+                </div>
               ) : null}
             </div>
+            {selectedBoard && isBoardMetaOpen ? (
+              <div style={{ display: "grid", gap: spacing.sm, justifyItems: "start", padding: spacing.sm, borderRadius: spacing.md, background: colors.background, border: `1px solid ${colors.border}` }}>
+                <input
+                  value={selectedBoard.title}
+                  onChange={(e) => updateBoard(selectedBoard.id, { title: e.target.value })}
+                  style={{ ...inputStyle, background: colors.surface, minWidth: "280px" }}
+                  placeholder="Board title"
+                />
+                <textarea
+                  value={selectedBoard.description}
+                  onChange={(e) => updateBoard(selectedBoard.id, { description: e.target.value })}
+                  style={{ ...inputStyle, minHeight: "74px", resize: "vertical", background: colors.surface, minWidth: "280px" }}
+                  placeholder="Board description"
+                />
+              </div>
+            ) : null}
 
             {!selectedBoard ? (
               <p style={{ ...typography.body, color: colors.mutedText, margin: 0 }}>No boards yet. Create one.</p>
