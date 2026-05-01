@@ -37,7 +37,22 @@ export default function TypingUploadPage() {
       </div>
       <p style={{ fontSize: 12, color: typingTokens.color.muted }}>Use natural lighting. Avoid filters. Face clearly visible.</p>
       {!canAnalyze && <p style={{ fontSize: 12, color: typingTokens.color.muted }}>Add at least {MIN_IMAGES} images.</p>}
-      <button disabled={!canAnalyze} onClick={() => router.push("/typing/processing")} style={{ marginTop: 10 }}>Analyze</button>
+      <button
+        type="button"
+        disabled={!canAnalyze}
+        onClick={() => router.push("/typing/processing")}
+        style={{
+          marginTop: 10,
+          border: typingTokens.border.soft,
+          background: canAnalyze ? typingTokens.color.accent : "#ece6df",
+          color: canAnalyze ? "#fff" : typingTokens.color.muted,
+          padding: "10px 18px",
+          borderRadius: 8,
+          opacity: canAnalyze ? 1 : 0.8,
+        }}
+      >
+        Analyze
+      </button>
     </FlowPage>
   );
 }

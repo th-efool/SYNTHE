@@ -43,6 +43,13 @@ export default function TypingQuizStepPage() {
   return (
     <FlowPage>
       <ProgressHeader currentStep={normalizedStep} totalSteps={totalQuestions} />
+      <p style={{ marginTop: -8, marginBottom: 12, fontSize: 12, color: typingTokens.color.muted }}>
+        {question.id.includes("structure") || question.id.includes("silhouette")
+          ? "Refining structure signal"
+          : question.id.includes("color") || question.id.includes("contrast")
+            ? "Refining color signal"
+            : "Refining essence signal"}
+      </p>
       <QuestionBlock
         questionId={question.id}
         prompt={question.prompt}
@@ -52,7 +59,15 @@ export default function TypingQuizStepPage() {
       />
       <div style={{ marginTop: 16 }}>
         <button
+          type="button"
           disabled={!selectedOption}
+          style={{
+            border: typingTokens.border.soft,
+            background: selectedOption ? typingTokens.color.accent : "#ece6df",
+            color: selectedOption ? "#fff" : typingTokens.color.muted,
+            padding: "10px 18px",
+            borderRadius: 8,
+          }}
           onClick={() => {
             if (!selectedOption) return;
             saveAnswer(question.id, selectedOption);

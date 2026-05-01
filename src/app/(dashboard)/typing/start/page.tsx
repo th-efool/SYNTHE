@@ -7,14 +7,14 @@ import { useRouter } from "next/navigation";
 import { useTypingStore } from "@/lib/typing-state";
 
 const cards = [
-  { key: "quiz", title: "Guided Quiz", helper: "Fastest method", description: "Structured questions with deterministic scoring.", recommended: true },
-  { key: "image", title: "Image Analysis", helper: "Most accurate with images", description: "Upload 2–3 clear photos for visual signal analysis." },
-  { key: "pro", title: "Professional Session", helper: "Human expert review", description: "Book a live guided session for advanced typing." },
+  { key: "quiz", title: "Guided Quiz", helper: "Fastest method", description: "Structured questions with deterministic scoring.", recommended: true, route: "/typing/quiz", mode: "quiz" as const },
+  { key: "image", title: "Image Analysis", helper: "Most accurate with images", description: "Upload 2–3 clear photos for visual signal analysis.", route: "/typing/upload", mode: "image" as const },
+  { key: "pro", title: "Professional Session", helper: "Human expert review", description: "Book a live guided session for advanced typing.", route: "/typing/processing", mode: "pro" as const },
 ] as const;
 
 export default function TypingStartPage() {
   const router = useRouter();
-  const { mode, profile, isComplete, currentStep, answers, uploadedImages, resetFlow } = useTypingStore();
+  const { mode, profile, isComplete, currentStep, answers, uploadedImages, resetFlow, selectMode } = useTypingStore();
   
   useEffect(() => {
     if (profile && isComplete) return void router.replace("/typing");
@@ -31,7 +31,7 @@ export default function TypingStartPage() {
       <p style={{ marginTop: 0, maxWidth: 620, color: typingTokens.color.muted }}>Resolve your structure, color, and presence through a structured analysis system.</p>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: typingTokens.spacing.md }}>
         {cards.map((card) => (
-          <button key={card.key} onClick={() => { resetFlow(); router.push("/typing/mode"); }} style={{ border: typingTokens.border.soft, padding: 20, textAlign: "left", transition: "all 180ms ease", cursor: "pointer" }} className="typing-card">
+          <button type="button" key={card.key} onClick={() => { resetFlow(); selectMode(card.mode); router.push(card.route); }} style={{ border: typingTokens.border.soft, padding: 20, textAlign: "left", transition: "all 180ms ease", cursor: "pointer" }} className="typing-card">
             <div style={{ width: 18, height: 18, border: typingTokens.border.soft, marginBottom: 10 }} />
             <h3 style={{ margin: "0 0 6px", fontFamily: typingTokens.typography.serif, fontSize: 16 }}>{card.title}</h3>
             <p style={{ margin: "0 0 6px", fontSize: 12, color: typingTokens.color.muted }}>{card.helper}</p>

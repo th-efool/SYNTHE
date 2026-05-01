@@ -17,11 +17,14 @@ export default function TypingResultPage() {
     <FlowPage>
       <p style={{ margin: 0, color: typingTokens.color.muted }}>Profile Generated</p>
       <h1 style={{ marginTop: 6 }}>Your Result</h1>
-      <p>{profile.kibbe} · {profile.season}</p>
-      <p>Essence: {profile.essence.join(" + ")}</p>
-      <p>Confidence: {Math.round(profile.confidence * 100)}%</p>
-      <button className="to-control" onClick={() => router.push("/typing")}>Go to Profile Control →</button>
-      <style>{`.to-control{transition:all 180ms ease}.to-control:hover{transform:translateX(2px);text-decoration:underline}`}</style>
+      <div style={{ display: "grid", gap: 10, gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", marginBottom: 14 }}>
+        <div style={{ border: typingTokens.border.soft, borderRadius: 8, padding: 12 }}><p style={{ margin: 0, fontSize: 12, color: typingTokens.color.muted }}>Structure</p><p style={{ margin: "6px 0 0" }}>{profile.kibbe}</p></div>
+        <div style={{ border: typingTokens.border.soft, borderRadius: 8, padding: 12 }}><p style={{ margin: 0, fontSize: 12, color: typingTokens.color.muted }}>Color</p><p style={{ margin: "6px 0 0" }}>{profile.season}</p></div>
+        <div style={{ border: typingTokens.border.soft, borderRadius: 8, padding: 12 }}><p style={{ margin: 0, fontSize: 12, color: typingTokens.color.muted }}>Essence</p><p style={{ margin: "6px 0 0" }}>{profile.essence.join(" + ")}</p></div>
+      </div>
+      <p style={{ color: typingTokens.color.muted }}>Confidence: {Math.round(profile.confidence * 100)}%</p>
+      <button className="to-control" type="button" onClick={() => router.push("/typing")} style={{ border: typingTokens.border.soft, padding: "10px 16px", borderRadius: 8, background: "#fff" }}>Go to Profile Control →</button>
+      <style>{`.to-control{transition:all 180ms ease}.to-control:hover{transform:translateX(2px);border-color:${typingTokens.color.accent}}`}</style>
     </FlowPage>
   );
 }
