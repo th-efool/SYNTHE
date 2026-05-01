@@ -1,39 +1,70 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useTypingStore } from "@/lib/typing-state";
+import { mockQuestions } from "@/features/typing/data/mockQuestions";
+import { ProgressHeader } from "@/features/typing/components/ProgressHeader";
+import { QuestionBlock } from "@/features/typing/components/QuestionBlock";
 
 export default function TypingQuizStepPage() {
   const params = useParams<{ step: string }>();
   const router = useRouter();
-  const { saveAnswer, setStep, nextStep } = useTypingStore();
+  const { answers, saveAnswer, setStep, nextStep } = useTypingStore();
 
-  const numericStep = useMemo(() => {
-    const parsed = Number(params.step);
+  const stepNumber = useMemo(() => {
+    const parsed = Number.parseInt(params.step, 10);
     return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
   }, [params.step]);
 
-  const isLastStep = numericStep >= 3;
+  const totalQuestions = mockQuestions.length;
+  const normalizedStep = Math.min(Math.max(stepNumber, 1), totalQuestions);
+  const question = mockQuestions[normalizedStep - 1];
+  const [selectedOption, setSelectedOption] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (!question) {
+      router.replace("/typing/processing");
+      return;
+    }
+    setStep(normalizedStep);
+    const previousAnswer = answers[question.id];
+    if (typeof previousAnswer === "string") {
+      setSelectedOption(previousAnswer);
+    } else {
+      setSelectedOption(undefined);
+    }
+  }, [answers, normalizedStep, question, router, setStep]);
+
+  if (!question) return null;
 
   return (
     <main style={{ padding: 24 }}>
-      <h1>Quiz Step {numericStep}</h1>
-      <p>Answer this step, then continue.</p>
-      <button
-        onClick={() => {
-          saveAnswer(`step-${numericStep}`, `answer-${numericStep}`);
-          if (isLastStep) {
-            setStep(numericStep);
-            router.push("/typing/processing");
-            return;
-          }
-          nextStep();
-          router.push(`/typing/quiz/${numericStep + 1}`);
-        }}
-      >
-        {isLastStep ? "Submit and process" : "Next step"}
-      </button>
+      <ProgressHeader currentStep={normalizedStep} totalSteps={totalQuestions} />
+      <QuestionBlock
+        questionId={question.id}
+        prompt={question.prompt}
+        options={question.options}
+        selectedOption={selectedOption}
+        onSelect={setSelectedOption}
+      />
+      <div style={{ marginTop: 16 }}>
+        <button
+          disabled={!selectedOption}
+          onClick={() => {
+            if (!selectedOption) return;
+            saveAnswer(question.id, selectedOption);
+            if (normalizedStep >= totalQuestions) {
+              router.push("/typing/processing");
+              return;
+            }
+            nextStep();
+            router.push(`/typing/quiz/${normalizedStep + 1}`);
+          }}
+        >
+          {normalizedStep >= totalQuestions ? "Submit and process" : "Next"}
+        </button>
+      </div>
     </main>
   );
 }
