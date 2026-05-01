@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTypingStore } from "@/lib/typing-state";
 
 type Layer = {
   key: string;
@@ -79,7 +80,17 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 /* ─── PROFILE HEADER ─── */
-function ProfileHeader({ profile, onRetake }: { profile: UserProfile; onRetake: () => void }) {
+function ProfileHeader({
+  profile,
+  onRetake,
+  onStart,
+  onRefine,
+}: {
+  profile: UserProfile;
+  onRetake: () => void;
+  onStart: () => void;
+  onRefine: () => void;
+}) {
   return (
     <section className="profile-header" style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 40, alignItems: "start" }}>
       <div style={{ position: "relative" }}>
@@ -142,11 +153,28 @@ function ProfileHeader({ profile, onRetake }: { profile: UserProfile; onRetake: 
         </div>
 
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <button
+            className="hover-button"
+            onClick={onStart}
+            style={{
+              background: "#2f2a24",
+              color: "#fff",
+              border: "none",
+              borderRadius: 3,
+              padding: "8px 18px",
+              fontSize: 12,
+              letterSpacing: "0.06em",
+              cursor: "pointer",
+              fontFamily: "Georgia, serif",
+            }}
+          >
+            Start Flow
+          </button>
           <button className="hover-button" style={{
             background: "#c97b5a", color: "#fff", border: "none",
             borderRadius: 3, padding: "8px 18px", fontSize: 12,
             letterSpacing: "0.06em", cursor: "pointer", fontFamily: "Georgia, serif",
-          }}>
+          }} onClick={onRefine}>
             Refine Analysis
           </button>
           <button className="hover-button" onClick={onRetake} style={{
@@ -560,6 +588,16 @@ function RetakeAnalysisModal({ open, onClose }: { open: boolean; onClose: () => 
 /* ─── PAGE ─── */
 export default function TypingPage() {
   const [isRetakeOpen, setIsRetakeOpen] = useState(false);
+  const router = useRouter();
+  const { mode, currentStep, isComplete, profile, resetFlow } = useTypingStore();
+
+  useEffect(() => {
+    if (!profile) {
+      router.replace("/typing/start");
+    }
+  }, [profile, router]);
+
+  if (!profile) return null;
   return (
     <>
     <main style={{
@@ -571,7 +609,15 @@ export default function TypingPage() {
     }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", flexDirection: "column", gap: 0 }}>
 
-        <div className="section-enter"><ProfileHeader profile={userProfile} onRetake={() => setIsRetakeOpen(true)} /></div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+          <p style={{ margin: 0, fontSize: 12, color: "#7a6e62" }}>
+            Flow state: {mode ?? "not-started"} · step {currentStep} · {isComplete ? "complete" : "in progress"}
+          </p>
+          <button onClick={resetFlow} style={{ border: "1px solid #d9d0c5", background: "transparent", borderRadius: 3, padding: "6px 10px", cursor: "pointer" }}>
+            Reset flow state
+          </button>
+        </div>
+        <div className="section-enter"><ProfileHeader profile={userProfile} onRetake={() => setIsRetakeOpen(true)} onStart={() => router.push("/typing/start")} onRefine={() => router.push("/typing/refine")} /></div>
 
         <div style={{ height: 40 }} />
         <Divider />
