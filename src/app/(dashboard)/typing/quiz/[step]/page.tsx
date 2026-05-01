@@ -20,7 +20,7 @@ function signalLabel(id: string) {
 export default function TypingQuizStepPage() {
   const params = useParams<{ step: string }>();
   const router = useRouter();
-  const { answers, saveAnswer, setStep, nextStep } = useTypingStore();
+  const { answers, saveAnswer, setStep } = useTypingStore();
 
   const stepNumber = useMemo(() => {
     const parsed = Number.parseInt(params.step, 10);
@@ -32,6 +32,11 @@ export default function TypingQuizStepPage() {
   const question = mockQuestions[normalizedStep - 1];
   const selectedOption = typeof answers[question?.id] === "string" ? (answers[question.id] as string) : undefined;
   const isLast = normalizedStep >= totalQuestions;
+  const goToStep = (step: number) => {
+    const boundedStep = Math.min(Math.max(step, 1), totalQuestions);
+    setStep(boundedStep);
+    router.push(`/typing/quiz/${boundedStep}`);
+  };
 
   useEffect(() => {
     if (!question) {
@@ -64,8 +69,8 @@ export default function TypingQuizStepPage() {
         <button
           type="button"
           onClick={() => {
-            if (normalizedStep <= 1) router.push("/typing/quiz");
-            else router.push(`/typing/quiz/${normalizedStep - 1}`);
+            if (normalizedStep <= 1) return;
+            goToStep(normalizedStep - 1);
           }}
           style={{
             border: typingTokens.border.soft,
@@ -74,6 +79,7 @@ export default function TypingQuizStepPage() {
             padding: "10px 16px",
             borderRadius: 8,
           }}
+          disabled={normalizedStep <= 1}
         >
           ← Back
         </button>
@@ -92,11 +98,11 @@ export default function TypingQuizStepPage() {
           onClick={() => {
             if (!selectedOption) return;
             if (isLast) {
+              setStep(totalQuestions);
               router.push("/typing/processing");
               return;
             }
-            nextStep();
-            router.push(`/typing/quiz/${normalizedStep + 1}`);
+            goToStep(normalizedStep + 1);
           }}
         >
           {isLast ? "Submit & Analyze →" : "Continue Analysis →"}
