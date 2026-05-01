@@ -1,6 +1,6 @@
 "use client";
 
-import { type CSSProperties, useMemo, useState } from "react";
+import { type CSSProperties, useEffect, useMemo, useState } from "react";
 import { OutfitCard } from "@/components/ui/cards/OutfitCard";
 import { ProductCard } from "@/components/ui/cards/ProductCard";
 import { colors } from "@/components/theme/colors";
@@ -31,12 +31,17 @@ export default function WardrobePage() {
   const [selectedLookId, setSelectedLookId] = useState<string>(mockLooks[0]?.id ?? "");
   const [selectedBoardId, setSelectedBoardId] = useState<string>(mockMoodboards[0]?.id ?? "");
   const [confirmLookDelete, setConfirmLookDelete] = useState(false);
-  const [isLookEditorOpen, setIsLookEditorOpen] = useState(false);
+  const [isLookOverlayOpen, setIsLookOverlayOpen] = useState(false);
+  const [activeLookOverlayId, setActiveLookOverlayId] = useState<string>(mockLooks[0]?.id ?? "");
   const [confirmBoardDelete, setConfirmBoardDelete] = useState(false);
 
   const selectedLook = useMemo(
     () => looks.find((look) => look.id === selectedLookId) ?? looks[0],
     [looks, selectedLookId],
+  );
+  const overlayLook = useMemo(
+    () => looks.find((look) => look.id === activeLookOverlayId) ?? looks[0],
+    [looks, activeLookOverlayId],
   );
   const selectedBoard = useMemo(
     () => boards.find((board) => board.id === selectedBoardId) ?? boards[0],
@@ -67,27 +72,30 @@ export default function WardrobePage() {
     };
     setLooks((prev) => [next, ...prev]);
     setSelectedLookId(next.id);
-    setIsLookEditorOpen(true);
+    setActiveLookOverlayId(next.id);
+    setIsLookOverlayOpen(true);
     setTab("looks");
   };
 
   const deleteLook = () => {
-    if (!selectedLook) return;
-    const filtered = looks.filter((look) => look.id !== selectedLook.id);
+    if (!overlayLook) return;
+    const filtered = looks.filter((look) => look.id !== overlayLook.id);
     setLooks(filtered);
     setSelectedLookId(filtered[0]?.id ?? "");
+    setActiveLookOverlayId(filtered[0]?.id ?? "");
     setConfirmLookDelete(false);
+    if (!filtered.length) setIsLookOverlayOpen(false);
   };
 
   const moveLookItem = (dir: -1 | 1, idx: number) => {
-    if (!selectedLook) return;
-    const next = [...selectedLook.itemIds];
+    if (!overlayLook) return;
+    const next = [...overlayLook.itemIds];
     const to = idx + dir;
     if (to < 0 || to >= next.length) return;
     const tmp = next[idx];
     next[idx] = next[to];
     next[to] = tmp;
-    updateLook(selectedLook.id, { itemIds: next });
+    updateLook(overlayLook.id, { itemIds: next });
   };
 
   const createBoard = () => {
@@ -147,6 +155,19 @@ export default function WardrobePage() {
     updateBoard(selectedBoard.id, { pins: next });
   };
 
+
+  useEffect(() => {
+    if (!isLookOverlayOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsLookOverlayOpen(false);
+        setConfirmLookDelete(false);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isLookOverlayOpen]);
+
   return (
     <div style={{ maxWidth: "1200px", margin: "0 auto", padding: spacing.xxl, display: "grid", gap: spacing.xl }}>
       <section
@@ -200,7 +221,8 @@ export default function WardrobePage() {
                     onClick={() => {
                       setSelectedLookId(look.id);
                       setConfirmLookDelete(false);
-                      setIsLookEditorOpen(true);
+                      setActiveLookOverlayId(look.id);
+                      setIsLookOverlayOpen(true);
                     }}
                     style={{
                       ...cardBtn(selectedLook?.id === look.id),
@@ -229,28 +251,28 @@ export default function WardrobePage() {
             )}
           </div>
 
-          {isLookEditorOpen && selectedLook ? (
-            <div style={overlayStyle}>
-              <div style={modalStyle}>
+          {isLookOverlayOpen && overlayLook ? (
+            <div style={overlayStyle} onClick={() => { setIsLookOverlayOpen(false); setConfirmLookDelete(false); }}>
+              <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: spacing.md }}>
                   <h2 style={{ ...panelTitle, margin: 0 }}>Edit look</h2>
-                  <button onClick={() => setIsLookEditorOpen(false)} style={smallBtn}>Close</button>
+                  <button onClick={() => { setIsLookOverlayOpen(false); setConfirmLookDelete(false); }} style={smallBtn}>Close</button>
                 </div>
                 <div style={{ display: "grid", gap: spacing.sm }}>
-                  <input value={selectedLook.title} onChange={(e) => updateLook(selectedLook.id, { title: e.target.value })} style={inputStyle} placeholder="Look title" />
-                  <textarea value={selectedLook.note ?? ""} onChange={(e) => updateLook(selectedLook.id, { note: e.target.value })} style={{ ...inputStyle, minHeight: "90px", resize: "vertical" }} placeholder="Styling note" />
+                  <input value={overlayLook.title} onChange={(e) => updateLook(overlayLook.id, { title: e.target.value })} style={inputStyle} placeholder="Look title" />
+                  <textarea value={overlayLook.note ?? ""} onChange={(e) => updateLook(overlayLook.id, { note: e.target.value })} style={{ ...inputStyle, minHeight: "90px", resize: "vertical" }} placeholder="Styling note" />
                   <p style={{ ...typography.tag, margin: 0, color: colors.mutedText }}>Selected pieces</p>
                   <div style={{ display: "grid", gap: spacing.sm }}>
-                    {selectedLook.itemIds.map((id, idx) => {
+                    {overlayLook.itemIds.map((id, idx) => {
                       const item = mockWardrobeItems.find((p) => p.id === id);
                       if (!item) return null;
                       return (
-                        <div key={`${selectedLook.id}-${id}-${idx}`} style={rowStyle}>
+                        <div key={`${overlayLook.id}-${id}-${idx}`} style={rowStyle}>
                           <span style={{ fontSize: "14px" }}>{item.name}</span>
                           <div style={{ display: "flex", gap: spacing.xs }}>
                             <button onClick={() => moveLookItem(-1, idx)} style={smallBtn}>↑</button>
                             <button onClick={() => moveLookItem(1, idx)} style={smallBtn}>↓</button>
-                            <button onClick={() => updateLook(selectedLook.id, { itemIds: selectedLook.itemIds.filter((itemId) => itemId !== id) })} style={smallBtn}>Remove</button>
+                            <button onClick={() => updateLook(overlayLook.id, { itemIds: overlayLook.itemIds.filter((itemId) => itemId !== id) })} style={smallBtn}>Remove</button>
                           </div>
                         </div>
                       );
@@ -263,8 +285,8 @@ export default function WardrobePage() {
                     <div key={`add-${item.id}`} style={tileStyle}>
                       <ProductCard {...item} />
                       <button onClick={() => {
-                        if (selectedLook.itemIds.includes(item.id)) return;
-                        updateLook(selectedLook.id, { itemIds: [...selectedLook.itemIds, item.id] });
+                        if (overlayLook.itemIds.includes(item.id)) return;
+                        updateLook(overlayLook.id, { itemIds: [...overlayLook.itemIds, item.id] });
                       }} style={{ ...smallBtn, width: "100%" }}>Add piece</button>
                     </div>
                   ))}
@@ -490,7 +512,8 @@ const inputStyle: CSSProperties = {
 const overlayStyle: CSSProperties = {
   position: "fixed",
   inset: 0,
-  background: "rgba(17, 24, 39, 0.45)",
+  background: "rgba(17, 24, 39, 0.3)",
+  backdropFilter: "blur(8px)",
   display: "grid",
   placeItems: "center",
   padding: spacing.lg,
