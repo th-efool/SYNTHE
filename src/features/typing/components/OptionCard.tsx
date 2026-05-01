@@ -11,6 +11,7 @@ type OptionCardProps = {
 export function OptionCard({ children, selected = false, onClick }: OptionCardProps) {
   return (
     <button
+      type="button"
       onClick={onClick}
       style={{
         textAlign: "left",
