@@ -31,6 +31,7 @@ export default function WardrobePage() {
   const [selectedLookId, setSelectedLookId] = useState<string>(mockLooks[0]?.id ?? "");
   const [selectedBoardId, setSelectedBoardId] = useState<string>(mockMoodboards[0]?.id ?? "");
   const [confirmLookDelete, setConfirmLookDelete] = useState(false);
+  const [isLookEditorOpen, setIsLookEditorOpen] = useState(false);
   const [confirmBoardDelete, setConfirmBoardDelete] = useState(false);
 
   const selectedLook = useMemo(
@@ -66,6 +67,7 @@ export default function WardrobePage() {
     };
     setLooks((prev) => [next, ...prev]);
     setSelectedLookId(next.id);
+    setIsLookEditorOpen(true);
     setTab("looks");
   };
 
@@ -178,46 +180,65 @@ export default function WardrobePage() {
       </section>
 
       {tab === "looks" ? (
-        <section style={{ display: "grid", gap: spacing.lg, gridTemplateColumns: "minmax(0, 0.95fr) minmax(0, 1.45fr)" }}>
+        <section style={{ display: "grid", gap: spacing.lg }}>
           <div style={panelStyle}>
-            <h2 style={panelTitle}>Looks library</h2>
-            <div style={{ display: "grid", gap: spacing.sm }}>
-              {looks.map((look) => (
-                <button key={look.id} onClick={() => setSelectedLookId(look.id)} style={cardBtn(selectedLook?.id === look.id)}>
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: spacing.sm, alignItems: "center" }}>
-                    <strong style={{ fontSize: "14px" }}>{look.title}</strong>
-                    <span style={{ ...typography.tag, color: colors.mutedText }}>{fmtDate(look.updatedAt)}</span>
-                  </div>
-                  <div style={{ display: "flex", gap: spacing.xs, marginTop: spacing.sm, flexWrap: "wrap" }}>
-                    {look.itemIds.slice(0, 3).map((id) => {
-                      const item = mockWardrobeItems.find((p) => p.id === id);
-                      return item ? <Tag key={`${look.id}-${id}`} label={item.name} /> : null;
-                    })}
-                  </div>
-                </button>
-              ))}
+            <div style={{ marginBottom: spacing.lg }}>
+              <p style={{ ...typography.tag, margin: 0, color: colors.mutedText }}>Looks archive</p>
+              <h2 style={{ ...typography.sectionTitle, margin: `${spacing.xs} 0 0` }}>My Wardrobe</h2>
+              <p style={{ ...typography.body, margin: `${spacing.xs} 0 0`, color: colors.mutedText }}>
+                Curated pieces. Endless combinations.
+              </p>
             </div>
-          </div>
 
-          <div style={panelStyle}>
-            {!selectedLook ? (
+            {!looks.length ? (
               <p style={{ ...typography.body, color: colors.mutedText, margin: 0 }}>No looks yet. Create one.</p>
             ) : (
-              <>
+              <div style={{ display: "grid", gap: spacing.md, gridTemplateColumns: "repeat(6, minmax(0, 1fr))", gridAutoRows: "minmax(120px, auto)" }}>
+                {looks.map((look, idx) => (
+                  <button
+                    key={look.id}
+                    onClick={() => {
+                      setSelectedLookId(look.id);
+                      setConfirmLookDelete(false);
+                      setIsLookEditorOpen(true);
+                    }}
+                    style={{
+                      ...cardBtn(selectedLook?.id === look.id),
+                      gridColumn: `span ${idx % 5 === 0 ? 3 : idx % 2 === 0 ? 2 : 1}`,
+                      minHeight: idx % 3 === 0 ? "180px" : "140px",
+                      display: "grid",
+                      alignContent: "space-between",
+                    }}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", gap: spacing.sm, alignItems: "center" }}>
+                      <strong style={{ fontSize: "15px" }}>{look.title}</strong>
+                      <span style={{ ...typography.tag, color: colors.mutedText }}>{fmtDate(look.updatedAt)}</span>
+                    </div>
+                    <p style={{ ...typography.body, margin: `${spacing.sm} 0 0`, color: colors.mutedText }}>
+                      {look.note || "No note added yet."}
+                    </p>
+                    <div style={{ display: "flex", gap: spacing.xs, marginTop: spacing.sm, flexWrap: "wrap" }}>
+                      {look.itemIds.slice(0, 4).map((id) => {
+                        const item = mockWardrobeItems.find((p) => p.id === id);
+                        return item ? <Tag key={`${look.id}-${id}`} label={item.name} /> : null;
+                      })}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {isLookEditorOpen && selectedLook ? (
+            <div style={overlayStyle}>
+              <div style={modalStyle}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: spacing.md }}>
+                  <h2 style={{ ...panelTitle, margin: 0 }}>Edit look</h2>
+                  <button onClick={() => setIsLookEditorOpen(false)} style={smallBtn}>Close</button>
+                </div>
                 <div style={{ display: "grid", gap: spacing.sm }}>
-                  <h2 style={panelTitle}>Look editor</h2>
-                  <input
-                    value={selectedLook.title}
-                    onChange={(e) => updateLook(selectedLook.id, { title: e.target.value })}
-                    style={inputStyle}
-                    placeholder="Look title"
-                  />
-                  <textarea
-                    value={selectedLook.note ?? ""}
-                    onChange={(e) => updateLook(selectedLook.id, { note: e.target.value })}
-                    style={{ ...inputStyle, minHeight: "90px", resize: "vertical" }}
-                    placeholder="Styling note"
-                  />
+                  <input value={selectedLook.title} onChange={(e) => updateLook(selectedLook.id, { title: e.target.value })} style={inputStyle} placeholder="Look title" />
+                  <textarea value={selectedLook.note ?? ""} onChange={(e) => updateLook(selectedLook.id, { note: e.target.value })} style={{ ...inputStyle, minHeight: "90px", resize: "vertical" }} placeholder="Styling note" />
                   <p style={{ ...typography.tag, margin: 0, color: colors.mutedText }}>Selected pieces</p>
                   <div style={{ display: "grid", gap: spacing.sm }}>
                     {selectedLook.itemIds.map((id, idx) => {
@@ -229,37 +250,25 @@ export default function WardrobePage() {
                           <div style={{ display: "flex", gap: spacing.xs }}>
                             <button onClick={() => moveLookItem(-1, idx)} style={smallBtn}>↑</button>
                             <button onClick={() => moveLookItem(1, idx)} style={smallBtn}>↓</button>
-                            <button
-                              onClick={() => updateLook(selectedLook.id, { itemIds: selectedLook.itemIds.filter((itemId) => itemId !== id) })}
-                              style={smallBtn}
-                            >
-                              Remove
-                            </button>
+                            <button onClick={() => updateLook(selectedLook.id, { itemIds: selectedLook.itemIds.filter((itemId) => itemId !== id) })} style={smallBtn}>Remove</button>
                           </div>
                         </div>
                       );
                     })}
                   </div>
                 </div>
-
                 <p style={{ ...typography.tag, margin: `${spacing.md} 0 ${spacing.sm}` }}>Add from wardrobe</p>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(190px, 1fr))", gap: spacing.sm }}>
                   {mockWardrobeItems.map((item) => (
                     <div key={`add-${item.id}`} style={tileStyle}>
                       <ProductCard {...item} />
-                      <button
-                        onClick={() => {
-                          if (selectedLook.itemIds.includes(item.id)) return;
-                          updateLook(selectedLook.id, { itemIds: [...selectedLook.itemIds, item.id] });
-                        }}
-                        style={{ ...smallBtn, width: "100%" }}
-                      >
-                        Add piece
-                      </button>
+                      <button onClick={() => {
+                        if (selectedLook.itemIds.includes(item.id)) return;
+                        updateLook(selectedLook.id, { itemIds: [...selectedLook.itemIds, item.id] });
+                      }} style={{ ...smallBtn, width: "100%" }}>Add piece</button>
                     </div>
                   ))}
                 </div>
-
                 <div style={{ display: "flex", justifyContent: "flex-end", marginTop: spacing.md }}>
                   {!confirmLookDelete ? (
                     <button onClick={() => setConfirmLookDelete(true)} style={dangerBtn}>Delete look</button>
@@ -270,9 +279,9 @@ export default function WardrobePage() {
                     </div>
                   )}
                 </div>
-              </>
-            )}
-          </div>
+              </div>
+            </div>
+          ) : null}
         </section>
       ) : (
         <section style={{ display: "grid", gap: spacing.lg, gridTemplateColumns: "minmax(0, 0.8fr) minmax(0, 1.6fr)" }}>
@@ -475,6 +484,29 @@ const inputStyle: CSSProperties = {
   background: colors.background,
   color: colors.primaryText,
   padding: `${spacing.sm} ${spacing.md}`,
+};
+
+
+const overlayStyle: CSSProperties = {
+  position: "fixed",
+  inset: 0,
+  background: "rgba(17, 24, 39, 0.45)",
+  display: "grid",
+  placeItems: "center",
+  padding: spacing.lg,
+  zIndex: 50,
+};
+
+const modalStyle: CSSProperties = {
+  width: "min(980px, 100%)",
+  maxHeight: "90vh",
+  overflow: "auto",
+  border: `1px solid ${colors.border}`,
+  borderRadius: spacing.lg,
+  background: colors.surface,
+  padding: spacing.lg,
+  display: "grid",
+  gap: spacing.sm,
 };
 
 const tabBtn = (active: boolean): CSSProperties => ({
