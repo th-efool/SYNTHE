@@ -7,7 +7,6 @@ import { colors } from "@/components/theme/colors";
 import { spacing } from "@/components/theme/spacing";
 import { typography } from "@/components/theme/typography";
 import { Button } from "@/components/ui/elements/Button";
-import { Tag } from "@/components/ui/elements/Tag";
 import {
   mockLooks,
   mockMoodboards,
@@ -87,16 +86,6 @@ export default function WardrobePage() {
     if (!filtered.length) setIsLookOverlayOpen(false);
   };
 
-  const moveLookItem = (dir: -1 | 1, idx: number) => {
-    if (!overlayLook) return;
-    const next = [...overlayLook.itemIds];
-    const to = idx + dir;
-    if (to < 0 || to >= next.length) return;
-    const tmp = next[idx];
-    next[idx] = next[to];
-    next[to] = tmp;
-    updateLook(overlayLook.id, { itemIds: next });
-  };
 
   const createBoard = () => {
     const next: MockMoodboard = {
@@ -232,18 +221,16 @@ export default function WardrobePage() {
                       alignContent: "space-between",
                     }}
                   >
-                    <div style={{ display: "flex", justifyContent: "space-between", gap: spacing.sm, alignItems: "center" }}>
-                      <strong style={{ fontSize: "15px" }}>{look.title}</strong>
+                    <OutfitCard
+                      title={look.title}
+                      items={look.itemIds
+                        .map((id) => mockWardrobeItems.find((item) => item.id === id))
+                        .filter(Boolean)
+                        .map((item) => ({ id: item!.id, image: item!.image }))}
+                    />
+                    <div style={{ display: "flex", justifyContent: "space-between", gap: spacing.sm, alignItems: "center", marginTop: spacing.sm }}>
+                      <strong style={{ fontSize: "13px" }}>{look.title}</strong>
                       <span style={{ ...typography.tag, color: colors.mutedText }}>{fmtDate(look.updatedAt)}</span>
-                    </div>
-                    <p style={{ ...typography.body, margin: `${spacing.sm} 0 0`, color: colors.mutedText }}>
-                      {look.note || "No note added yet."}
-                    </p>
-                    <div style={{ display: "flex", gap: spacing.xs, marginTop: spacing.sm, flexWrap: "wrap" }}>
-                      {look.itemIds.slice(0, 4).map((id) => {
-                        const item = mockWardrobeItems.find((p) => p.id === id);
-                        return item ? <Tag key={`${look.id}-${id}`} label={item.name} /> : null;
-                      })}
                     </div>
                   </button>
                 ))}
@@ -270,9 +257,7 @@ export default function WardrobePage() {
                         <div key={`${overlayLook.id}-${id}-${idx}`} style={rowStyle}>
                           <span style={{ fontSize: "14px" }}>{item.name}</span>
                           <div style={{ display: "flex", gap: spacing.xs }}>
-                            <button onClick={() => moveLookItem(-1, idx)} style={smallBtn}>↑</button>
-                            <button onClick={() => moveLookItem(1, idx)} style={smallBtn}>↓</button>
-                            <button onClick={() => updateLook(overlayLook.id, { itemIds: overlayLook.itemIds.filter((itemId) => itemId !== id) })} style={smallBtn}>Remove</button>
+                                                        <button onClick={() => updateLook(overlayLook.id, { itemIds: overlayLook.itemIds.filter((itemId) => itemId !== id) })} style={smallBtn}>Remove</button>
                           </div>
                         </div>
                       );
