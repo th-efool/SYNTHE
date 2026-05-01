@@ -1,29 +1,42 @@
 "use client";
 
+import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useTypingStore } from "@/lib/typing-state";
+import { UploadSlot } from "@/features/typing/components/UploadSlot";
 
-const mockImage = "preview://sample-face-1";
+const MAX_IMAGES = 3;
+const MIN_IMAGES = 2;
 
 export default function TypingUploadPage() {
   const router = useRouter();
   const { uploadedImages, addImagePreview, removeImagePreview } = useTypingStore();
 
+  const slots = useMemo(() => Array.from({ length: MAX_IMAGES }, (_, index) => index), []);
+  const canAnalyze = uploadedImages.length >= MIN_IMAGES;
+
   return (
     <main style={{ padding: 24 }}>
       <h1>Upload</h1>
-      <p>Upload your photos to continue.</p>
-      <button onClick={() => addImagePreview(`${mockImage}-${uploadedImages.length + 1}`)}>Add mock image</button>
-      {uploadedImages.length > 0 && (
-        <ul>
-          {uploadedImages.map((img) => (
-            <li key={img}>
-              {img} <button onClick={() => removeImagePreview(img)}>remove</button>
-            </li>
-          ))}
-        </ul>
-      )}
-      <button onClick={() => router.push("/typing/processing")}>Process uploads</button>
+      <p>Add at least {MIN_IMAGES} images (max {MAX_IMAGES}) to analyze.</p>
+      <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
+        {slots.map((index) => (
+          <UploadSlot
+            key={index}
+            label={`Image ${index + 1}`}
+            previewUrl={uploadedImages[index]}
+            onFileSelected={(file) => {
+              if (uploadedImages.length >= MAX_IMAGES) return;
+              const previewUrl = URL.createObjectURL(file);
+              addImagePreview(previewUrl);
+            }}
+            onRemove={uploadedImages[index] ? () => removeImagePreview(uploadedImages[index]) : undefined}
+          />
+        ))}
+      </div>
+      <button disabled={!canAnalyze} onClick={() => router.push("/typing/processing")} style={{ marginTop: 16 }}>
+        Analyze
+      </button>
     </main>
   );
 }

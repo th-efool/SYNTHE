@@ -1,4 +1,5 @@
 "use client";
+import { OptionCard } from "./OptionCard";
 
 type QuestionBlockProps = {
   questionId: string;
@@ -16,20 +17,13 @@ export function QuestionBlock({ questionId, prompt, options, selectedOption, onS
         {options.map((option) => {
           const isSelected = selectedOption === option;
           return (
-            <button
+            <OptionCard
               key={`${questionId}-${option}`}
               onClick={() => onSelect(option)}
-              style={{
-                textAlign: "left",
-                padding: "10px 12px",
-                borderRadius: 6,
-                border: isSelected ? "1px solid #c97b5a" : "1px solid #d9d0c5",
-                background: isSelected ? "#f4e4dc" : "#fff",
-                cursor: "pointer",
-              }}
+              selected={isSelected}
             >
               {option}
-            </button>
+            </OptionCard>
           );
         })}
       </div>
