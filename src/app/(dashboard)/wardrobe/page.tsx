@@ -1,6 +1,7 @@
 "use client";
 
 import { type CSSProperties, useEffect, useMemo, useState } from "react";
+import { LookGalleryCard } from "@/components/ui/cards/LookGalleryCard";
 import { OutfitCard } from "@/components/ui/cards/OutfitCard";
 import { ProductCard } from "@/components/ui/cards/ProductCard";
 import { colors } from "@/components/theme/colors";
@@ -22,6 +23,14 @@ const fmtDate = (d: string) =>
   new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
 const makeId = (prefix: string) => `${prefix}-${Math.random().toString(36).slice(2, 9)}`;
+
+const lookPatternMap = [
+  { colSpan: 3, minHeight: "250px" },
+  { colSpan: 2, minHeight: "210px" },
+  { colSpan: 1, minHeight: "180px" },
+  { colSpan: 2, minHeight: "220px" },
+  { colSpan: 1, minHeight: "170px" },
+];
 
 export default function WardrobePage() {
   const [tab, setTab] = useState<Tab>("looks");
@@ -204,36 +213,37 @@ export default function WardrobePage() {
               <p style={{ ...typography.body, color: colors.mutedText, margin: 0 }}>No looks yet. Create one.</p>
             ) : (
               <div style={{ display: "grid", gap: spacing.md, gridTemplateColumns: "repeat(6, minmax(0, 1fr))", gridAutoRows: "minmax(120px, auto)" }}>
-                {looks.map((look, idx) => (
-                  <button
-                    key={look.id}
-                    onClick={() => {
-                      setSelectedLookId(look.id);
-                      setConfirmLookDelete(false);
-                      setActiveLookOverlayId(look.id);
-                      setIsLookOverlayOpen(true);
-                    }}
-                    style={{
-                      ...cardBtn(selectedLook?.id === look.id),
-                      gridColumn: `span ${idx % 5 === 0 ? 3 : idx % 2 === 0 ? 2 : 1}`,
-                      minHeight: idx % 3 === 0 ? "180px" : "140px",
-                      display: "grid",
-                      alignContent: "space-between",
-                    }}
-                  >
-                    <OutfitCard
-                      title={look.title}
-                      items={look.itemIds
-                        .map((id) => mockWardrobeItems.find((item) => item.id === id))
-                        .filter(Boolean)
-                        .map((item) => ({ id: item!.id, image: item!.image }))}
-                    />
-                    <div style={{ display: "flex", justifyContent: "space-between", gap: spacing.sm, alignItems: "center", marginTop: spacing.sm }}>
-                      <strong style={{ fontSize: "13px" }}>{look.title}</strong>
-                      <span style={{ ...typography.tag, color: colors.mutedText }}>{fmtDate(look.updatedAt)}</span>
-                    </div>
-                  </button>
-                ))}
+                {looks.map((look, idx) => {
+                  const pattern = lookPatternMap[idx % lookPatternMap.length];
+                  const lookImages = look.itemIds
+                    .map((id) => mockWardrobeItems.find((item) => item.id === id)?.image)
+                    .filter(Boolean) as string[];
+
+                  return (
+                    <button
+                      key={look.id}
+                      onClick={() => {
+                        setSelectedLookId(look.id);
+                        setConfirmLookDelete(false);
+                        setActiveLookOverlayId(look.id);
+                        setIsLookOverlayOpen(true);
+                      }}
+                      style={{
+                        ...cardBtn(selectedLook?.id === look.id),
+                        gridColumn: `span ${pattern.colSpan}`,
+                        minHeight: pattern.minHeight,
+                        padding: spacing.xs,
+                      }}
+                    >
+                      <LookGalleryCard
+                        title={look.title}
+                        styleLabel={look.note?.slice(0, 32) || "Quiet layers"}
+                        images={lookImages}
+                        active={selectedLook?.id === look.id}
+                      />
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
