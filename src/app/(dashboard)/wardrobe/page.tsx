@@ -180,11 +180,23 @@ export default function WardrobePage() {
         }}
       >
         <div>
-          <p style={{ ...typography.tag, margin: 0, color: colors.mutedText }}>Wardrobe studio</p>
-          <h1 style={{ ...typography.sectionTitle, margin: `${spacing.sm} 0 0` }}>Build looks. Compose moodboards.</h1>
-          <p style={{ ...typography.body, margin: `${spacing.sm} 0 0`, color: colors.mutedText }}>
-            Private styling workbench for saved pieces and visual direction.
-          </p>
+          {tab === "looks" ? (
+            <>
+              <p style={{ ...typography.tag, margin: 0, color: colors.mutedText }}>Synthe wardrobe</p>
+              <h1 style={{ ...typography.sectionTitle, margin: `${spacing.sm} 0 0` }}>My Wardrobe</h1>
+              <p style={{ ...typography.body, margin: `${spacing.sm} 0 0`, color: colors.mutedText }}>
+                Curated pieces. Endless combinations.
+              </p>
+            </>
+          ) : (
+            <>
+              <p style={{ ...typography.tag, margin: 0, color: colors.mutedText }}>Moodboard studio</p>
+              <h1 style={{ ...typography.sectionTitle, margin: `${spacing.sm} 0 0` }}>Build looks. Compose moodboards.</h1>
+              <p style={{ ...typography.body, margin: `${spacing.sm} 0 0`, color: colors.mutedText }}>
+                Visual direction and references for upcoming styling stories.
+              </p>
+            </>
+          )}
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: spacing.sm, justifyContent: "space-between" }}>
           <div style={{ display: "inline-flex", gap: spacing.xs, padding: spacing.xs, background: colors.background, borderRadius: spacing.xxl }}>
@@ -202,7 +214,7 @@ export default function WardrobePage() {
         <section style={{ display: "grid", gap: spacing.lg }}>
           <div style={panelStyle}>
             <div style={{ marginBottom: spacing.lg }}>
-              <p style={{ ...typography.tag, margin: 0, color: colors.mutedText }}>Looks archive</p>
+              <p style={{ ...typography.tag, margin: 0, color: colors.mutedText }}>Featured looks</p>
               <h2 style={{ ...typography.sectionTitle, margin: `${spacing.xs} 0 0` }}>My Wardrobe</h2>
               <p style={{ ...typography.body, margin: `${spacing.xs} 0 0`, color: colors.mutedText }}>
                 Curated pieces. Endless combinations.
