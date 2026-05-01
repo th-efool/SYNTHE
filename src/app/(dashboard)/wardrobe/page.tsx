@@ -42,6 +42,8 @@ export default function WardrobePage() {
   const [isLookOverlayOpen, setIsLookOverlayOpen] = useState(false);
   const [activeLookOverlayId, setActiveLookOverlayId] = useState<string>(mockLooks[0]?.id ?? "");
   const [confirmBoardDelete, setConfirmBoardDelete] = useState(false);
+  const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
+  const [activePinActionsId, setActivePinActionsId] = useState<string | null>(null);
 
   const selectedLook = useMemo(
     () => looks.find((look) => look.id === selectedLookId) ?? looks[0],
@@ -352,62 +354,31 @@ export default function WardrobePage() {
               <p style={{ ...typography.body, color: colors.mutedText, margin: 0 }}>No boards yet. Create one.</p>
             ) : (
               <>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: spacing.xs }}>
+                <div style={{ display: "flex", justifyContent: "flex-end", position: "relative" }}>
                   <button
-                    onClick={() => addPin({ id: makeId("pin"), type: "product", productId: mockWardrobeItems[0].id, x: 1, y: 1, w: 4, h: 4 })}
-                    style={smallBtn}
+                    onClick={() => setIsQuickAddOpen((prev) => !prev)}
+                    style={{
+                      ...smallBtn,
+                      borderRadius: "999px",
+                      width: "40px",
+                      height: "40px",
+                      fontSize: "20px",
+                      lineHeight: 1,
+                      boxShadow: "0 8px 20px rgba(40, 32, 24, 0.18)",
+                    }}
+                    aria-label="Add pin"
+                    aria-expanded={isQuickAddOpen}
                   >
-                    + Product pin
+                    +
                   </button>
-                  <button
-                    onClick={() =>
-                      addPin({
-                        id: makeId("pin"),
-                        type: "look",
-                        lookId: looks[0]?.id ?? "",
-                        x: 1,
-                        y: 1,
-                        w: 5,
-                        h: 4,
-                      })
-                    }
-                    style={smallBtn}
-                  >
-                    + Look pin
-                  </button>
-                  <button
-                    onClick={() =>
-                      addPin({
-                        id: makeId("pin"),
-                        type: "note",
-                        text: "Add tonal layering with matte texture.",
-                        x: 1,
-                        y: 1,
-                        w: 4,
-                        h: 2,
-                      })
-                    }
-                    style={smallBtn}
-                  >
-                    + Note pin
-                  </button>
-                  <button
-                    onClick={() =>
-                      addPin({
-                        id: makeId("pin"),
-                        type: "color",
-                        hex: "#B28A6E",
-                        label: "Clay",
-                        x: 1,
-                        y: 1,
-                        w: 3,
-                        h: 2,
-                      })
-                    }
-                    style={smallBtn}
-                  >
-                    + Color chip
-                  </button>
+                  {isQuickAddOpen ? (
+                    <div style={{ position: "absolute", top: "46px", right: 0, display: "grid", gap: spacing.xs, padding: spacing.xs, background: colors.surface, border: `1px solid ${colors.border}`, borderRadius: spacing.md }}>
+                      <button onClick={() => { addPin({ id: makeId("pin"), type: "product", productId: mockWardrobeItems[0].id, x: 1, y: 1, w: 4, h: 4 }); setIsQuickAddOpen(false); }} style={smallBtn}>Product pin</button>
+                      <button onClick={() => { addPin({ id: makeId("pin"), type: "look", lookId: looks[0]?.id ?? "", x: 1, y: 1, w: 5, h: 4 }); setIsQuickAddOpen(false); }} style={smallBtn}>Look pin</button>
+                      <button onClick={() => { addPin({ id: makeId("pin"), type: "note", text: "Add tonal layering with matte texture.", x: 1, y: 1, w: 4, h: 2 }); setIsQuickAddOpen(false); }} style={smallBtn}>Note pin</button>
+                      <button onClick={() => { addPin({ id: makeId("pin"), type: "color", hex: "#B28A6E", label: "Clay", x: 1, y: 1, w: 3, h: 2 }); setIsQuickAddOpen(false); }} style={smallBtn}>Color chip</button>
+                    </div>
+                  ) : null}
                 </div>
 
                 <div
@@ -424,6 +395,8 @@ export default function WardrobePage() {
                   {selectedBoard.pins.map((pin, idx) => (
                     <div
                       key={pin.id}
+                      onMouseEnter={() => setActivePinActionsId(pin.id)}
+                      onMouseLeave={() => setActivePinActionsId((current) => (current === pin.id ? null : current))}
                       style={{
                         breakInside: "avoid",
                         marginBottom: spacing.md,
@@ -475,7 +448,7 @@ export default function WardrobePage() {
                         </div>
                       ) : null}
 
-                      <div style={{ display: "flex", gap: spacing.xs, padding: spacing.xs, justifyContent: "flex-end" }}>
+                      <div style={{ display: "flex", gap: spacing.xs, padding: spacing.xs, justifyContent: "flex-end", opacity: activePinActionsId === pin.id ? 1 : 0, transition: "opacity 180ms ease" }}>
                         <button onClick={() => movePin(pin.id, -1)} style={smallBtn}>↑</button>
                         <button onClick={() => movePin(pin.id, 1)} style={smallBtn}>↓</button>
                         <button onClick={() => removePin(pin.id)} style={smallBtn}>Remove</button>
