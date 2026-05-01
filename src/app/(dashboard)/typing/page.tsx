@@ -597,7 +597,23 @@ export default function TypingPage() {
     }
   }, [profile, router]);
 
-  if (!profile) return null;
+  if (!profile) {
+    return (
+      <main style={{ minHeight: "60vh", display: "grid", placeItems: "center", padding: 24 }}>
+        <div style={{ textAlign: "center", maxWidth: 520 }}>
+          <p style={{ margin: 0, color: "#7a6e62" }}>No active typing session found.</p>
+          <h1 style={{ margin: "8px 0 12px", fontFamily: "Georgia, serif", fontWeight: 400 }}>Redirecting to start…</h1>
+          <button
+            type="button"
+            onClick={() => router.replace("/typing/start")}
+            style={{ border: "1px solid #d9d0c5", background: "#fff", borderRadius: 4, padding: "10px 14px", cursor: "pointer" }}
+          >
+            Go to typing start
+          </button>
+        </div>
+      </main>
+    );
+  }
   return (
     <>
     <main style={{
