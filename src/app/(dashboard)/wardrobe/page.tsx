@@ -42,6 +42,9 @@ export default function WardrobePage() {
   const [isLookOverlayOpen, setIsLookOverlayOpen] = useState(false);
   const [activeLookOverlayId, setActiveLookOverlayId] = useState<string>(mockLooks[0]?.id ?? "");
   const [confirmBoardDelete, setConfirmBoardDelete] = useState(false);
+  const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
+  const [activePinActionsId, setActivePinActionsId] = useState<string | null>(null);
+  const [isBoardMetaOpen, setIsBoardMetaOpen] = useState(false);
 
   const selectedLook = useMemo(
     () => looks.find((look) => look.id === selectedLookId) ?? looks[0],
@@ -313,131 +316,129 @@ export default function WardrobePage() {
           ) : null}
         </section>
       ) : (
-        <section style={{ display: "grid", gap: spacing.lg, gridTemplateColumns: "minmax(0, 0.8fr) minmax(0, 1.6fr)" }}>
-          <div style={panelStyle}>
-            <h2 style={panelTitle}>Board list</h2>
+        <section style={{ display: "grid", gap: spacing.lg }}>
+          <div style={{ ...panelStyle, display: "grid", gap: spacing.lg }}>
             <div style={{ display: "grid", gap: spacing.sm }}>
-              {boards.map((board) => (
-                <button key={board.id} onClick={() => setSelectedBoardId(board.id)} style={cardBtn(selectedBoard?.id === board.id)}>
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: spacing.sm }}>
-                    <strong style={{ fontSize: "14px" }}>{board.title}</strong>
-                    <span style={{ ...typography.tag, color: colors.mutedText }}>{fmtDate(board.updatedAt)}</span>
-                  </div>
-                  <p style={{ ...typography.body, margin: `${spacing.xs} 0 0`, color: colors.mutedText }}>{board.description || "No description"}</p>
-                </button>
-              ))}
+              <p style={{ ...typography.tag, margin: 0, color: colors.mutedText }}>Moodboard</p>
+              <h2 style={{ ...typography.sectionTitle, margin: 0 }}>Moodboard</h2>
+              <p style={{ ...typography.body, margin: 0, color: colors.mutedText }}>
+                Explore. Play. Refine your style story.
+              </p>
             </div>
-          </div>
 
-          <div style={panelStyle}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: spacing.sm, alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: spacing.xs }}>
+                <label htmlFor="board-selector" style={{ ...typography.tag, color: colors.mutedText }}>
+                  Active board
+                </label>
+                <select
+                  id="board-selector"
+                  value={selectedBoard?.id ?? ""}
+                  onChange={(e) => setSelectedBoardId(e.target.value)}
+                  style={{ ...inputStyle, minWidth: "220px", background: colors.surface }}
+                >
+                  {boards.map((board) => (
+                    <option key={board.id} value={board.id}>
+                      {board.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {selectedBoard ? (
+                <div style={{ display: "inline-flex", alignItems: "center", gap: spacing.xs }}>
+                  <span style={{ ...typography.tag, color: colors.mutedText }}>
+                    Updated {fmtDate(selectedBoard.updatedAt)}
+                  </span>
+                  <button onClick={() => setIsBoardMetaOpen((prev) => !prev)} style={smallBtn}>
+                    Edit details
+                  </button>
+                </div>
+              ) : null}
+            </div>
+            {selectedBoard && isBoardMetaOpen ? (
+              <div style={{ display: "grid", gap: spacing.sm, justifyItems: "start", padding: spacing.sm, borderRadius: spacing.md, background: colors.background, border: `1px solid ${colors.border}` }}>
+                <input
+                  value={selectedBoard.title}
+                  onChange={(e) => updateBoard(selectedBoard.id, { title: e.target.value })}
+                  style={{ ...inputStyle, background: colors.surface, minWidth: "280px" }}
+                  placeholder="Board title"
+                />
+                <textarea
+                  value={selectedBoard.description}
+                  onChange={(e) => updateBoard(selectedBoard.id, { description: e.target.value })}
+                  style={{ ...inputStyle, minHeight: "74px", resize: "vertical", background: colors.surface, minWidth: "280px" }}
+                  placeholder="Board description"
+                />
+              </div>
+            ) : null}
+
             {!selectedBoard ? (
               <p style={{ ...typography.body, color: colors.mutedText, margin: 0 }}>No boards yet. Create one.</p>
             ) : (
               <>
-                <div style={{ display: "grid", gap: spacing.sm }}>
-                  <h2 style={panelTitle}>Moodboard canvas</h2>
-                  <input
-                    value={selectedBoard.title}
-                    onChange={(e) => updateBoard(selectedBoard.id, { title: e.target.value })}
-                    style={inputStyle}
-                    placeholder="Board title"
-                  />
-                  <textarea
-                    value={selectedBoard.description}
-                    onChange={(e) => updateBoard(selectedBoard.id, { description: e.target.value })}
-                    style={{ ...inputStyle, minHeight: "80px", resize: "vertical" }}
-                    placeholder="Board description"
-                  />
-                </div>
-
-                <div style={{ display: "flex", flexWrap: "wrap", gap: spacing.xs, marginTop: spacing.md }}>
+                <div style={{ display: "flex", justifyContent: "flex-end", position: "relative" }}>
                   <button
-                    onClick={() => addPin({ id: makeId("pin"), type: "product", productId: mockWardrobeItems[0].id, x: 1, y: 1, w: 4, h: 4 })}
-                    style={smallBtn}
+                    onClick={() => setIsQuickAddOpen((prev) => !prev)}
+                    style={{
+                      ...smallBtn,
+                      borderRadius: "999px",
+                      width: "40px",
+                      height: "40px",
+                      fontSize: "20px",
+                      lineHeight: 1,
+                      boxShadow: "0 8px 20px rgba(40, 32, 24, 0.18)",
+                    }}
+                    aria-label="Add pin"
+                    aria-expanded={isQuickAddOpen}
                   >
-                    + Product pin
+                    +
                   </button>
-                  <button
-                    onClick={() =>
-                      addPin({
-                        id: makeId("pin"),
-                        type: "look",
-                        lookId: looks[0]?.id ?? "",
-                        x: 1,
-                        y: 1,
-                        w: 5,
-                        h: 4,
-                      })
-                    }
-                    style={smallBtn}
-                  >
-                    + Look pin
-                  </button>
-                  <button
-                    onClick={() =>
-                      addPin({
-                        id: makeId("pin"),
-                        type: "note",
-                        text: "Add tonal layering with matte texture.",
-                        x: 1,
-                        y: 1,
-                        w: 4,
-                        h: 2,
-                      })
-                    }
-                    style={smallBtn}
-                  >
-                    + Note pin
-                  </button>
-                  <button
-                    onClick={() =>
-                      addPin({
-                        id: makeId("pin"),
-                        type: "color",
-                        hex: "#B28A6E",
-                        label: "Clay",
-                        x: 1,
-                        y: 1,
-                        w: 3,
-                        h: 2,
-                      })
-                    }
-                    style={smallBtn}
-                  >
-                    + Color chip
-                  </button>
+                  {isQuickAddOpen ? (
+                    <div style={{ position: "absolute", top: "46px", right: 0, display: "grid", gap: spacing.xs, padding: spacing.xs, background: colors.surface, border: `1px solid ${colors.border}`, borderRadius: spacing.md }}>
+                      <button onClick={() => { addPin({ id: makeId("pin"), type: "product", productId: mockWardrobeItems[0].id, x: 1, y: 1, w: 4, h: 4 }); setIsQuickAddOpen(false); }} style={smallBtn}>Product pin</button>
+                      <button onClick={() => { addPin({ id: makeId("pin"), type: "look", lookId: looks[0]?.id ?? "", x: 1, y: 1, w: 5, h: 4 }); setIsQuickAddOpen(false); }} style={smallBtn}>Look pin</button>
+                      <button onClick={() => { addPin({ id: makeId("pin"), type: "note", text: "Add tonal layering with matte texture.", x: 1, y: 1, w: 4, h: 2 }); setIsQuickAddOpen(false); }} style={smallBtn}>Note pin</button>
+                      <button onClick={() => { addPin({ id: makeId("pin"), type: "color", hex: "#B28A6E", label: "Clay", x: 1, y: 1, w: 3, h: 2 }); setIsQuickAddOpen(false); }} style={smallBtn}>Color chip</button>
+                    </div>
+                  ) : null}
                 </div>
 
                 <div
                   style={{
-                    marginTop: spacing.md,
-                    display: "grid",
-                    gridTemplateColumns: "repeat(8, minmax(0, 1fr))",
-                    gridAutoRows: "56px",
-                    gap: spacing.sm,
-                    background: colors.background,
+                    marginTop: spacing.sm,
+                    columnCount: 3,
+                    columnGap: spacing.md,
+                    background: "#efe7db",
                     borderRadius: spacing.md,
-                    padding: spacing.md,
-                    border: `1px dashed ${colors.border}`,
+                    padding: spacing.lg,
+                    boxShadow: "inset 0 0 0 1px rgba(83, 62, 48, 0.12)",
                   }}
                 >
                   {selectedBoard.pins.map((pin, idx) => (
                     <div
                       key={pin.id}
+                      onMouseEnter={() => setActivePinActionsId(pin.id)}
+                      onMouseLeave={() => setActivePinActionsId((current) => (current === pin.id ? null : current))}
                       style={{
-                        border: `1px solid ${colors.border}`,
+                        breakInside: "avoid",
+                        marginBottom: spacing.md,
+                        border: `1px solid rgba(83, 62, 48, 0.16)`,
                         borderRadius: spacing.md,
-                        background: colors.surface,
+                        background: "#fffaf4",
                         overflow: "hidden",
-                        gridColumn: `${pin.x} / span ${pin.w}`,
-                        gridRow: `${pin.y} / span ${pin.h}`,
                         display: "grid",
+                        boxShadow: "0 10px 24px rgba(83, 62, 48, 0.14)",
+                        transform: `translateY(${(idx % 3) * 4}px) rotate(${[-1.2, 0.65, -0.4, 1.1, -0.8][idx % 5]}deg)`,
                       }}
                     >
                       {pin.type === "product" ? (
                         (() => {
                           const p = mockWardrobeItems.find((item) => item.id === pin.productId);
-                          return p ? <ProductCard {...p} /> : null;
+                          return p ? (
+                            <div style={{ minHeight: idx % 2 === 0 ? "250px" : "220px" }}>
+                              <ProductCard {...p} />
+                            </div>
+                          ) : null;
                         })()
                       ) : null}
                       {pin.type === "look" ? (
@@ -445,29 +446,31 @@ export default function WardrobePage() {
                           const look = looks.find((item) => item.id === pin.lookId);
                           if (!look) return <div style={{ padding: spacing.sm }}>Missing look</div>;
                           return (
-                            <OutfitCard
-                              title={look.title}
-                              items={look.itemIds
-                                .map((id) => mockWardrobeItems.find((item) => item.id === id))
-                                .filter(Boolean)
-                                .map((item) => ({ id: item!.id, image: item!.image }))}
-                            />
+                            <div style={{ minHeight: idx % 2 === 0 ? "320px" : "280px" }}>
+                              <OutfitCard
+                                title={look.title}
+                                items={look.itemIds
+                                  .map((id) => mockWardrobeItems.find((item) => item.id === id))
+                                  .filter(Boolean)
+                                  .map((item) => ({ id: item!.id, image: item!.image }))}
+                              />
+                            </div>
                           );
                         })()
                       ) : null}
                       {pin.type === "note" ? (
-                        <div style={{ padding: spacing.md, display: "grid", alignContent: "center" }}>
+                        <div style={{ padding: spacing.md, display: "grid", alignContent: "center", minHeight: idx % 2 ? "180px" : "140px" }}>
                           <p style={{ ...typography.body, margin: 0, fontStyle: "italic" }}>{pin.text}</p>
                         </div>
                       ) : null}
                       {pin.type === "color" ? (
-                        <div style={{ padding: spacing.md, display: "grid", alignContent: "center", gap: spacing.sm }}>
-                          <div style={{ width: "100%", height: "32px", borderRadius: spacing.xs, background: pin.hex }} />
+                        <div style={{ padding: spacing.md, display: "grid", alignContent: "center", gap: spacing.sm, minHeight: "120px" }}>
+                          <div style={{ width: "100%", height: idx % 2 ? "40px" : "30px", borderRadius: spacing.xs, background: pin.hex }} />
                           <span style={{ ...typography.tag }}>{pin.label}</span>
                         </div>
                       ) : null}
 
-                      <div style={{ display: "flex", gap: spacing.xs, padding: spacing.xs, justifyContent: "flex-end" }}>
+                      <div style={{ display: "flex", gap: spacing.xs, padding: spacing.xs, justifyContent: "flex-end", opacity: activePinActionsId === pin.id ? 1 : 0, transition: "opacity 180ms ease" }}>
                         <button onClick={() => movePin(pin.id, -1)} style={smallBtn}>↑</button>
                         <button onClick={() => movePin(pin.id, 1)} style={smallBtn}>↓</button>
                         <button onClick={() => removePin(pin.id)} style={smallBtn}>Remove</button>
