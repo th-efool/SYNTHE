@@ -1,0 +1,111 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: localai-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-litellm}
+      POSTGRES_USER: ${POSTGRES_USER:-litellm}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-litellm}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: localai-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  litellm:
+    build:
+      context: ./infra/litellm
+    image: localai-litellm:stable
+    container_name: localai-litellm
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      PYTHONUNBUFFERED: "1"
+      PYTHONFAULTHANDLER: "1"
+      LITELLM_LOG: ${LITELLM_LOG:-INFO}
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-sk-localai}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-litellm}:${POSTGRES_PASSWORD:-litellm}@postgres:5432/${POSTGRES_DB:-litellm}
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      OLLAMA_API_BASE: ${OLLAMA_API_BASE:-http://host.docker.internal:11434}
+      VLLM_API_BASE: ${VLLM_API_BASE:-http://vllm:8000/v1}
+      VLLM_MODEL: ${VLLM_MODEL:-}
+      CONFIG_PATH: /tmp/litellm.generated.yaml
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    volumes:
+      - ./infra/litellm/start.sh:/app/start.sh:ro
+    entrypoint: ["/bin/bash", "/app/start.sh"]
+    ports:
+      - "4000:4000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:4000/health/readiness >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    restart: unless-stopped
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: localai-open-webui
+    depends_on:
+      litellm:
+        condition: service_healthy
+    environment:
+      OPENAI_API_BASE_URL: http://litellm:4000/v1
+      OPENAI_API_KEY: ${LITELLM_MASTER_KEY:-sk-localai}
+    volumes:
+      - open-webui-data:/app/backend/data
+    ports:
+      - "3001:8080"
+    restart: unless-stopped
+
+  vllm:
+    image: vllm/vllm-openai:latest
+    container_name: localai-vllm
+    profiles: ["vllm"]
+    environment:
+      MODEL: ${VLLM_MODEL:-TinyLlama/TinyLlama-1.1B-Chat-v1.0}
+    command: ["--model", "${VLLM_MODEL:-TinyLlama/TinyLlama-1.1B-Chat-v1.0}", "--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  traefik:
+    image: traefik:v3.1
+    container_name: localai-traefik
+    command:
+      - --providers.file.filename=/etc/traefik/dynamic.yml
+      - --entrypoints.web.address=:80
+      - --api.dashboard=true
+    volumes:
+      - ./infra/traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
+    ports:
+      - "8080:80"
+      - "8081:8080"
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  redis-data:
+  open-webui-data:

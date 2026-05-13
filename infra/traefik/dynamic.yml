@@ -1,0 +1,11 @@
+http:
+  routers:
+    litellm:
+      rule: PathPrefix(`/`)
+      entryPoints: [web]
+      service: litellm
+  services:
+    litellm:
+      loadBalancer:
+        servers:
+          - url: http://litellm:4000
