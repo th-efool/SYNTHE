@@ -1,0 +1,56 @@
+flowchart TD
+
+    A[User Input]
+
+    A --> B1[Questionnaire]
+    A --> B2[Photos]
+    A --> B3[Hybrid Input]
+
+    B1 --> C[Feature Extraction]
+    B2 --> C
+    B3 --> C
+
+    C --> D[Feature Store]
+
+    D --> E1[Kibbe Scorer]
+    D --> E2[Season Scorer]
+    D --> E3[Essence Scorer]
+
+    E1 --> F[Candidate Distributions]
+    E2 --> F
+    E3 --> F
+
+    F --> G[Entropy Calculator]
+
+    G --> H{Confidence High?}
+
+    H -->|No| I[Identify Most Confused Candidates]
+
+    I --> J[Discriminative Feature Analysis]
+
+    J --> K[Question Generator]
+
+    K --> L[Ask Highest Information Gain Question]
+
+    L --> M[User Answer]
+
+    M --> D
+
+    H -->|Yes| N[Cross-System Validation]
+
+    N --> O{Contradictions?}
+
+    O -->|Yes| K
+
+    O -->|No| P[Resolve Profile]
+
+    P --> Q[Compound Profile]
+
+    Q --> R[Explanation Layer]
+
+    R --> S[Appearance Graph]
+
+    S --> T1[Wardrobe OS]
+    S --> T2[Shopping Copilot]
+    S --> T3[Outfit Generator]
+    S --> T4[Appearance Coach]
