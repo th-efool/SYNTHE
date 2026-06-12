@@ -59,68 +59,92 @@ flowchart TD
 ```
 # 2 
 ```mermaid
-flowchart LR
+flowchart TD
 
-    Input[User Input]
+    START([User Input])
 
-    Input --> FE
+    START --> INPUT
 
-    subgraph FE[Feature Extraction Layer]
+    subgraph INPUT["Input Layer"]
+        FORM[Form Answers]
+        IMAGE[Image Analysis]
+        HYBRID[Hybrid Input]
+    end
+
+    INPUT --> FEATURES
+
+    subgraph FEATURES["Feature Extraction"]
         FE1[Form Feature Extractor]
         FE2[Vision Feature Extractor]
+        FE3[Unified Feature Store]
     end
 
-    FE --> SC
+    FEATURES --> INFERENCE
 
-    subgraph SC[Inference Layer]
-        A1[Archetype Scorer]
-        A2[Candidate Retriever]
-        A3[Distribution Builder]
+    subgraph INFERENCE["Hypothesis Engine"]
+        H1[Candidate Retriever]
+        H2[Archetype Scorer]
+        H3[Distribution Builder]
+
+        H1 --> H2
+        H2 --> H3
     end
 
-    SC --> UC
+    INFERENCE --> UNCERTAINTY
 
-    subgraph UC[Uncertainty Layer]
+    subgraph UNCERTAINTY["Uncertainty Analysis"]
         U1[Entropy Calculator]
-        U2[Ambiguity Detector]
-        U3[Confidence Estimator]
+        U2[Ambiguity Detection]
+        U3[Confidence Evaluation]
+
+        U1 --> U2
+        U2 --> U3
     end
 
-    UC --> Decision
+    U3 --> RESOLVED{Resolved?}
 
-    Decision{Resolved?}
+    RESOLVED -->|No| RESOLUTION
 
-    Decision -->|No| QA
+    subgraph RESOLUTION["Adaptive Resolution Loop"]
+        R1[Confused Candidate Pair Finder]
+        R2[Information Gain Analysis]
+        R3[Question Generator]
+        R4[User Answer]
 
-    subgraph QA[Resolution Layer]
-        Q1[Confusion Pair Finder]
-        Q2[Information Gain Analyzer]
-        Q3[Question Generator]
+        R1 --> R2
+        R2 --> R3
+        R3 --> R4
     end
 
-    QA --> UserAnswer[User Answer]
+    R4 --> FEATURES
 
-    UserAnswer --> FE
+    RESOLVED -->|Yes| VALIDATION
 
-    Decision -->|Yes| VAL
+    subgraph VALIDATION["Cross-System Validation"]
+        V1[Kibbe Validation]
+        V2[Season Validation]
+        V3[Essence Validation]
+        V4[Reconciliation Engine]
 
-    subgraph VAL[Validation Layer]
-        V1[Kibbe Validator]
-        V2[Season Validator]
-        V3[Essence Validator]
-        V4[Cross-System Reconciliation]
+        V1 --> V4
+        V2 --> V4
+        V3 --> V4
     end
 
-    VAL --> Profile[Compound Profile]
+    VALIDATION --> PROFILE
 
-    Profile --> EXP
+    PROFILE[Compound Profile]
 
-    subgraph EXP[Explanation Layer]
-        E1[Reasoning Engine]
+    PROFILE --> EXPLAIN
+
+    subgraph EXPLAIN["Explanation Layer"]
+        E1[Reasoning Generator]
         E2[Natural Language Explainer]
+
+        E1 --> E2
     end
 
-    EXP --> Graph[Appearance Graph]
+    EXPLAIN --> GRAPH[(Appearance Graph)]
 ```
 
 # 3
