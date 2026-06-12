@@ -1,3 +1,4 @@
+```mermaid
 flowchart TD
 
     A[User Input]
@@ -54,3 +55,4 @@ flowchart TD
     S --> T2[Shopping Copilot]
     S --> T3[Outfit Generator]
     S --> T4[Appearance Coach]
+```
