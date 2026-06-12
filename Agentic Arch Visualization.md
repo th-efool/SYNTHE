@@ -1,3 +1,4 @@
+# 1
 ```mermaid
 flowchart TD
 
@@ -55,4 +56,108 @@ flowchart TD
     S --> T2[Shopping Copilot]
     S --> T3[Outfit Generator]
     S --> T4[Appearance Coach]
+```
+# 2 
+```mermaid
+flowchart LR
+
+    Input[User Input]
+
+    Input --> FE
+
+    subgraph FE[Feature Extraction Layer]
+        FE1[Form Feature Extractor]
+        FE2[Vision Feature Extractor]
+    end
+
+    FE --> SC
+
+    subgraph SC[Inference Layer]
+        A1[Archetype Scorer]
+        A2[Candidate Retriever]
+        A3[Distribution Builder]
+    end
+
+    SC --> UC
+
+    subgraph UC[Uncertainty Layer]
+        U1[Entropy Calculator]
+        U2[Ambiguity Detector]
+        U3[Confidence Estimator]
+    end
+
+    UC --> Decision
+
+    Decision{Resolved?}
+
+    Decision -->|No| QA
+
+    subgraph QA[Resolution Layer]
+        Q1[Confusion Pair Finder]
+        Q2[Information Gain Analyzer]
+        Q3[Question Generator]
+    end
+
+    QA --> UserAnswer[User Answer]
+
+    UserAnswer --> FE
+
+    Decision -->|Yes| VAL
+
+    subgraph VAL[Validation Layer]
+        V1[Kibbe Validator]
+        V2[Season Validator]
+        V3[Essence Validator]
+        V4[Cross-System Reconciliation]
+    end
+
+    VAL --> Profile[Compound Profile]
+
+    Profile --> EXP
+
+    subgraph EXP[Explanation Layer]
+        E1[Reasoning Engine]
+        E2[Natural Language Explainer]
+    end
+
+    EXP --> Graph[Appearance Graph]
+```
+
+# 3
+# Continuous Appearance Intelligence System
+
+```mermaid
+flowchart TB
+
+    User((User))
+
+    User --> Typing[Initial Typing Engine]
+
+    Typing --> Graph[(Appearance Graph)]
+
+    Graph --> Wardrobe[Wardrobe OS]
+    Graph --> Shopping[Shopping Copilot]
+    Graph --> Events[Event Planner]
+    Graph --> Outfits[Outfit Generator]
+    Graph --> Coach[Appearance Coach]
+
+    Wardrobe --> Feedback
+    Shopping --> Feedback
+    Events --> Feedback
+    Outfits --> Feedback
+    Coach --> Feedback
+
+    Feedback[Outcome Feedback]
+
+    Feedback --> Graph
+
+    Graph --> Learning[Preference + Outcome Learning]
+
+    Learning --> Graph
+
+    Graph --> Recommendations
+
+    Recommendations[Personalized Recommendations]
+
+    Recommendations --> User
 ```
